@@ -38,7 +38,14 @@
         </div>
       </div>
     </div>
-    <div class="main-content"></div>
+    <div class="main-content">
+      <div class="header">
+        <div class="right">
+          <i class='bx bx-bell' ></i>
+          <i class='bx bx-user'></i>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
