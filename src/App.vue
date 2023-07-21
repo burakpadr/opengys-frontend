@@ -111,10 +111,10 @@ export default {
         return;
 
       this.resetActivityStatus();
-
-      if (submenuIndex == null)
-        parentMenu.parentMenuisActive = true;
-      else 
+      
+      parentMenu.parentMenuisActive = true;
+      
+      if (submenuIndex != null)
         parentMenu.submenus.at(submenuIndex).isActive = true;
     },
     resetActivityStatus() {
