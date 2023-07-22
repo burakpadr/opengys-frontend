@@ -146,16 +146,6 @@ export default {
   float: left;
 }
 
-.container .main-content {
-  width: 100%;
-  flex-grow: 1;
-}
-
-.navbar.active ~ .main-content {
-  left: 220px;
-  width: calc(100% - 220px);
-}
-
 .navbar.active {
   width: 220px;
   overflow-y: auto;

@@ -3,6 +3,9 @@
     <Navbar/>
     <div class="main-content">
       <Header/>
+      <div class="content">
+        <router-view/>
+      </div>
     </div>
   </div>
 </template>
