@@ -20,7 +20,6 @@ export default {
   position: relative;
   top: 0;
   left: 0;
-  display: relative;
   background-color: #eff3f8;
 }
 

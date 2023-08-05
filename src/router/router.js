@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import AdvertPlaceView from '../views/AdvertPlaceView.vue'
 
 const routes = [
+    { path: "/advert-places", component: AdvertPlaceView }
 ]
 
 const router = createRouter({

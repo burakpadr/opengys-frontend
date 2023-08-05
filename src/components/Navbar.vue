@@ -10,28 +10,28 @@
       <div class="navbar-body">
         <div class="navbar-element" v-for="(navbarElement, i) in navbarElements" :key="i">
           <li>
-            <a @click="changeActivityStatus(i, null)">
+            <router-link :to="navbarElement.href" @click="changeActivityStatus(i, null)">
               <i :class="[navbarElement.iconClass, changeActivityOfIcon(navbarElement.parentMenuisActive)]" ></i>
               <span class="navbar-item" :class="{ active: navbarElement.parentMenuisActive }"> {{ navbarElement.title }} </span>
               <i v-if="navbarElement.hasSubMenu" class="bx bxs-chevron-down toogle-sub-menu-icon" @click="toggleSubMenu(i)"></i>
-            </a>
+            </router-link>
             <div class="navbar-tooltip">
               <div v-if="navbarElement.hasSubMenu" class="sub-menu-header">
                 {{ navbarElement.title }}
               </div>
               <div v-else>
-                <a :href="navbarElement.href">{{ navbarElement.title }}</a>
+                <router-link :to="navbarElement.href" @click="changeActivityStatus(i, null)" >{{ navbarElement.title }}</router-link>
               </div>
               <div v-for="(submenu, j) in navbarElement.submenus" :key="j">
-                <a :href="submenu.href" :class="{ active: submenu.isActive }">{{ submenu.title }}</a>
+                <router-link :to="submenu.href" @click="changeActivityStatus(i, j)" :class="{ active: submenu.isActive }">{{ submenu.title }}</router-link>
               </div>
             </div>
           </li>
           <div class="sub-menu" :class="{active: navbarElement.submenuIsActive}" v-if="navbarElement.hasSubMenu">
             <li v-for="(submenu, j) in navbarElement.submenus" :key="j">
-              <a @click="changeActivityStatus(i, j)">
+              <router-link :to="submenu.href" @click="changeActivityStatus(i, j)">
                 <span class="navbar-item" :class="{ active: submenu.isActive }">{{ submenu.title }}</span>
-              </a>
+              </router-link>
             </li>
           </div>
         </div>
@@ -82,7 +82,7 @@ export default {
           submenuIsActive: false,
           submenus: [
             { title: "Kategori", href: "#", isActive: false },
-            { title: "İlan Yeri", href: "#", isActive: false },
+            { title: "İlan Yeri", href: "/advert-places", isActive: false },
           ],
         },
         {
