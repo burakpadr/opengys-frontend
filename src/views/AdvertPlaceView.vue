@@ -26,7 +26,7 @@
               @click="confirmDeleteAdvertPlace($event, advertPlace.id)"
             ></i>
             <i
-              @click="openUpdateEventModal(advertPlace)"
+              @click="openUpdateEventModal(advertPlace.id)"
               class="bx bx-edit-alt"
             ></i>
           </td>
@@ -121,14 +121,13 @@ export default {
 
       this.toggleModal();
     },
-    openUpdateEventModal(advertPlace) {
+    openUpdateEventModal(advertPlaceId) {
       this.modalHeader = "Güncelle";
       this.modalName = "UPDATE";
 
-      this.advertPlace = {
-        id: advertPlace.id,
-        name: advertPlace.name,
-      };
+      gysClient.get(`advert-places/${advertPlaceId}`).then((response) => {
+        this.advertPlace = response.data;
+      });
 
       this.toggleModal();
     },
