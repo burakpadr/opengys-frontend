@@ -125,11 +125,18 @@ export default {
       this.modalHeader = "Güncelle";
       this.modalName = "UPDATE";
 
-      gysClient.get(`advert-places/${advertPlaceId}`).then((response) => {
-        this.advertPlace = response.data;
-      });
+      gysClient
+        .get(`advert-places/${advertPlaceId}`)
+        .then((response) => {
+          this.advertPlace = response.data;
 
-      this.toggleModal();
+          this.toggleModal();
+        })
+        .catch((error) => {
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+          this.notification.messageContent = error.response.data.message;
+        });
     },
     setVisibilityOfNotification(event) {
       this.notification.isActive = event;
@@ -154,14 +161,21 @@ export default {
       this.loading = false;
     },
     create() {
-      gysClient.post("advert-places", this.advertPlace).then(() => {
-        this.toggleModal();
-        this.getAdvertPlaces();
+      gysClient
+        .post("advert-places", this.advertPlace)
+        .then(() => {
+          this.toggleModal();
+          this.getAdvertPlaces();
 
-        this.notification.isActive = true;
-        this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-        this.notification.messageContent = "İlan yeri oluşturuldu.";
-      });
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+          this.notification.messageContent = "İlan yeri oluşturuldu.";
+        })
+        .catch((error) => {
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+          this.notification.messageContent = error.response.data.message;
+        });
     },
     update() {
       gysClient
@@ -173,6 +187,11 @@ export default {
           this.notification.isActive = true;
           this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
           this.notification.messageContent = "İlan yeri güncellendi.";
+        })
+        .catch((error) => {
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+          this.notification.messageContent = error.response.data.message;
         });
     },
     confirmDeleteAdvertPlace(event, advertPlaceId) {
@@ -195,9 +214,16 @@ export default {
       });
     },
     deleteAdvertPlace(advertPlaceId) {
-      gysClient.delete(`advert-places/${advertPlaceId}`).then(() => {
-        this.getAdvertPlaces();
-      });
+      gysClient
+        .delete(`advert-places/${advertPlaceId}`)
+        .then(() => {
+          this.getAdvertPlaces();
+        })
+        .catch((error) => {
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+          this.notification.messageContent = error.response.data.message;
+        });
     },
   },
   mounted() {

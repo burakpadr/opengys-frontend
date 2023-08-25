@@ -253,23 +253,37 @@ export default {
       this.toggleCreateModal();
     },
     openUpdateEventModal(id) {
-      gysClient.get(`categories/${id}`).then((response) => {
-        this.category = response.data;
-      });
+      gysClient
+        .get(`categories/${id}`)
+        .then((response) => {
+          this.category = response.data;
 
-      this.toggleUpdateModal();
+          this.toggleUpdateModal();
+        })
+        .catch((error) => {
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+          this.notification.messageContent = error.response.data.message;
+        });
     },
     create() {
       this.loading = true;
 
-      gysClient.post("categories", this.category).then(() => {
-        this.toggleCreateModal();
-        this.getCategories();
+      gysClient
+        .post("categories", this.category)
+        .then(() => {
+          this.toggleCreateModal();
+          this.getCategories();
 
-        this.notification.isActive = true;
-        this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-        this.notification.messageContent = "Kategori oluşturuldu.";
-      });
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+          this.notification.messageContent = "Kategori oluşturuldu.";
+        })
+        .catch((error) => {
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+          this.notification.messageContent = error.response.data.message;
+        });
 
       this.loading = false;
     },
@@ -285,6 +299,11 @@ export default {
           this.notification.isActive = true;
           this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
           this.notification.messageContent = "Kategori güncellendi.";
+        })
+        .catch((error) => {
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+          this.notification.messageContent = error.response.data.message;
         });
 
       this.loading = false;
@@ -296,9 +315,16 @@ export default {
       this.category.subCategories.splice(index, 1);
     },
     deleteCategory(categoryId) {
-      gysClient.delete(`categories/${categoryId}`).then(() => {
-        this.getCategories();
-      });
+      gysClient
+        .delete(`categories/${categoryId}`)
+        .then(() => {
+          this.getCategories();
+        })
+        .catch((error) => {
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+          this.notification.messageContent = error.response.data.message;
+        });
     },
     confirmDeleteCategory(event, categoryId) {
       this.$confirm.require({
