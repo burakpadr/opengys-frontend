@@ -1,8 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
 import AdvertPlaceView from '../views/AdvertPlaceView.vue'
+import CategoryView from '../views/CategoryView.vue'
 
 const routes = [
-    { path: "/advert-places", component: AdvertPlaceView }
+    { path: "/advert-places", component: AdvertPlaceView },
+    { path: "/categories", component: CategoryView }
 ]
 
 const router = createRouter({

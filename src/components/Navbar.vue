@@ -81,7 +81,7 @@ export default {
           parentMenuisActive: false,
           submenuIsActive: false,
           submenus: [
-            { title: "Kategori", href: "#", isActive: false },
+            { title: "Kategori", href: "/categories", isActive: false },
             { title: "İlan Yeri", href: "/advert-places", isActive: false },
           ],
         },

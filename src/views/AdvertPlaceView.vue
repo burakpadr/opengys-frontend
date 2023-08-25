@@ -1,71 +1,73 @@
 <template>
-  <Notification
-    :isActive="notification.isActive"
-    :severity="notification.severity"
-    :messageContent="notification.messageContent"
-    @isActive="setVisibilityOfNotification"
-  />
-  <CrudHeader @addButtonClicked="openAddEventModal" />
-  <div class="table-container">
-    <table>
-      <tr>
-        <th>İlan Yeri</th>
-        <th>Aksiyon</th>
-      </tr>
-      <tr v-for="(advertPlace, index) in advertPlaces" :key="index">
-        <td data-cell="İlan Yeri">{{ advertPlace.name }}</td>
-        <td data-cell="Aksiyon">
-          <ConfirmPopup
-            :pt="{
-              root: { class: 'confirmPopup' },
-            }"
-          ></ConfirmPopup>
-          <i
-            class="bx bx-trash"
-            @click="confirmDeleteAdvertPlace($event, advertPlace.id)"
-          ></i>
-          <i
-            @click="openUpdateEventModal(advertPlace)"
-            class="bx bx-edit-alt"
-          ></i>
-        </td>
-      </tr>
-    </table>
-  </div>
-  <div class="paginator">
-    <Pagination
-      :totalRecords="pagination.totalRecords"
-      @pageState="getPageState"
+  <div class="advert-place-container">
+    <Notification
+      :isActive="notification.isActive"
+      :severity="notification.severity"
+      :messageContent="notification.messageContent"
+      @isActive="setVisibilityOfNotification"
     />
-  </div>
-  <form class="modal" v-if="modalIsVisible" @click.self="toggleModal">
-    <i class="bx bx-x exit" @click="toggleModal"></i>
-    <div class="modal-content">
-      <div class="modal-content-header">
-        <span>{{ modalHeader }}</span>
-      </div>
-      <div class="modal-content-row">
-        <span class="p-float-label" style="margin: 0 auto">
-          <InputText
-            class="input"
-            v-model="advertPlace.name"
-            size="small"
-            required="true"
-          />
-          <label class="input" for="İlan Yeri*">İlan Yeri*</label>
-        </span>
-      </div>
-      <div class="modal-content-row">
-        <Button
-          :loading="loading"
-          label="Kaydet"
-          size="small"
-          class="button"
-          @click="submitForm"
-        />
-      </div>
+    <CrudHeader @addButtonClicked="openAddEventModal" />
+    <div class="table-container">
+      <table>
+        <tr>
+          <th>İlan Yeri</th>
+          <th>Aksiyon</th>
+        </tr>
+        <tr v-for="(advertPlace, index) in advertPlaces" :key="index">
+          <td data-cell="İlan Yeri">{{ advertPlace.name }}</td>
+          <td data-cell="Aksiyon">
+            <ConfirmPopup
+              :pt="{
+                root: { class: 'confirmPopup' },
+              }"
+            ></ConfirmPopup>
+            <i
+              class="bx bx-trash"
+              @click="confirmDeleteAdvertPlace($event, advertPlace.id)"
+            ></i>
+            <i
+              @click="openUpdateEventModal(advertPlace)"
+              class="bx bx-edit-alt"
+            ></i>
+          </td>
+        </tr>
+      </table>
     </div>
-  </form>
+    <div class="paginator">
+      <Pagination
+        :totalRecords="pagination.totalRecords"
+        @pageState="getPageState"
+      />
+    </div>
+    <form class="modal" v-if="modalIsVisible" @click.self="toggleModal">
+      <i class="bx bx-x exit" @click="toggleModal"></i>
+      <div class="modal-content">
+        <div class="modal-content-header">
+          <span>{{ modalHeader }}</span>
+        </div>
+        <div class="modal-content-row">
+          <span class="p-float-label" style="margin: 0 auto">
+            <InputText
+              class="input"
+              v-model="advertPlace.name"
+              size="small"
+              required="true"
+            />
+            <label class="input" for="İlan Yeri*">İlan Yeri*</label>
+          </span>
+        </div>
+        <div class="modal-content-row">
+          <Button
+            :loading="loading"
+            label="Kaydet"
+            size="small"
+            class="button"
+            @click="submitForm"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -208,7 +210,7 @@ export default {
 <style>
 @import "../assets/css/table.css";
 
-.modal {
+.advert-place-container .modal {
   width: 100%;
   min-height: 100%;
   position: fixed;
@@ -218,7 +220,7 @@ export default {
   display: table;
 }
 
-.modal-content {
+.advert-place-container .modal-content {
   width: 350px;
   height: 220px;
   background: #fafafa;
@@ -229,37 +231,37 @@ export default {
   border-radius: 10px;
 }
 
-.modal-content-row {
+.advert-place-container .modal-content-row {
   margin-top: 30px;
 }
 
-.modal-content .modal-content-row:nth-child(2) {
+.advert-place-container .modal-content .modal-content-row:nth-child(2) {
   margin-top: 40px;
 }
 
-.modal-content-row .input,
-.modal-content-row .button {
+.advert-place-container .modal-content-row .input,
+.advert-place-container .modal-content-row .button {
   margin-left: 20px;
   font-size: 0.85rem;
 }
 
-.modal-content-row .button {
+.advert-place-container .modal-content-row .button {
   width: 100px;
   position: absolute;
   bottom: 20px;
 }
 
-.modal-content-header {
+.advert-place-container .modal-content-header {
   margin-top: 10px;
   margin-left: 20px;
 }
 
-.modal-content-header span {
+.advert-place-container .modal-content-header span {
   border-bottom: 2px solid #616161;
   padding-bottom: 5px;
 }
 
-.modal .exit {
+.advert-place-container .modal .exit {
   position: absolute;
   right: 150px;
   top: 70px;
@@ -268,7 +270,7 @@ export default {
 }
 
 @media (max-width: 650px) {
-  .modal .exit {
+  .advert-place-container .modal .exit {
     right: 30px;
   }
 }

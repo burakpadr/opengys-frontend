@@ -8,6 +8,7 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Toast from 'primevue/toast';
 import ConfirmPopup from 'primevue/confirmpopup';
+import Chips from 'primevue/chips';
 
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
@@ -28,5 +29,6 @@ app.component("Button", Button);
 app.component("InputText", InputText);
 app.component("Toast", Toast);
 app.component("ConfirmPopup", ConfirmPopup);
+app.component("Chips", Chips);
 
 app.mount('#app');
