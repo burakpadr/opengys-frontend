@@ -6,7 +6,25 @@
       :messageContent="notification.messageContent"
       @isActive="setVisibilityOfNotification"
     />
-    <CrudHeader @addButtonClicked="openAddEventModal" />
+    <div class="header-container">
+      <Button
+        icon="pi pi-plus"
+        style="background-color: #3b82f6"
+        size="large"
+        class="add-button"
+        rounded
+        @click="openAddEventModal"
+      />
+      <span class="p-input-icon-left search-bar-container">
+        <i class="pi pi-search" />
+        <InputText
+          v-model="value1"
+          size="small"
+          class="search-bar"
+          placeholder="Ara"
+        />
+      </span>
+    </div>
     <div class="table-container">
       <table>
         <tr>
@@ -72,14 +90,13 @@
 
 <script>
 import Pagination from "@/components/Pagination.vue";
-import CrudHeader from "@/components/CrudHeader.vue";
 import Notification from "@/components/Notification.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
 import { gysClient } from "@/assets/js/client.js";
 
 export default {
   name: "AdvertPlaceView",
-  components: { Pagination, CrudHeader, Notification },
+  components: { Pagination, Notification },
   data() {
     return {
       pagination: {
@@ -234,6 +251,7 @@ export default {
 
 <style>
 @import "../assets/css/table.css";
+@import "../assets/css/crudHeader.css";
 
 .advert-place-container .modal {
   width: 100%;

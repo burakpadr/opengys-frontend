@@ -1,0 +1,30 @@
+.header-container {
+    width: 100%;
+    margin-top: 50px;
+    display: flex;
+  }
+  
+  .add-button {
+    margin-left: 50px;
+  }
+  
+  .search-bar-container {
+    margin: 0 auto;
+  }
+  
+  .search-bar {
+    width: 300px;
+    background: transparent;
+  }
+  
+  @media (max-width: 1220px) {
+    .add-button {
+      margin-left: 20px;
+    }
+  
+    @media (max-width: 650px) {
+      .search-bar {
+          width: 150px;
+      }
+    }
+  }

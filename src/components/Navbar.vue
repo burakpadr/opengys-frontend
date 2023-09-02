@@ -57,7 +57,7 @@ export default {
         },
         {
           title: "Gayrimenkuller",
-          href: "",
+          href: "/real-estates",
           iconClass: "bx bx-buildings",
           hasSubMenu: false,
           parentMenuisActive: false,
