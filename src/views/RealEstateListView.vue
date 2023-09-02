@@ -209,7 +209,6 @@
 
 <script>
 import Pagination from "@/components/Pagination.vue";
-import { RealEstateListService } from "@/service/RealEstateListService";
 import * as NotificationConstants from "../assets/js/notificationConstants";
 import { gysClient } from "@/assets/js/client.js";
 
@@ -278,8 +277,6 @@ export default {
     },
   },
   mounted() {
-    // this.statusList = RealEstateListService.getStatusFilterData();
-
     this.getRealEstates();
     this.getStatusList();
 
