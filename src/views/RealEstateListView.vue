@@ -138,53 +138,65 @@
     <!-- Skeleton view -->
 
     <div class="card" v-else>
-        <DataView :value="realEstates" :layout="layout">
-            <template #header>
-                <div class="flex justify-content-end">
-                    <DataViewLayoutOptions v-model="layout" />
-                </div>
-            </template>
+      <DataView :value="realEstates" :layout="layout">
+        <template #header>
+          <div class="flex justify-content-end">
+            <DataViewLayoutOptions v-model="layout" />
+          </div>
+        </template>
 
-            <template #list>
-                <div class="col-12">
-                    <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
-                        <Skeleton class="w-9 sm:w-16rem xl:w-10rem shadow-2 h-6rem block xl:block mx-auto border-round" />
-                        <div class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
-                            <div class="flex flex-column align-items-center sm:align-items-start gap-3">
-                                <Skeleton class="w-8rem border-round h-2rem" />
-                                <Skeleton class="w-6rem border-round h-1rem" />
-                                <div class="flex align-items-center gap-3">
-                                    <Skeleton class="w-6rem border-round h-1rem" />
-                                </div>
-                            </div>
-                            <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-                                <Skeleton class="w-4rem border-round h-2rem" />
-                                <Skeleton shape="circle" class="w-3rem h-3rem" />
-                            </div>
-                        </div>
-                    </div>
+        <template #list>
+          <div class="col-12">
+            <div
+              class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4"
+            >
+              <Skeleton
+                class="w-9 sm:w-16rem xl:w-10rem shadow-2 h-6rem block xl:block mx-auto border-round"
+              />
+              <div
+                class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4"
+              >
+                <div
+                  class="flex flex-column align-items-center sm:align-items-start gap-3"
+                >
+                  <Skeleton class="w-8rem border-round h-2rem" />
+                  <Skeleton class="w-6rem border-round h-1rem" />
+                  <div class="flex align-items-center gap-3">
+                    <Skeleton class="w-6rem border-round h-1rem" />
+                  </div>
                 </div>
-            </template>
+                <div
+                  class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2"
+                >
+                  <Skeleton class="w-4rem border-round h-2rem" />
+                  <Skeleton shape="circle" class="w-3rem h-3rem" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
 
-            <template #grid>
-                <div class="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
-                    <div class="p-4 border-1 surface-border surface-card border-round">
-                        <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                            <Skeleton class="w-6rem border-round h-2rem" />
-                            <Skeleton class="w-3rem border-round h-1rem" />
-                        </div>
-                        <div class="flex flex-column align-items-center gap-3 py-5">
-                            <Skeleton class="w-9 shadow-2 border-round h-10rem" />
-                            <Skeleton class="w-8rem border-round h-2rem" />
-                        </div>
-                        <div class="flex align-items-center justify-content-between">
-                            <Skeleton class="w-4rem border-round h-2rem" />
-                            <Skeleton shape="circle" class="w-3rem h-3rem" />
-                        </div>
-                    </div>
-                </div>
-            </template>
-        </DataView>
+        <template #grid>
+          <div class="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
+            <div class="p-4 border-1 surface-border surface-card border-round">
+              <div
+                class="flex flex-wrap align-items-center justify-content-between gap-2"
+              >
+                <Skeleton class="w-6rem border-round h-2rem" />
+                <Skeleton class="w-3rem border-round h-1rem" />
+              </div>
+              <div class="flex flex-column align-items-center gap-3 py-5">
+                <Skeleton class="w-9 shadow-2 border-round h-10rem" />
+                <Skeleton class="w-8rem border-round h-2rem" />
+              </div>
+              <div class="flex align-items-center justify-content-between">
+                <Skeleton class="w-4rem border-round h-2rem" />
+                <Skeleton shape="circle" class="w-3rem h-3rem" />
+              </div>
+            </div>
+          </div>
+        </template>
+      </DataView>
     </div>
   </div>
   <div class="paginator">
@@ -207,7 +219,12 @@ export default {
   data() {
     return {
       selectedStatusFilter: { ALL: true },
-      statusList: null,
+      statusList: [
+        {
+          key: "ALL",
+          label: "Tümü",
+        },
+      ],
       realEstates: null,
       products: null,
       layout: "list",
@@ -216,11 +233,11 @@ export default {
         dataSizePerPage: 10,
         totalRecords: 65,
       },
-      dataIsLoaded: false
+      dataIsLoaded: false,
     };
   },
   methods: {
-    getRealEstates() {
+    async getRealEstates() {
       gysClient
         .get(
           `real-estates?page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc`
@@ -231,15 +248,40 @@ export default {
           this.pagination.totalRecords = response.data.totalElements;
         });
     },
+    async getStatusList() {
+      gysClient.get("status").then((response) => {
+        response.data.forEach((mainStatus) => {
+          gysClient
+            .get(`status/${mainStatus.alias}/sub-status`)
+            .then((subStatusListRepsonse) => {
+              let statusListItem = {
+                key: mainStatus.alias,
+                label: mainStatus.value,
+                children: [],
+              };
+
+              subStatusListRepsonse.data.forEach((subStatus) => {
+                statusListItem.children.push({
+                  key: mainStatus.alias + "." + subStatus.alias,
+                  label: subStatus.value,
+                });
+              });
+
+              this.statusList.push(statusListItem);
+            });
+        });
+      });
+    },
     getPageState(pageData) {
       this.pagination.currentPageIndex = pageData.page;
       this.pagination.dataSizePerPage = pageData.rows;
-    }
+    },
   },
   mounted() {
-    this.statusList = RealEstateListService.getStatusFilterData();
+    // this.statusList = RealEstateListService.getStatusFilterData();
 
     this.getRealEstates();
+    this.getStatusList();
 
     this.dataIsLoaded = true;
   },
