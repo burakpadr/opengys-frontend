@@ -235,7 +235,7 @@ export default {
     };
   },
   methods: {
-    setVisibilityOfNotification(event) {
+    ƒ(event) {
       this.notification.isActive = event;
     },
     getCategories() {

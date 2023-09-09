@@ -230,7 +230,7 @@ export default {
       pagination: {
         currentPageIndex: null,
         dataSizePerPage: 10,
-        totalRecords: 65,
+        totalRecords: null,
       },
       dataIsLoaded: false,
     };
@@ -274,6 +274,8 @@ export default {
     getPageState(pageData) {
       this.pagination.currentPageIndex = pageData.page;
       this.pagination.dataSizePerPage = pageData.rows;
+
+      this.getRealEstates();
     },
   },
   mounted() {

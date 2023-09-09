@@ -13,6 +13,7 @@ import TreeSelect from 'primevue/treeselect';
 import DataView from 'primevue/dataview';
 import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions'
 import Skeleton from 'primevue/skeleton';
+import Dropdown from 'primevue/dropdown';
 
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
@@ -39,5 +40,6 @@ app.component("TreeSelect", TreeSelect);
 app.component("DataView", DataView);
 app.component("DataViewLayoutOptions", DataViewLayoutOptions);
 app.component("Skeleton", Skeleton);
+app.component("Dropdown", Dropdown);
 
 app.mount('#app');

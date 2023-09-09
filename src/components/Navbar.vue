@@ -83,6 +83,7 @@ export default {
           submenus: [
             { title: "Kategori", href: "/categories", isActive: false },
             { title: "İlan Yeri", href: "/advert-places", isActive: false },
+            { title: "Özellik", href: "/attributes", isActive: false },
           ],
         },
         {
