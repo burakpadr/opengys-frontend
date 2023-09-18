@@ -16,8 +16,6 @@
         @click="openAddEventModal"
       />
       <span class="p-input-icon-left search-bar-container">
-        <i class="pi pi-search" />
-        <InputText size="small" class="search-bar" placeholder="Ara" />
       </span>
       <div class="card flex justify-content-center">
         <div class="card flex justify-content-center">
