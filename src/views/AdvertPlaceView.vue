@@ -18,10 +18,11 @@
       <span class="p-input-icon-left search-bar-container">
         <i class="pi pi-search" />
         <InputText
-          v-model="value1"
+          v-model="searchTerm"
           size="small"
           class="search-bar"
           placeholder="Ara"
+          @input="search"
         />
       </span>
     </div>
@@ -118,6 +119,7 @@ export default {
         name: null,
       },
       advertPlaces: [],
+      searchTerm: "",
     };
   },
   methods: {
@@ -159,15 +161,17 @@ export default {
       this.notification.isActive = event;
     },
     getAdvertPlaces() {
-      gysClient
-        .get(
-          `advert-places?page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc`
-        )
-        .then((response) => {
-          this.advertPlaces = response.data.content;
+      if (this.searchTerm === "") {
+        gysClient
+          .get(
+            `advert-places?page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc`
+          )
+          .then((response) => {
+            this.advertPlaces = response.data.content;
 
-          this.pagination.totalRecords = response.data.totalElements;
-        });
+            this.pagination.totalRecords = response.data.totalElements;
+          });
+      } else this.search();
     },
     submitForm() {
       this.loading = true;
@@ -241,6 +245,19 @@ export default {
           this.notification.severity = NotificationConstants.SEVERITY_ERROR;
           this.notification.messageContent = error.response.data.message;
         });
+    },
+    search() {
+      if (this.searchTerm !== "") {
+        gysClient
+          .get(
+            `advert-places/search?search=${this.searchTerm}&page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}`
+          )
+          .then((response) => {
+            this.advertPlaces = response.data.content;
+
+            this.pagination.totalRecords = response.data.totalElements;
+          });
+      } else this.getAdvertPlaces();
     },
   },
   mounted() {
