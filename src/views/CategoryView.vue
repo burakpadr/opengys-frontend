@@ -18,10 +18,11 @@
       <span class="p-input-icon-left search-bar-container">
         <i class="pi pi-search" />
         <InputText
-          v-model="value1"
+          v-model="searchTerm"
           size="small"
           class="search-bar"
           placeholder="Ara"
+          @input="search"
         />
       </span>
     </div>
@@ -231,7 +232,7 @@ export default {
         subCategories: [],
       },
       loading: false,
-      value: null,
+      searchTerm: "",
     };
   },
   methods: {
@@ -239,15 +240,17 @@ export default {
       this.notification.isActive = event;
     },
     getCategories() {
-      gysClient
-        .get(
-          `categories?page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc`
-        )
-        .then((response) => {
-          this.categories = response.data.content;
+      if (this.searchTerm === "") {
+        gysClient
+          .get(
+            `categories?page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc`
+          )
+          .then((response) => {
+            this.categories = response.data.content;
 
-          this.pagination.totalRecords = response.data.totalElements;
-        });
+            this.pagination.totalRecords = response.data.totalElements;
+          });
+      } else this.search();
     },
     getPageState(pageData) {
       this.pagination.currentPageIndex = pageData.page;
@@ -361,6 +364,19 @@ export default {
           });
         },
       });
+    },
+    search() {
+      if (this.searchTerm !== "") {
+        gysClient
+          .get(
+            `categories/search?search=${this.searchTerm}&page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}`
+          )
+          .then((response) => {
+            this.categories = response.data.content;
+
+            this.pagination.totalRecords = response.data.totalElements;
+          });
+      } else this.getCategories();
     },
   },
   mounted() {
