@@ -277,6 +277,7 @@ export default {
   top: 0;
   left: 0;
   background: rgba(102, 102, 102, 0.775);
+  backdrop-filter: blur(10px);
   display: table;
 }
 

@@ -14,6 +14,7 @@ import DataView from 'primevue/dataview';
 import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions'
 import Skeleton from 'primevue/skeleton';
 import Dropdown from 'primevue/dropdown';
+import Textarea from 'primevue/textarea'
 
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
@@ -41,5 +42,6 @@ app.component("DataView", DataView);
 app.component("DataViewLayoutOptions", DataViewLayoutOptions);
 app.component("Skeleton", Skeleton);
 app.component("Dropdown", Dropdown);
+app.component("Textarea", Textarea);
 
 app.mount('#app');

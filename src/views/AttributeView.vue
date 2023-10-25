@@ -174,25 +174,6 @@
             >{{ fieldErrorMessage || "&nbsp;" }}</small
           >
         </div>
-        <div class="modal-content-row" v-if="attribute.category.subCategories">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Dropdown
-              v-model="attribute.subCategory"
-              :options="attribute.category.subCategories"
-              optionLabel="name"
-              class="w-full md:w-14rem input"
-              inputId="subCategory"
-              :class="{ 'p-invalid': formFieldsHasError.subCategory }"
-            />
-            <label for="subCategory" class="input">Alt Kategori*</label>
-          </span>
-          <small
-            class="p-error input"
-            id="text-error"
-            v-if="formFieldsHasError.subCategory"
-            >{{ fieldErrorMessage || "&nbsp;" }}</small
-          >
-        </div>
       </div>
       <div class="modal-right-content">
         <div class="modal-content-header">
@@ -219,7 +200,7 @@
               v-model="attribute.attributeValues[index].value"
               required="true"
             />
-            <label class="input" for="Alt Kategori Adı*">Değer*</label>
+            <label class="input" >Değer*</label>
             <i
               class="bx bx-trash"
               style="margin-left: 15px"
@@ -262,7 +243,7 @@
               :disabled="true"
               :class="{ 'p-invalid': formFieldsHasError.alias }"
             />
-            <label class="input" for="Kategori Adı*">Kod*</label>
+            <label class="input" >Kod*</label>
           </span>
           <small
             class="p-error input"
@@ -280,7 +261,7 @@
               required="true"
               :class="{ 'p-invalid': formFieldsHasError.label }"
             />
-            <label class="input" for="Kategori Adı*">İsim*</label>
+            <label class="input" >İsim*</label>
           </span>
           <small
             class="p-error input"
@@ -299,7 +280,7 @@
               type="number"
               :class="{ 'p-invalid': formFieldsHasError.screenOrder }"
             />
-            <label class="input" for="Kategori Adı*">Ekran Sırası*</label>
+            <label class="input" >Ekran Sırası*</label>
           </span>
           <small
             class="p-error input"
@@ -348,26 +329,6 @@
             >{{ fieldErrorMessage || "&nbsp;" }}</small
           >
         </div>
-        <div class="modal-content-row" v-if="attribute.category.subCategories">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Dropdown
-              v-model="attribute.subCategory"
-              :options="attribute.category.subCategories"
-              optionLabel="name"
-              class="w-full md:w-14rem input"
-              inputId="subCategory"
-              :disabled="true"
-              :class="{ 'p-invalid': formFieldsHasError.subCategory }"
-            />
-            <label for="subCategory" class="input">Alt Kategori*</label>
-          </span>
-          <small
-            class="p-error input"
-            id="text-error"
-            v-if="formFieldsHasError.subCategory"
-            >{{ fieldErrorMessage || "&nbsp;" }}</small
-          >
-        </div>
       </div>
       <div class="modal-right-content">
         <div class="modal-content-header">
@@ -381,26 +342,6 @@
             :disabled="attribute.inputType.alias !== 'SELECT'"
             @click="addAttributeValue"
           />
-        </div>
-        <div
-          class="modal-content-row"
-          v-for="(attributeValue, index) in attribute.attributeValues"
-          :key="index"
-        >
-          <span class="p-float-label">
-            <InputText
-              class="input"
-              size="small"
-              v-model="attribute.attributeValues[index].value"
-              required="true"
-            />
-            <label class="input" for="Alt Kategori Adı*">Değer*</label>
-            <i
-              class="bx bx-trash"
-              style="margin-left: 15px"
-              @click="deleteAttributeValue(index)"
-            ></i>
-          </span>
         </div>
         <div class="modal-content-row">
           <Button
@@ -419,7 +360,7 @@
 <script>
 import Pagination from "@/components/Pagination.vue";
 import Notification from "@/components/Notification.vue";
-import * as NotificationConstants from "../assets/js/notificationConstants";
+import * as Notificationtants from "../assets/js/notificationConstants";
 import { gysClient } from "@/assets/js/client.js";
 
 export default {
@@ -444,7 +385,6 @@ export default {
         screenOrder: null,
         inputType: "",
         category: [],
-        subCategory: [],
         attributeValues: [],
       },
       pagination: {
@@ -463,7 +403,6 @@ export default {
         screenOrder: false,
         inputType: false,
         category: false,
-        subCategory: false,
       },
       fieldErrorMessage: "Bu alan zorunludur!",
       createModalIsVisible: false,
@@ -501,16 +440,6 @@ export default {
 
               this.pagination.totalRecords = response.data.totalElements;
             });
-        } else {
-          gysClient
-            .get(
-              `attributes?page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc&subCategoryId=${selectedCategorizationValues[1]}`
-            )
-            .then((response) => {
-              this.attributes = response.data.content;
-
-              this.pagination.totalRecords = response.data.totalElements;
-            });
         }
       }
     },
@@ -526,13 +455,6 @@ export default {
               label: category.name,
               children: [],
             };
-
-            category.subCategories.forEach((subCategory) => {
-              categorizationListItem.children.push({
-                key: category.id + "." + subCategory.id,
-                label: subCategory.name,
-              });
-            });
 
             this.categorizationList.push(categorizationListItem);
           });
@@ -556,7 +478,6 @@ export default {
         screenOrder: null,
         inputType: "",
         category: [],
-        subCategory: [],
         attributeValues: [],
       };
 
@@ -599,7 +520,6 @@ export default {
         screenOrder: this.attribute.screenOrder,
         inputType: this.attribute.inputType.alias,
         categoryId: this.attribute.category.id,
-        subCategoryId: this.attribute.subCategory.id,
         attributeValues: this.attribute.attributeValues,
       };
 
@@ -715,15 +635,6 @@ export default {
         return false;
       } else this.formFieldsHasError.category = false;
 
-      if (
-        Object.keys(this.attribute.category).length &&
-        !Object.keys(this.attribute.subCategory).length
-      ) {
-        this.formFieldsHasError.subCategory = true;
-
-        return false;
-      } else this.formFieldsHasError.subCategory = false;
-
       return true;
     },
   },
@@ -754,6 +665,7 @@ export default {
   background: rgba(102, 102, 102, 0.775);
   display: flex;
   padding: 100px;
+  backdrop-filter: blur(10px);
 }
 
 .attribute-container .modal-left-content {

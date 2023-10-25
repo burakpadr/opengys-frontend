@@ -236,7 +236,7 @@ export default {
     };
   },
   methods: {
-    ƒ(event) {
+    setVisibilityOfNotification(event) {
       this.notification.isActive = event;
     },
     getCategories() {
@@ -349,7 +349,7 @@ export default {
     confirmDeleteCategory(event, categoryId) {
       this.$confirm.require({
         target: event.currentTarget,
-        message: "Kaydı silmek istediğinden emin misin?",
+        message: "Kaydı silmek istediğinden emin misin? (Kategoriye bağlı gayrimenkuller de silinecektir!)",
         rejectLabel: "Hayır",
         acceptLabel: "Evet",
         icon: "pi pi-exclamation-triangle",
@@ -396,6 +396,7 @@ export default {
   top: 0;
   left: 0;
   background: rgba(102, 102, 102, 0.775);
+  backdrop-filter: blur(10px);
   display: flex;
   padding: 100px;
 }
