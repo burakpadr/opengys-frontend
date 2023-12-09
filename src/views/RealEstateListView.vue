@@ -33,86 +33,89 @@
       </div>
     </div>
     <div class="card real-estate-list">
-      <DataView
-        :value="realEstates"
-        :layout="layout"
-        :pt="{
-          header: { class: 'header' },
-          content: { class: 'body' },
-        }"
-      >
-        <template #header> </template>
+      <div>
+        <DataView
+          :value="realEstates"
+          :layout="layout"
+          :pt="{
+            header: { class: 'header' },
+            content: { class: 'body' },
+          }"
+        >
+          <template #header> </template>
 
-        <!-- List view -->
-
-        <template #list="realEstate">
-          <div class="col-12">
-            <div
-              class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4"
-            >
-              <img
-                v-if="realEstate.data.coverPhotoPath == null"
-                class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
-                src="../assets/img/no-photo.jpeg"
-              />
-              <img
-                v-else
-                class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
-                :src="realEstate.data.coverPhotoPath"
-              />
+          <!-- List view -->
+          <template #list="realEstate">
+            <div class="col-12">
               <div
-                class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4"
+                class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4"
               >
+                <img
+                  v-if="realEstate.data.coverPhotoPath == null"
+                  class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
+                  src="../assets/img/no-photo.jpeg"
+                />
+                <img
+                  v-else
+                  class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
+                  :src="realEstate.data.coverPhotoPath"
+                />
                 <div
-                  class="flex flex-column align-items-center sm:align-items-start gap-3"
+                  class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4"
                 >
-                  <div class="text-xl font-bold text-700">
-                    {{ realEstate.data.no }}
+                  <div
+                    class="flex flex-column align-items-center sm:align-items-start gap-3"
+                  >
+                    <div class="text-xl font-bold text-700">
+                      {{ realEstate.data.no }}
+                    </div>
+                    <div class="flex align-items-center gap-3">
+                      <span class="flex align-items-center gap-1">
+                        <i class="bx bx-purchase-tag"></i>
+                        <span
+                          >{{ realEstate.data.mainStatus }} >
+                          {{ realEstate.data.subStatus }}</span
+                        >
+                      </span>
+                    </div>
+                    <div class="flex align-items-center gap-3">
+                      <span class="flex align-items-center gap-2">
+                        <i class="pi pi-map-marker"></i>
+                        <span
+                          >{{ realEstate.data.districtName }},
+                          {{ realEstate.data.cityName }}</span
+                        >
+                      </span>
+                    </div>
                   </div>
-                  <div class="flex align-items-center gap-3">
-                    <span class="flex align-items-center gap-1">
-                      <i class="bx bx-purchase-tag"></i>
-                      <span
-                        >{{ realEstate.data.mainStatus }} >
-                        {{ realEstate.data.subStatus }}</span
-                      >
-                    </span>
+                  <div
+                    class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2"
+                  >
+                    <!-- <span class="text-xl font-semibold">₺0</span> -->
+                    <Button
+                      icon="pi pi-pencil"
+                      @click="openUpdateEventModal(realEstate.data.id)"
+                      rounded
+                    ></Button>
+                    <ConfirmPopup
+                      :pt="{
+                        root: { class: 'confirmPopup' },
+                      }"
+                    ></ConfirmPopup>
+                    <Button
+                      icon="pi pi-trash"
+                      rounded
+                      @click="
+                        confirmDeleteRealEstate($event, realEstate.data.id)
+                      "
+                    ></Button>
                   </div>
-                  <div class="flex align-items-center gap-3">
-                    <span class="flex align-items-center gap-2">
-                      <i class="pi pi-map-marker"></i>
-                      <span
-                        >{{ realEstate.data.districtName }},
-                        {{ realEstate.data.cityName }}</span
-                      >
-                    </span>
-                  </div>
-                </div>
-                <div
-                  class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2"
-                >
-                  <!-- <span class="text-xl font-semibold">₺0</span> -->
-                  <Button
-                    icon="pi pi-pencil"
-                    @click="openUpdateEventModal(realEstate.data.id)"
-                    rounded
-                  ></Button>
-                  <ConfirmPopup
-                    :pt="{
-                      root: { class: 'confirmPopup' },
-                    }"
-                  ></ConfirmPopup>
-                  <Button
-                    icon="pi pi-trash"
-                    rounded
-                    @click="confirmDeleteRealEstate($event, realEstate.data.id)"
-                  ></Button>
                 </div>
               </div>
             </div>
-          </div>
-        </template>
-      </DataView>
+          </template>
+        </DataView>
+      </div>
     </div>
     <div class="paginator">
       <Pagination
@@ -153,6 +156,10 @@
         :isUpdateAction="true"
         @updateResult="handleUpdateModalAction"
       />
+      <RealEstatePhoto 
+        v-if="selectedTabComponentName === 'RealEstatePhoto'"
+        @updateResult="handleUpdateModalAction"
+        :realEstateId="1"/>
     </div>
   </div>
 </template>
@@ -162,13 +169,19 @@ import Pagination from "@/components/Pagination.vue";
 import Notification from "@/components/Notification.vue";
 import Stepper from "@/components/Stepper.vue";
 import RealEstateBasicInformation from "@/components/RealEstateBasicInformation.vue";
+import RealEstatePhoto from "@/components/RealEstatePhoto.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
 import { gysClient } from "@/assets/js/client.js";
 import { FOR_RENT_TABS } from "@/assets/js/realEstateTabs";
 
 export default {
   name: "RealEstateListView",
-  components: { Pagination, Stepper, RealEstateBasicInformation, Notification },
+  components: { 
+    Pagination,
+    Stepper,
+    RealEstateBasicInformation, 
+    RealEstatePhoto, 
+    Notification },
   data() {
     return {
       notification: {
@@ -223,6 +236,11 @@ export default {
           `real-estates?page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc`
         )
         .then((response) => {
+          response.data.content.forEach((realEstate) => {
+            if (realEstate.coverPhotoPath)
+              realEstate.coverPhotoPath = process.env.VUE_APP_GYS_API_BASE_URL + realEstate.coverPhotoPath;
+          });
+
           this.realEstates = response.data.content;
 
           this.pagination.totalRecords = response.data.totalElements;
@@ -273,6 +291,7 @@ export default {
       if (this.updateModalIsVisible) {
         this.updateModalIsVisible = false;
         this.stepperOptions.steps = [];
+        this.selectedTabComponentName = "RealEstateBasicInformation";
 
         this.getRealEstates();
         this.resetModalData();
@@ -301,7 +320,9 @@ export default {
 
       if (mainStatusAlias === "FOR_RENT") {
         FOR_RENT_TABS.forEach((tab) => {
-          this.stepperOptions.steps.push(tab);
+          const copyOfTab = JSON.parse(JSON.stringify(tab));
+
+          this.stepperOptions.steps.push(copyOfTab);
         });
       } else if (mainStatusAlias === "FOR_SALE") {
       }

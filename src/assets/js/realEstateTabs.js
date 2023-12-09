@@ -7,7 +7,7 @@ export const FOR_RENT_TABS = [
     {
         label: "Fotoğraflar",
         isActive: false,
-        component: ""
+        component: "RealEstatePhoto"
     },
     {
         label: "İlanlar",

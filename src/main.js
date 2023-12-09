@@ -14,7 +14,10 @@ import DataView from 'primevue/dataview';
 import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions'
 import Skeleton from 'primevue/skeleton';
 import Dropdown from 'primevue/dropdown';
-import Textarea from 'primevue/textarea'
+import Textarea from 'primevue/textarea';
+import FileUpload from 'primevue/fileupload';
+import Galleria from 'primevue/galleria';
+import Tooltip from 'primevue/tooltip';
 
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
@@ -43,5 +46,9 @@ app.component("DataViewLayoutOptions", DataViewLayoutOptions);
 app.component("Skeleton", Skeleton);
 app.component("Dropdown", Dropdown);
 app.component("Textarea", Textarea);
+app.component("FileUpload", FileUpload);
+app.component("Galleria", Galleria);
+
+app.directive('tooltip', Tooltip);
 
 app.mount('#app');

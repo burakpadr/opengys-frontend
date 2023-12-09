@@ -288,7 +288,7 @@ export default {
     },
     update() {
       this.loading = true;
-
+      
       gysClient
         .put(`real-estates/${this.realEstate.id}`, this.realEstate)
         .then(() => {
