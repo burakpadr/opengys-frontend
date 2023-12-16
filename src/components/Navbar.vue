@@ -74,7 +74,7 @@ export default {
           submenus: [],
         },
         {
-          title: "Tanımlar",
+          title: "Sistem Tanımları",
           href: "",
           iconClass: "bx bx-edit-alt",
           hasSubMenu: true,
@@ -84,6 +84,19 @@ export default {
             { title: "Kategori", href: "/categories", isActive: false },
             { title: "İlan Yeri", href: "/advert-places", isActive: false },
             { title: "Özellik", href: "/attributes", isActive: false },
+            { title: "Tapu Sahibi", href: "/attributes", isActive: false },
+          ],
+        },
+        {
+          title: "Ayarlar",
+          href: "",
+          iconClass: "bx bx-cog",
+          hasSubMenu: true,
+          parentMenuisActive: false,
+          submenuIsActive: false,
+          submenus: [
+            { title: "Kullanıcı", href: "/categories", isActive: false },
+            { title: "Kiracı", href: "/categories", isActive: false },          
           ],
         },
         {
@@ -148,7 +161,7 @@ export default {
 }
 
 .navbar.active {
-  width: 220px;
+  width: 280px;
   overflow-y: auto;
 }
 
@@ -213,7 +226,7 @@ export default {
   height: 50px;
   width: 100%;
   margin: 0.8rem auto;
-  line-height: 50px;
+  line-height: 25px;
 }
 
 .navbar .navbar-element li a {
@@ -248,7 +261,7 @@ export default {
 }
 
 .navbar .navbar-element li .navbar-tooltip {
-  min-width: 100px;
+  min-width: 200px;
   position: absolute;
   left: 123%;
   top: 10%;
@@ -264,7 +277,6 @@ export default {
 .navbar-tooltip div a,
 .navbar-tooltip div.sub-menu-header {
   padding: 0rem 1.2rem;
-  height: 40px;
 }
 
 .navbar .navbar-element li:hover .navbar-tooltip {
