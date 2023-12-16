@@ -18,6 +18,9 @@ import Textarea from 'primevue/textarea';
 import FileUpload from 'primevue/fileupload';
 import Galleria from 'primevue/galleria';
 import Tooltip from 'primevue/tooltip';
+import Tag from 'primevue/tag';
+import Calendar from 'primevue/calendar';
+import InputNumber from 'primevue/inputnumber';
 
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
@@ -48,6 +51,9 @@ app.component("Dropdown", Dropdown);
 app.component("Textarea", Textarea);
 app.component("FileUpload", FileUpload);
 app.component("Galleria", Galleria);
+app.component("Tag", Tag);
+app.component("Calendar", Calendar);
+app.component("InputNumber", InputNumber);
 
 app.directive('tooltip', Tooltip);
 

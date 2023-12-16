@@ -12,7 +12,7 @@ export const FOR_RENT_TABS = [
     {
         label: "İlanlar",
         isActive: false,
-        component: ""
+        component: "AdvertInformation"
     },
     {
         label: "Sözleşmeler",

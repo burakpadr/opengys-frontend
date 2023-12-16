@@ -150,16 +150,25 @@
         @stepState="changeTab"
         style="margin-top: 50px"
       />
+      
       <RealEstateBasicInformation
         v-if="selectedTabComponentName === 'RealEstateBasicInformation'"
         :realEstate="basicInformationOfRealEstate"
         :isUpdateAction="true"
         @updateResult="handleUpdateModalAction"
       />
-      <RealEstatePhoto 
+
+      <RealEstatePhoto
         v-if="selectedTabComponentName === 'RealEstatePhoto'"
         @updateResult="handleUpdateModalAction"
-        :realEstateId="1"/>
+        :realEstateId="selectedRealEstateId"
+      />
+
+      <AdvertInformation
+        v-if="selectedTabComponentName == 'AdvertInformation'"
+        :realEstateId="selectedRealEstateId"
+        @updateResult="handleUpdateModalAction"
+      />
     </div>
   </div>
 </template>
@@ -173,15 +182,18 @@ import RealEstatePhoto from "@/components/RealEstatePhoto.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
 import { gysClient } from "@/assets/js/client.js";
 import { FOR_RENT_TABS } from "@/assets/js/realEstateTabs";
+import AdvertInformation from "@/components/AdvertInformation.vue";
 
 export default {
   name: "RealEstateListView",
-  components: { 
+  components: {
     Pagination,
     Stepper,
-    RealEstateBasicInformation, 
-    RealEstatePhoto, 
-    Notification },
+    RealEstateBasicInformation,
+    RealEstatePhoto,
+    AdvertInformation,
+    Notification,
+  },
   data() {
     return {
       notification: {
@@ -189,6 +201,7 @@ export default {
         severity: "",
         messageContent: "",
       },
+      selectedRealEstateId: null,
       selectedStatusFilter: { ALL: true },
       statusList: [
         {
@@ -238,7 +251,9 @@ export default {
         .then((response) => {
           response.data.content.forEach((realEstate) => {
             if (realEstate.coverPhotoPath)
-              realEstate.coverPhotoPath = process.env.VUE_APP_GYS_API_BASE_URL + realEstate.coverPhotoPath;
+              realEstate.coverPhotoPath =
+                process.env.VUE_APP_GYS_API_BASE_URL +
+                realEstate.coverPhotoPath;
           });
 
           this.realEstates = response.data.content;
@@ -301,6 +316,8 @@ export default {
       }
     },
     openUpdateEventModal(id) {
+      this.selectedRealEstateId = id;
+
       gysClient
         .get(`real-estates/${id}`)
         .then((response) => {
