@@ -349,7 +349,7 @@ export default {
     confirmDeleteCategory(event, categoryId) {
       this.$confirm.require({
         target: event.currentTarget,
-        message: "Kaydı silmek istediğinden emin misin? (Kategoriye bağlı gayrimenkuller de silinecektir!)",
+        message: "Kaydı silmek istediğinden emin misin?",
         rejectLabel: "Hayır",
         acceptLabel: "Evet",
         icon: "pi pi-exclamation-triangle",

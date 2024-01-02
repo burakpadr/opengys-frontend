@@ -7,7 +7,7 @@
           @before-send="beforeUploadImages($event)"
           @error="onImageUploadError($event)"
           @upload="afterUploadImages($event)"
-          :url="baseServiceUrl + 'real-estates/1/photos'"
+          :url="baseServiceUrl + `real-estates/${this.realEstateId}/photos`"
           :multiple="true"
           accept="image/*"
           :maxFileSize="1000000"

@@ -74,6 +74,15 @@ export default {
           submenus: [],
         },
         {
+          title: "Onay",
+          href: "",
+          iconClass: "bx bx-badge-check",
+          parentMenuisActive: false,
+          hasSubMenu: false,
+          submenuIsActive: false,
+          submenus: [],
+        },
+        {
           title: "Sistem Tanımları",
           href: "",
           iconClass: "bx bx-edit-alt",
@@ -84,29 +93,30 @@ export default {
             { title: "Kategori", href: "/categories", isActive: false },
             { title: "İlan Yeri", href: "/advert-places", isActive: false },
             { title: "Özellik", href: "/attributes", isActive: false },
-            { title: "Tapu Sahibi", href: "/attributes", isActive: false },
           ],
         },
         {
-          title: "Ayarlar",
+          title: "Kullanıcı Yönetimi",
           href: "",
-          iconClass: "bx bx-cog",
+          iconClass: "bx bx-edit-alt",
           hasSubMenu: true,
           parentMenuisActive: false,
           submenuIsActive: false,
           submenus: [
-            { title: "Kullanıcı", href: "/categories", isActive: false },
+            { title: "Alt Kullanıcı", href: "/categories", isActive: false },          
             { title: "Kiracı", href: "/categories", isActive: false },          
           ],
         },
         {
-          title: "Onay",
+          title: "Güvenlik",
           href: "",
-          iconClass: "bx bx-badge-check",
+          iconClass: "bx bxs-key",
+          hasSubMenu: true,
           parentMenuisActive: false,
-          hasSubMenu: false,
           submenuIsActive: false,
-          submenus: [],
+          submenus: [
+            { title: "Yetkilendirme", href: "/categories", isActive: false },
+          ],
         },
       ],
     };
@@ -161,7 +171,7 @@ export default {
 }
 
 .navbar.active {
-  width: 280px;
+  width: 380px;
   overflow-y: auto;
 }
 
@@ -226,7 +236,10 @@ export default {
   height: 50px;
   width: 100%;
   margin: 0.8rem auto;
-  line-height: 25px;
+}
+
+.navbar .navbar-element .sub-menu li {
+  line-height: 50px;
 }
 
 .navbar .navbar-element li a {
