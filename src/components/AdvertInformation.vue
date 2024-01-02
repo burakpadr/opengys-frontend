@@ -357,11 +357,25 @@ export default {
         startDate = new Date(startDate.toISOString());
         startDate.setDate(startDate.getDate() + 1);
       }
+      else {
+        var startDateStrSplitted = startDate.split("-");
+
+        startDate = new Date(startDateStrSplitted[2], startDateStrSplitted[1] - 1, startDateStrSplitted[0]);
+
+        startDate.setDate(startDate.getDate() + 1);
+      }
+
       if (!(typeof this.advert.endDate === "string")) {
         endDate = new Date(endDate.toISOString());
         endDate.setDate(endDate.getDate() + 1);
       }
+      else {
+        var endDateDateStrSplitted = endDate.split("-");
 
+        endDate = new Date(endDateDateStrSplitted[2], endDateDateStrSplitted[1] - 1, endDateDateStrSplitted[0]);
+
+        endDate.setDate(endDate.getDate() + 1);
+      }
       const payload = {
         advertPlaceId: this.advert.advertPlaceId,
         startDate: startDate,
