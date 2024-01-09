@@ -1,5 +1,5 @@
 <template>
-  <div class="advert-information-container">
+  <div class="advert-information-container" v-if="isVisible">
     <div class="modal-left-content">
       <div class="modal-content-header">
         <span class="text">İlan Listesi</span>
@@ -229,6 +229,7 @@
 import { gysClient } from "@/assets/js/client.js";
 import Pagination from "@/components/Pagination.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
+import { canSeeComponent } from "@/service/RbacService";
 
 export default {
   name: "AdvertInformation",
@@ -240,6 +241,7 @@ export default {
   },
   data() {
     return {
+      isVisible: null,
       adverts: [],
       advertPlaces: null,
       advertStatusOptions: [
@@ -448,6 +450,8 @@ export default {
     },
   },
   mounted() {
+    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
+
     this.getAdverts();
     this.getAdvertPlaces();
   },

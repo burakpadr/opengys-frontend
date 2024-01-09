@@ -4,12 +4,14 @@ import AdvertPlaceView from '../views/AdvertPlaceView.vue'
 import CategoryView from '../views/CategoryView.vue'
 import RealEstateListView from '../views/RealEstateListView.vue'
 import AttributeView from '../views/AttributeView.vue'
+import RoleView from '../views/RoleView.vue'
 
 const routes = [
     { path: "/advert-places", component: AdvertPlaceView },
     { path: "/categories", component: CategoryView },
     { path: "/real-estates", component: RealEstateListView },
-    { path: "/attributes", component: AttributeView }
+    { path: "/attributes", component: AttributeView },
+    { path: "/roles", component: RoleView}
 ]
 
 const router = createRouter({

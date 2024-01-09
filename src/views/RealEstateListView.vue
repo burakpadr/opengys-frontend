@@ -1,5 +1,5 @@
 <template>
-  <div class="real-estate-list-container">
+  <div class="real-estate-list-container" v-if="isVisible">
     <Notification
       :isActive="notification.isActive"
       :severity="notification.severity"
@@ -177,12 +177,13 @@
 import Pagination from "@/components/Pagination.vue";
 import Notification from "@/components/Notification.vue";
 import Stepper from "@/components/Stepper.vue";
-import RealEstateBasicInformation from "@/components/RealEstateBasicInformation.vue";
-import RealEstatePhoto from "@/components/RealEstatePhoto.vue";
+import RealEstateBasicInformation from "@/views/RealEstateBasicInformation.vue";
+import RealEstatePhoto from "@/views/RealEstatePhoto.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
 import { gysClient } from "@/assets/js/client.js";
 import { FOR_RENT_TABS } from "@/assets/js/realEstateTabs";
-import AdvertInformation from "@/components/AdvertInformation.vue";
+import AdvertInformation from "@/views/AdvertInformation.vue";
+import { canSeeComponent } from "@/service/RbacService";
 
 export default {
   name: "RealEstateListView",
@@ -196,6 +197,7 @@ export default {
   },
   data() {
     return {
+      isVisible: null,
       notification: {
         isActive: false,
         severity: "",
@@ -421,6 +423,8 @@ export default {
     },
   },
   mounted() {
+    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
+
     this.getRealEstates();
     this.getStatusList();
   },

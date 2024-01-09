@@ -1,5 +1,5 @@
 <template>
-  <div class="real-estate-basic-information-container">
+  <div class="real-estate-basic-information-container" v-if="isVisible">
     <!-- Temel Bilgiler -->
 
     <div class="modal-left-content">
@@ -188,6 +188,7 @@
 
 <script>
 import { gysClient } from "@/assets/js/client.js";
+import { canSeeComponent } from "@/service/RbacService";
 
 export default {
   name: "RealEstateBasicInformation",
@@ -206,6 +207,7 @@ export default {
   },
   data() {
     return {
+      isVisible: null,
       loading: false,
       mainStatusList: null,
       cities: null,
@@ -312,6 +314,8 @@ export default {
     },
   },
   mounted() {
+    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
+
     this.getMainStatusList();
     this.getCities();
     this.getDistricts();

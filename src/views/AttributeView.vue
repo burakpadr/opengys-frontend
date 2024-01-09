@@ -1,5 +1,5 @@
 <template>
-  <div class="attribute-container">
+  <div class="attribute-container" v-if="isVisible">
     <Notification
       :isActive="notification.isActive"
       :severity="notification.severity"
@@ -87,9 +87,8 @@
               size="small"
               v-model="attribute.alias"
               required="true"
-              @input="() => (attribute.alias = attribute.alias.toUpperCase())"
-              :class="{ 'p-invalid': formFieldsHasError.alias }"
-            />
+              @input="() => attribute.alias = attribute.alias.toUpperCase()"
+              :class="{ 'p-invalid': formFieldsHasError.alias }"/>
             <label class="input">Kod*</label>
           </span>
           <small
@@ -239,7 +238,7 @@
               size="small"
               v-model="attribute.alias"
               required="true"
-              @input="() => (attribute.alias = attribute.alias.toUpperCase())"
+              @input="() => attribute.alias = attribute.alias.toUpperCase()"
               :disabled="true"
               :class="{ 'p-invalid': formFieldsHasError.alias }"
             />
@@ -360,14 +359,16 @@
 <script>
 import Pagination from "@/components/Pagination.vue";
 import Notification from "@/components/Notification.vue";
-import * as Notificationtants from "../assets/js/notificationConstants";
+import * as NotificationConstants from "../assets/js/notificationConstants";
 import { gysClient } from "@/assets/js/client.js";
+import { canSeeComponent } from "@/service/RbacService";
 
 export default {
   name: "AttributeView",
   components: { Pagination, Notification },
   data() {
     return {
+      isVisible: null,
       selectedCategorizationFilter: { ALL: true },
       categories: null,
       subCategories: null,
@@ -639,6 +640,8 @@ export default {
     },
   },
   mounted() {
+    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
+
     this.getAttributes();
     this.getCategorizationList();
     this.getInputTypes();

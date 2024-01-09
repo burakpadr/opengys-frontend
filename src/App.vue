@@ -1,22 +1,22 @@
 <template>
   <div class="container">
-    <Navbar/>
+    <Navbar />
     <div class="main-content">
-      <Header/>
+      <Header />
       <div class="content">
-        <router-view/>
+        <router-view />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Navbar from './components/Navbar.vue';
-import Header from './components/Header.vue';
+import Navbar from "./components/Navbar.vue";
+import Header from "./components/Header.vue";
 
 export default {
   name: "App",
-  components: { Navbar, Header }
+  components: { Navbar, Header },
 };
 </script>
 

@@ -21,6 +21,7 @@ import Tooltip from 'primevue/tooltip';
 import Tag from 'primevue/tag';
 import Calendar from 'primevue/calendar';
 import InputNumber from 'primevue/inputnumber';
+import Checkbox from 'primevue/checkbox';
 
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
@@ -54,6 +55,7 @@ app.component("Galleria", Galleria);
 app.component("Tag", Tag);
 app.component("Calendar", Calendar);
 app.component("InputNumber", InputNumber);
+app.component("Checkbox", Checkbox)
 
 app.directive('tooltip', Tooltip);
 

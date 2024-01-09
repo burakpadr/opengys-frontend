@@ -9,30 +9,34 @@
       </div>
       <div class="navbar-body">
         <div class="navbar-element" v-for="(navbarElement, i) in navbarElements" :key="i">
-          <li>
-            <router-link :to="navbarElement.href" @click="changeActivityStatus(i, null)">
-              <i :class="[navbarElement.iconClass, changeActivityOfIcon(navbarElement.parentMenuisActive)]" ></i>
-              <span class="navbar-item" :class="{ active: navbarElement.parentMenuisActive }"> {{ navbarElement.title }} </span>
-              <i v-if="navbarElement.hasSubMenu" class="bx bxs-chevron-down toogle-sub-menu-icon" @click="toggleSubMenu(i)"></i>
-            </router-link>
-            <div class="navbar-tooltip">
-              <div v-if="navbarElement.hasSubMenu" class="sub-menu-header">
-                {{ navbarElement.title }}
-              </div>
-              <div v-else>
-                <router-link :to="navbarElement.href" @click="changeActivityStatus(i, null)" >{{ navbarElement.title }}</router-link>
-              </div>
-              <div v-for="(submenu, j) in navbarElement.submenus" :key="j">
-                <router-link :to="submenu.href" @click="changeActivityStatus(i, j)" :class="{ active: submenu.isActive }">{{ submenu.title }}</router-link>
-              </div>
-            </div>
-          </li>
-          <div class="sub-menu" :class="{active: navbarElement.submenuIsActive}" v-if="navbarElement.hasSubMenu">
-            <li v-for="(submenu, j) in navbarElement.submenus" :key="j">
-              <router-link :to="submenu.href" @click="changeActivityStatus(i, j)">
-                <span class="navbar-item" :class="{ active: submenu.isActive }">{{ submenu.title }}</span>
+          <div v-if="(navbarElement.hasSubMenu && allowedComponentsContainAnySubMenu(navbarElement.submenus)) || allowedComponentsContainSubMenuByName(navbarElement.component)">
+            <li>
+              <router-link :to="navbarElement.href" @click="changeActivityStatus(i, null)">
+                <i :class="[navbarElement.iconClass, changeActivityOfIcon(navbarElement.parentMenuisActive)]" ></i>
+                <span class="navbar-item" :class="{ active: navbarElement.parentMenuisActive }"> {{ navbarElement.title }} </span>
+                <i v-if="navbarElement.hasSubMenu" class="bx bxs-chevron-down toogle-sub-menu-icon" @click="toggleSubMenu(i)"></i>
               </router-link>
+              <div class="navbar-tooltip">
+                <div v-if="navbarElement.hasSubMenu" class="sub-menu-header">
+                  {{ navbarElement.title }}
+                </div>
+                <div v-else>
+                  <router-link :to="navbarElement.href" @click="changeActivityStatus(i, null)" >{{ navbarElement.title }}</router-link>
+                </div>
+                <div v-for="(submenu, j) in navbarElement.submenus" :key="j">
+                  <router-link :to="submenu.href" @click="changeActivityStatus(i, j)" :class="{ active: submenu.isActive }">{{ submenu.title }}</router-link>
+                </div>
+              </div>
             </li>
+            <div class="sub-menu" :class="{active: navbarElement.submenuIsActive}" v-if="navbarElement.hasSubMenu">
+              <div v-for="(submenu, j) in navbarElement.submenus" :key="j">
+                <li v-if="allowedComponentsContainSubMenuByName(submenu.component)">
+                  <router-link :to="submenu.href" @click="changeActivityStatus(i, j)">
+                    <span class="navbar-item" :class="{ active: submenu.isActive }">{{ submenu.title }}</span>
+                  </router-link>
+                </li>
+            </div>
+            </div>
           </div>
         </div>
       </div>
@@ -40,85 +44,15 @@
 </template>
 
 <script>
+import { gysClient } from '@/assets/js/client';
+import { ELEMENTS } from '@/service/NavbarService'
 export default {
   name: "Navbar",
   data() {
     return {
       navbarIsActive: true,
-      navbarElements: [
-        {
-          title: "Dashboard",
-          href: "",
-          iconClass: "bx bxs-dashboard",
-          hasSubMenu: false,
-          parentMenuisActive: true,
-          submenuIsActive: false,
-          submenus: [],
-        },
-        {
-          title: "Gayrimenkuller",
-          href: "/real-estates",
-          iconClass: "bx bx-buildings",
-          hasSubMenu: false,
-          parentMenuisActive: false,
-          submenuIsActive: false,
-          submenus: [],
-        },
-        {
-          title: "Raporlar",
-          href: "",
-          iconClass: "bx bxs-report",
-          hasSubMenu: false,
-          parentMenuisActive: false,
-          submenuIsActive: false,
-          submenus: [],
-        },
-        {
-          title: "Onay",
-          href: "",
-          iconClass: "bx bx-badge-check",
-          parentMenuisActive: false,
-          hasSubMenu: false,
-          submenuIsActive: false,
-          submenus: [],
-        },
-        {
-          title: "Sistem Tanımları",
-          href: "",
-          iconClass: "bx bx-edit-alt",
-          hasSubMenu: true,
-          parentMenuisActive: false,
-          submenuIsActive: false,
-          submenus: [
-            { title: "Kategori", href: "/categories", isActive: false },
-            { title: "İlan Yeri", href: "/advert-places", isActive: false },
-            { title: "Özellik", href: "/attributes", isActive: false },
-          ],
-        },
-        {
-          title: "Kullanıcı Yönetimi",
-          href: "",
-          iconClass: "bx bx-edit-alt",
-          hasSubMenu: true,
-          parentMenuisActive: false,
-          submenuIsActive: false,
-          submenus: [
-            { title: "Alt Kullanıcı", href: "/categories", isActive: false },          
-            { title: "Kiracı", href: "/categories", isActive: false },          
-          ],
-        },
-        {
-          title: "Güvenlik",
-          href: "",
-          iconClass: "bx bxs-key",
-          hasSubMenu: true,
-          parentMenuisActive: false,
-          submenuIsActive: false,
-          submenus: [
-            { title: "Yetkilendirme", href: "/categories", isActive: false },
-          ],
-        },
-      ],
+      navbarElements: ELEMENTS,
+      allowedComponentsToBeSeen: []
     };
   },
   methods: {
@@ -153,7 +87,32 @@ export default {
     changeActivityOfIcon(parentMenuisActive) {
       return parentMenuisActive ? "active" : "";
     },
+    getAllowedComponentsToBeSeen() {
+        gysClient
+        .get("ui-elements/allowed-components-to-be-seen")
+        .then((response) => {
+          this.allowedComponentsToBeSeen = response.data;
+        })
+    },
+    allowedComponentsContainAnySubMenu(subMenus) {
+      for (var i = 0; i < subMenus.length; i++)
+        for (var j = 0; j < this.allowedComponentsToBeSeen.length; j++)
+          if (this.allowedComponentsToBeSeen[j].componentName === subMenus[i].component)
+            return true;
+
+      return false;
+    },
+    allowedComponentsContainSubMenuByName(componentName) {
+      for (var i = 0; i < this.allowedComponentsToBeSeen.length; i++)
+        if (this.allowedComponentsToBeSeen[i].componentName === componentName)
+          return true;
+
+      return false;
+    },
   },
+  mounted() {
+    this.getAllowedComponentsToBeSeen();
+  }
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="advert-place-container">
+  <div class="advert-place-container" v-if="isVisible">
     <Notification
       :isActive="notification.isActive"
       :severity="notification.severity"
@@ -94,12 +94,14 @@ import Pagination from "@/components/Pagination.vue";
 import Notification from "@/components/Notification.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
 import { gysClient } from "@/assets/js/client.js";
+import { canSeeComponent } from "@/service/RbacService";
 
 export default {
   name: "AdvertPlaceView",
   components: { Pagination, Notification },
   data() {
     return {
+      isVisible: null,
       pagination: {
         currentPageIndex: null,
         dataSizePerPage: 10,
@@ -261,6 +263,8 @@ export default {
     },
   },
   mounted() {
+    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
+
     this.getAdvertPlaces();
   },
 };

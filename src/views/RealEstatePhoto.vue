@@ -1,5 +1,5 @@
 <template>
-  <div class="real-estate-photo-container">
+  <div class="real-estate-photo-container" v-if="isVisible">
     <div class="modal-left-content">
       <div class="card">
         <FileUpload
@@ -68,6 +68,7 @@
 
 <script>
 import { gysClient } from "@/assets/js/client.js";
+import { canSeeComponent } from "@/service/RbacService";
 
 export default {
   name: "RealEstatePhoto",
@@ -76,6 +77,7 @@ export default {
   },
   data() {
     return {
+      isVisible: null,
       images: [],
       inside: false,
       position: "right",
@@ -176,6 +178,8 @@ export default {
     }
   },
   mounted() {
+    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
+
     this.getRealEstatePhotos();
 
     this.baseServiceUrl = gysClient.getUri();
