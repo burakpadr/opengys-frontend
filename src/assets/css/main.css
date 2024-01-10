@@ -44,3 +44,12 @@ body {
 i {
   cursor: pointer;
 }
+
+.input {
+  font-size: 0.85rem;
+}
+
+a {
+  outline: none;
+  text-decoration: none;
+}
