@@ -258,7 +258,7 @@ export default {
       if (this.searchTerm === "") {
         gysClient
           .get(
-            `roles?page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc`
+            `roles/as-page?page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc`
           )
           .then((response) => {
             this.roles = response.data.content;

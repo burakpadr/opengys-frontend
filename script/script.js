@@ -40,6 +40,10 @@ const COMPONENTS = [
     {
         componentName: "RoleView",
         label: "Güvenlik > Rol Mekanizması"
+    },
+    {
+        componentName: "StaffView",
+        label: "Kullanıcı Yönetimi > Alt Kullanıcı"
     }
 ]
 

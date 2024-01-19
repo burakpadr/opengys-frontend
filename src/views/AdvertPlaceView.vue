@@ -58,6 +58,9 @@
         @pageState="getPageState"
       />
     </div>
+    
+    <!-- Create Modal -->
+
     <form class="modal" v-if="modalIsVisible" @click.self="toggleModal">
       <i class="bx bx-x exit" @click="toggleModal"></i>
       <div class="modal-content">

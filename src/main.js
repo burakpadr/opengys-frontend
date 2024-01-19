@@ -25,6 +25,9 @@ import Checkbox from 'primevue/checkbox';
 import Card from 'primevue/card';
 import Password from 'primevue/password';
 import OverlayPanel from 'primevue/overlaypanel';
+import Menu from 'primevue/menu';
+import Avatar from 'primevue/avatar';
+import InputSwitch from 'primevue/inputswitch';
 
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
@@ -62,6 +65,9 @@ app.component("Checkbox", Checkbox);
 app.component("Card", Card);
 app.component("Password", Password);
 app.component("OverlayPanel", OverlayPanel);
+app.component("Menu", Menu);
+app.component("Avatar", Avatar);
+app.component("InputSwitch", InputSwitch);
 
 app.directive('tooltip', Tooltip);
 

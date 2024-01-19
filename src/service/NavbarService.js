@@ -57,7 +57,7 @@ export const ELEMENTS = [
         parentMenuisActive: false,
         submenuIsActive: false,
         submenus: [
-            { component: "", title: "Alt Kullanıcı", href: "/categories", isActive: false },
+            { component: "StaffView", title: "Alt Kullanıcı", href: "/staffs", isActive: false },
             { component: "", title: "Kiracı", href: "/categories", isActive: false },
         ],
     },

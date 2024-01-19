@@ -29,6 +29,10 @@ tr:nth-of-type(2n) {
     background-color: #f0f0f0;
 }
 
+tr.disabled {
+    opacity: .5;
+}
+
 tr i {
     font-size: 1.1rem;
     color: rgba(0, 0, 0, 0.6);

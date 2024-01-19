@@ -5,7 +5,10 @@
     :messageContent="notification.messageContent"
     @isActive="setVisibilityOfNotification"
   />
-  <form class="card flex align-items-center justify-content-center" @submit.prevent="signIn()">
+  <form
+    class="card flex align-items-center justify-content-center"
+    @submit.prevent="signUp()"
+  >
     <Card style="width: 25em">
       <template #header>
         <div class="logo">
@@ -14,16 +17,16 @@
         </div>
       </template>
       <template #title>
-        <div style="margin-top: 15px">Giriş</div>
+        <div style="margin-top: 15px">Kayıt</div>
       </template>
       <template #content>
         <div style="margin-top: 30px">
           <span class="p-float-label">
-            <InputText
-              class="input"
-              size="small"
-              v-model="email"
-            />
+            <InputText class="input" size="small" v-model="deedOwnerTitle" />
+            <label class="input">Firma Ünvanı*</label>
+          </span>
+          <span class="p-float-label" style="margin-top: 15px">
+            <InputText class="input" size="small" v-model="email" />
             <label class="input">E-Posta*</label>
           </span>
           <span class="p-float-label" style="margin-top: 15px">
@@ -40,10 +43,7 @@
       <template #footer>
         <div style="margin: 30px 0px 15px 0px">
           <div>
-            <Button type="submit" style="width: 100px" label="Giriş" />
-          </div>
-          <div style="margin-top: 10px">
-            <a href="#">Şifremi unuttum</a>
+            <Button type="submit" style="width: 100px" label="Kayıt Ol" />
           </div>
         </div>
       </template>
@@ -54,56 +54,66 @@
 <script>
 import Notification from "@/components/Notification.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
-import { getTokenFromBackend, setTokenToLocalStorage } from "@/service/TokenService";
+import { gysClient } from "@/assets/js/client";
 
 export default {
-  name: "LoginView",
+  name: "RegisterView",
   components: { Notification },
   data() {
     return {
+      deedOwnerTitle: null,
       email: null,
       password: null,
       notification: {
         isActive: false,
         severity: "",
         messageContent: "",
-      }
+      },
     };
   },
   methods: {
     setVisibilityOfNotification(event) {
       this.notification.isActive = event;
     },
-    signIn() {
-      getTokenFromBackend(this.email, this.password)
-      .then((response) => {
-        setTokenToLocalStorage(response.headers.authorization);
+    signUp() {
+      const payload = {
+        user: {
+          name: this.deedOwnerTitle,
+          email: this.email,
+          password: this.password,
+        },
+        isDeedOwner: true,
+      };
 
-        window.location.href = "/real-estates";
-      })
-      .then(() => {
-        if (window.PasswordCredential) {
-          const passwordCredential = new PasswordCredential({ id: this.email, password: this.password });
-          navigator.credentials.store(passwordCredential);
-        }
-      })
-      .catch((error) => {
+      gysClient
+        .post("staffs", payload)
+        .then(() => {
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+          this.notification.messageContent = "Kaydınız oluşuturldu.";
+
+          setInterval(() => {
+            window.location.href = "/";
+          }, 2000)
+        })
+        .catch((error) => {
           this.notification.isActive = true;
           this.notification.severity = NotificationConstants.SEVERITY_ERROR;
           this.notification.messageContent = error.response.data.message;
         });
-    }
-  }
+    },
+  },
+  mounted() {},
 };
 </script>
 
 <style>
-.login-container {
+.register-container {
   display: flex;
   justify-content: center;
 }
 
-.login-container .logo {
+.register-container .logo {
   display: flex;
   align-items: center;
   color: #424242;
@@ -112,13 +122,12 @@ export default {
   justify-content: center;
   margin-top: -23px;
 }
-.login-container .logo i {
+.register-container .logo i {
   font-size: 2.9rem;
   margin-right: 5px;
 }
 
-.login-container .logo span {
+.register-container .logo span {
   font-size: 1.3rem;
 }
-
 </style>

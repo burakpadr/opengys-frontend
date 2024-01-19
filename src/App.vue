@@ -1,5 +1,8 @@
 <template>
-  <div class="login-container" v-if="!tokenIsValid">
+  <div class="register-container" v-if="numberOfDeedOwner === 0">
+    <RegisterView />
+  </div>
+  <div class="login-container" v-else-if="!tokenIsValid">
     <LoginView />
   </div>
   <div class="container" v-else>
@@ -17,18 +20,31 @@
 import Navbar from "./components/Navbar.vue";
 import Header from "./components/Header.vue";
 import LoginView from './views/LoginView.vue';
+import RegisterView from "./views/RegisterView.vue";
 
 import { tokenIsExist, isTokenExpired } from "./service/TokenService";
+import { gysClient } from "./assets/js/client";
 
 export default {
   name: "App",
-  components: { Navbar, Header, LoginView },
+  components: { Navbar, Header, LoginView, RegisterView },
   data() {
     return {
+      numberOfDeedOwner: null,
       tokenIsValid: null
     }
   },
+  methods: {
+    countDeedOwner() {
+      gysClient.get("staffs/count-deed-owner")
+      .then((response) => {
+        this.numberOfDeedOwner = response.data;
+      })
+    }
+  },
   mounted() {
+    this.countDeedOwner();
+
     if (tokenIsExist())
       this.tokenIsValid = !isTokenExpired();
     else
@@ -40,7 +56,7 @@ export default {
 <style>
 @import "./assets/css/main.css";
 
-.login-container {
+.login-container, .register-container {
   width: 100%;
   height: 100%;
   position: relative;

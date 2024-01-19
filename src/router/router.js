@@ -5,13 +5,15 @@ import CategoryView from '../views/CategoryView.vue'
 import RealEstateListView from '../views/RealEstateListView.vue'
 import AttributeView from '../views/AttributeView.vue'
 import RoleView from '../views/RoleView.vue'
+import StaffView from '@/views/StaffView.vue'
 
 const routes = [
     { path: "/advert-places", component: AdvertPlaceView },
     { path: "/categories", component: CategoryView },
     { path: "/real-estates", component: RealEstateListView },
     { path: "/attributes", component: AttributeView },
-    { path: "/roles", component: RoleView}
+    { path: "/roles", component: RoleView},
+    { path: "/staffs", component: StaffView }
 ]
 
 const router = createRouter({

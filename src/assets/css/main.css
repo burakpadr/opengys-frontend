@@ -53,3 +53,11 @@ a {
   outline: none;
   text-decoration: none;
 }
+
+.p-overlaypanel .p-overlaypanel-content.overlay-panel {
+  padding: 0;
+}
+
+.disabled {
+  pointer-events: none;
+}
