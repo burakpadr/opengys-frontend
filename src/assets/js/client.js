@@ -5,3 +5,4 @@ export const gysClient = axios.create({
 });
 
 gysClient.defaults.headers.common['Authorization'] = localStorage.getItem("token");
+gysClient.defaults.headers.common['Accept-Language'] = "en-tr"

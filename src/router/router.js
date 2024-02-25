@@ -6,6 +6,8 @@ import RealEstateListView from '../views/RealEstateListView.vue'
 import AttributeView from '../views/AttributeView.vue'
 import RoleView from '../views/RoleView.vue'
 import StaffView from '@/views/StaffView.vue'
+import ResetPasswordView from '@/views/ResetPasswordView.vue'
+import TenantView from '@/views/TenantView.vue'
 
 const routes = [
     { path: "/advert-places", component: AdvertPlaceView },
@@ -13,7 +15,9 @@ const routes = [
     { path: "/real-estates", component: RealEstateListView },
     { path: "/attributes", component: AttributeView },
     { path: "/roles", component: RoleView},
-    { path: "/staffs", component: StaffView }
+    { path: "/staffs", component: StaffView },
+    { path: "/reset-password", component: ResetPasswordView },
+    { path: "/tenants", component: TenantView }
 ]
 
 const router = createRouter({

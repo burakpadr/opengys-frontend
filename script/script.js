@@ -44,6 +44,10 @@ const COMPONENTS = [
     {
         componentName: "StaffView",
         label: "Kullanıcı Yönetimi > Alt Kullanıcı"
+    },
+    {
+        componentName: "TenantView",
+        label: "Kullanıcı Yönetimi > Kiracılar"
     }
 ]
 

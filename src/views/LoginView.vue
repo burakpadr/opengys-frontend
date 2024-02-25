@@ -5,7 +5,7 @@
     :messageContent="notification.messageContent"
     @isActive="setVisibilityOfNotification"
   />
-  <form class="card flex align-items-center justify-content-center" @submit.prevent="signIn()">
+  <form class="card flex align-items-center justify-content-center" @submit.prevent="signIn()" v-if="loginModalIsVisible">
     <Card style="width: 25em">
       <template #header>
         <div class="logo">
@@ -43,22 +43,26 @@
             <Button type="submit" style="width: 100px" label="Giriş" />
           </div>
           <div style="margin-top: 10px">
-            <a href="#">Şifremi unuttum</a>
+            <a href="#" @click="openResetPasswordModal()">Şifremi unuttum</a>
           </div>
         </div>
       </template>
     </Card>
   </form>
+  <div class="card flex align-items-center justify-content-center" v-else>
+    <ResetPasswordView />
+  </div>
 </template>
 
 <script>
 import Notification from "@/components/Notification.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
-import { getTokenFromBackend, setTokenToLocalStorage } from "@/service/TokenService";
+import { getTokenFromBackend, setTokenToLocalStorage, removeToken } from "@/service/TokenService";
+import ResetPasswordView from './ResetPasswordView.vue';
 
 export default {
   name: "LoginView",
-  components: { Notification },
+  components: { Notification, ResetPasswordView },
   data() {
     return {
       email: null,
@@ -67,7 +71,8 @@ export default {
         isActive: false,
         severity: "",
         messageContent: "",
-      }
+      },
+      loginModalIsVisible: true,
     };
   },
   methods: {
@@ -75,6 +80,8 @@ export default {
       this.notification.isActive = event;
     },
     signIn() {
+      removeToken();
+      
       getTokenFromBackend(this.email, this.password)
       .then((response) => {
         setTokenToLocalStorage(response.headers.authorization);
@@ -92,6 +99,9 @@ export default {
           this.notification.severity = NotificationConstants.SEVERITY_ERROR;
           this.notification.messageContent = error.response.data.message;
         });
+    },
+    openResetPasswordModal() {
+      this.loginModalIsVisible = false;
     }
   }
 };

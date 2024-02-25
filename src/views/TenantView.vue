@@ -1,5 +1,5 @@
 <template>
-  <div class="staff-container" v-if="isVisible">
+  <div class="tenant-container" v-if="isVisible">
     <Notification
       :isActive="notification.isActive"
       :severity="notification.severity"
@@ -31,42 +31,29 @@
         <tr>
           <th>Adı Soyadı</th>
           <th>E-Posta</th>
-          <th>Rol</th>
-          <!-- <th>Aktif</th> -->
+          <th>Bağlı Gayrimenkul No</th>
           <th>Aksiyon</th>
         </tr>
-        <tr
-          v-for="(staff, index) in staffs"
-          :key="index"
-          :class="{
-            disabled: indexOfItIsMe === index,
-          }"
-        >
-          <td>{{ formatNameSurname(staff.user.name, staff.user.surname) }}</td>
-          <td>{{ staff.user.email }}</td>
-          <td>{{ staff.user.roleLabel }}</td>
-          <!-- <td>
-            <InputSwitch
-              v-model="staff.isActive"
-              @change="changeStaffActivity(index)"
-            />
-          </td> -->
-          <td data-cell="Aksiyon">
-            <div>
-              <ConfirmPopup
-                :pt="{
-                  root: { class: 'confirmPopup' },
-                }"
-              ></ConfirmPopup>
-              <i
-                class="bx bx-trash"
-                @click="confirmDeleteStaff($event, staff.id)"
-              ></i>
-              <i
-                @click="openUpdateEventModal(staff.id)"
-                class="bx bx-edit-alt"
-              ></i>
-            </div>
+        <tr v-for="(tenant, index) in tenants" :key="index">
+          <td>
+            {{ formatNameSurname(tenant.user.name, tenant.user.surname) }}
+          </td>
+          <td>{{ tenant.user.email }}</td>
+          <td>{{ tenant.realEstateNo }}</td>
+          <td>
+            <ConfirmPopup
+              :pt="{
+                root: { class: 'confirmPopup' },
+              }"
+            ></ConfirmPopup>
+            <i
+              class="bx bx-trash"
+              @click="confirmDeleteTenant($event, tenant.id)"
+            ></i>
+            <i
+              @click="openUpdateEventModal(tenant.id)"
+              class="bx bx-edit-alt"
+            ></i>
           </td>
         </tr>
       </table>
@@ -96,7 +83,7 @@
           <span class="p-float-label" style="margin: 0 auto">
             <InputText
               class="input"
-              v-model="staff.name"
+              v-model="tenant.name"
               size="small"
               required="true"
             />
@@ -107,7 +94,7 @@
           <span class="p-float-label" style="margin: 0 auto">
             <InputText
               class="input"
-              v-model="staff.surname"
+              v-model="tenant.surname"
               size="small"
               required="true"
             />
@@ -118,24 +105,11 @@
           <span class="p-float-label" style="margin: 0 auto">
             <InputText
               class="input"
-              v-model="staff.email"
+              v-model="tenant.email"
               size="small"
               required="true"
             />
             <label class="input">E-posta*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Dropdown
-              v-model="staff.roleId"
-              :options="roles"
-              optionLabel="label"
-              optionValue="id"
-              class="w-full md:w-14rem input"
-              inputId="inputType"
-            />
-            <label class="input">Rol*</label>
           </span>
         </div>
         <div class="modal-content-row">
@@ -161,10 +135,9 @@
           <span class="p-float-label" style="margin: 0 auto">
             <InputText
               class="input"
-              v-model="staff.name"
+              v-model="tenant.name"
               size="small"
               required="true"
-              :disabled="true"
             />
             <label class="input">Ad*</label>
           </span>
@@ -173,10 +146,9 @@
           <span class="p-float-label" style="margin: 0 auto">
             <InputText
               class="input"
-              v-model="staff.surname"
+              v-model="tenant.surname"
               size="small"
               required="true"
-              :disabled="true"
             />
             <label class="input">Soyad*</label>
           </span>
@@ -185,25 +157,11 @@
           <span class="p-float-label" style="margin: 0 auto">
             <InputText
               class="input"
-              v-model="staff.email"
+              v-model="tenant.email"
               size="small"
               required="true"
-              :disabled="true"
             />
             <label class="input">E-posta*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Dropdown
-              v-model="staff.roleId"
-              :options="roles"
-              optionLabel="label"
-              optionValue="id"
-              class="w-full md:w-14rem input"
-              inputId="inputType"
-            />
-            <label class="input">Rol*</label>
           </span>
         </div>
         <div class="modal-content-row">
@@ -220,11 +178,10 @@ import Notification from "@/components/Notification.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
 import { gysClient } from "@/assets/js/client.js";
 import { canSeeComponent } from "@/service/RbacService";
-import { parseToken } from "@/service/TokenService";
 import { transformToTitle } from "@/util/StringUtil";
 
 export default {
-  name: "StaffView",
+  name: "TenantsView",
   components: { Pagination, Notification },
   data() {
     return {
@@ -241,94 +198,25 @@ export default {
         dataSizePerPage: 10,
         totalRecords: null,
       },
-      staffs: [],
-      roles: [],
-      staff: {
+      searchTerm: "",
+      tenants: [],
+      tenant: {
         id: null,
         name: null,
         surname: null,
         email: null,
-        roleId: null,
-        isDeedOwner: null,
       },
-      searchTerm: "",
-      indexOfItIsMe: null,
     };
   },
   methods: {
     setVisibilityOfNotification(event) {
       this.notification.isActive = event;
     },
-    openUpdateEventModal(id) {
-      this.getRoles();
-
-      gysClient
-        .get(`staffs/${id}`)
-        .then((response) => {
-          const data = response.data;
-
-          this.staff.id = data.id;
-          this.staff.name = data.user.name;
-          this.staff.surname = data.user.surname;
-          this.staff.email = data.user.email;
-          this.staff.roleId = data.user.roleId;
-          this.staff.isDeedOwner = data.isDeedOwner;
-
-          this.toggleUpdateModal();
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
-        });
-    },
-    openAddEventModal() {
-      this.staff = {};
-
-      this.toggleCreateModal();
-    },
-    toggleCreateModal() {
-      if (this.createModalIsVisible) {
-        this.createModalIsVisible = false;
-      } else {
-        this.createModalIsVisible = true;
-
-        this.getRoles();
-      }
-    },
-    toggleUpdateModal() {
-      this.updateModalIsVisible = this.updateModalIsVisible ? false : true;
-    },
     getPageState(pageData) {
       this.pagination.currentPageIndex = pageData.page;
       this.pagination.dataSizePerPage = pageData.rows;
 
-      this.getStaffs();
-    },
-    getStaffsAsPromise() {
-      if (this.searchTerm === "") {
-        return gysClient.get(
-          `staffs/as-page?page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc`
-        );
-      } else return this.search();
-    },
-    getStaffs() {
-      if (this.searchTerm === "") {
-        gysClient
-          .get(
-            `staffs/as-page?page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc`
-          )
-          .then((response) => {
-            this.staffs = response.data.content;
-
-            this.pagination.totalRecords = response.data.totalElements;
-          });
-      } else this.search();
-    },
-    getRoles() {
-      gysClient.get("roles/as-list").then((response) => {
-        this.roles = response.data;
-      });
+      this.getCategories();
     },
     formatNameSurname(name, surname) {
       var surnameIsNotNull = surname != null;
@@ -337,53 +225,30 @@ export default {
 
       return transformToTitle(formattedNameSurname);
     },
-    create() {
-      const payload = {
-        user: {
-          name: this.staff.name,
-          surname: this.staff.surname,
-          email: this.staff.email,
-          roleId: this.staff.roleId,
-        },
-        isDeedOwner: false,
-      };
+    openAddEventModal() {
+      this.tenant = {};
 
-      gysClient
-        .post("staffs", payload)
-        .then(() => {
-          this.toggleCreateModal();
-          this.getStaffs();
-
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Alt kullanıcı oluşturuldu.";
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
-        });
+      this.toggleCreateModal();
     },
-    update() {
-      const payload = {
-        user: {
-          name: this.staff.name,
-          surname: this.staff.surname,
-          email: this.staff.email,
-          roleId: this.staff.roleId,
-        },
-        isDeedOwner: false,
-      };
-
+    toggleCreateModal() {
+      if (this.createModalIsVisible) {
+        this.createModalIsVisible = false;
+      } else {
+        this.createModalIsVisible = true;
+      }
+    },
+    openUpdateEventModal(id) {
       gysClient
-        .put(`staffs/${this.staff.id}`, payload)
-        .then(() => {
+        .get(`tenants/${id}`)
+        .then((response) => {
+          const data = response.data;
+
+          this.tenant.id = data.id;
+          this.tenant.name = data.user.name;
+          this.tenant.surname = data.user.surname;
+          this.tenant.email = data.user.email;
+
           this.toggleUpdateModal();
-          this.getStaffs();
-
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Alt kullanıcı güncellendi.";
         })
         .catch((error) => {
           this.notification.isActive = true;
@@ -391,7 +256,10 @@ export default {
           this.notification.messageContent = error.response.data.message;
         });
     },
-    confirmDeleteStaff(event, id) {
+    toggleUpdateModal() {
+      this.updateModalIsVisible = this.updateModalIsVisible ? false : true;
+    },
+    confirmDeleteTenant(event, id) {
       this.$confirm.require({
         target: event.currentTarget,
         message: "Kaydı silmek istediğinden emin misin?",
@@ -399,7 +267,7 @@ export default {
         acceptLabel: "Evet",
         icon: "pi pi-exclamation-triangle",
         accept: () => {
-          this.deleteStaff(id);
+          this.deleteTenant(id);
 
           this.$toast.add({
             severity: NotificationConstants.SEVERITY_SUCCESS,
@@ -410,11 +278,11 @@ export default {
         },
       });
     },
-    deleteStaff(id) {
+    deleteTenant(id) {
       gysClient
-        .delete(`staffs/${id}`)
+        .delete(`tenants/${id}`)
         .then(() => {
-          this.getStaffs();
+          this.getTenants();
         })
         .catch((error) => {
           this.notification.isActive = true;
@@ -422,39 +290,53 @@ export default {
           this.notification.messageContent = error.response.data.message;
         });
     },
-    changeStaffActivity(index) {
+    getTenants() {
+      if (this.searchTerm === "") {
+        gysClient
+          .get(
+            `tenants/as-page?page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc`
+          )
+          .then((response) => {
+            this.tenants = response.data.content;
+
+            this.pagination.totalRecords = response.data.totalElements;
+          });
+      } else this.search();
+    },
+    create() {
+      const payload = {
+        user: {
+          name: this.tenant.name,
+          surname: this.tenant.surname,
+          email: this.tenant.email,
+        },
+      };
+
       gysClient
-        .patch(
-          `staffs/${this.staffs[index].id}/is-active?value=${this.staffs[index].isActive}`
-        )
+        .post("tenants", payload)
+        .then(() => {
+          this.toggleCreateModal();
+          this.getTenants();
+
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+          this.notification.messageContent = "Kiraci oluşturuldu.";
+        })
         .catch((error) => {
           this.notification.isActive = true;
           this.notification.severity = NotificationConstants.SEVERITY_ERROR;
           this.notification.messageContent = error.response.data.message;
         });
     },
-    findIndexOfItIsMe(staffs) {
-      const decodedToken = parseToken();
-
-      staffs.forEach((staff, index) => {
-        if (staff.user.id === Number(decodedToken.sub)) {
-          this.indexOfItIsMe = index;
-
-          return;
-        }
-      });
-    },
     search() {
       gysClient
         .get(
-          `staffs/search?searchTerm=${this.searchTerm}&page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc`
+          `tenants/search?searchTerm=${this.searchTerm}&page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}&sort=id,asc`
         )
         .then((response) => {
-          this.staffs = response.data.content;
+          this.tenants = response.data.content;
 
           this.pagination.totalRecords = response.data.totalElements;
-
-          this.findIndexOfItIsMe(response.data.content);
         });
     },
   },
@@ -463,15 +345,7 @@ export default {
       (response) => (this.isVisible = response.data)
     );
 
-    const staffs = this.getStaffsAsPromise();
-
-    staffs.then((response) => {
-      this.staffs = response.data.content;
-
-      this.pagination.totalRecords = response.data.totalElements;
-
-      this.findIndexOfItIsMe(response.data.content);
-    });
+    this.getTenants();
   },
 };
 </script>
@@ -480,7 +354,7 @@ export default {
 @import "../assets/css/table.css";
 @import "../assets/css/crudHeader.css";
 
-.staff-container .modal {
+.tenant-container .modal {
   width: 100%;
   min-height: 100%;
   position: fixed;
@@ -491,7 +365,7 @@ export default {
   display: table;
 }
 
-.staff-container .modal-content {
+.tenant-container .modal-content {
   width: 350px;
   background: #fafafa;
   position: absolute;
@@ -502,35 +376,35 @@ export default {
   padding-bottom: 20px;
 }
 
-.staff-container .modal-content-row {
+.tenant-container .modal-content-row {
   margin-top: 30px;
 }
 
-.staff-container .modal-content .modal-content-row:nth-child(2) {
+.tenant-container .modal-content .modal-content-row:nth-child(2) {
   margin-top: 40px;
 }
 
-.staff-container .modal-content-row .input,
-.staff-container .modal-content-row .button {
+.tenant-container .modal-content-row .input,
+.tenant-container .modal-content-row .button {
   margin-left: 20px;
   font-size: 0.85rem;
 }
 
-.staff-container .modal-content-row .button {
+.tenant-container .modal-content-row .button {
   width: 100px;
 }
 
-.staff-container .modal-content-header {
+.tenant-container .modal-content-header {
   margin-top: 10px;
   margin-left: 20px;
 }
 
-.staff-container .modal-content-header span {
+.tenant-container .modal-content-header span {
   border-bottom: 2px solid #616161;
   padding-bottom: 5px;
 }
 
-.staff-container .modal .exit {
+.tenant-container .modal .exit {
   position: absolute;
   right: 150px;
   top: 70px;
@@ -539,7 +413,7 @@ export default {
 }
 
 @media (max-width: 650px) {
-  .staff-container .modal .exit {
+  .tenant-container .modal .exit {
     right: 30px;
   }
 }

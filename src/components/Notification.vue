@@ -5,7 +5,7 @@
 <script>
 export default {
   name: "Notification",
-  props: ["isActive", "severity", "messageContent"],
+  props: ["isActive", "severity", "messageContent", "timeIgnore"],
   watch: {
     isActive() {
       if (this.isActive)
@@ -13,7 +13,7 @@ export default {
           severity: this.severity,
           summary: "Bildirim",
           detail: this.messageContent,
-          life: 3000,
+          life: this.timeIgnore ? null : 3000,
         });
 
         this.$emit("isActive", false);

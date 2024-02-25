@@ -44,9 +44,9 @@ export const ELEMENTS = [
         parentMenuisActive: false,
         submenuIsActive: false,
         submenus: [
-            { component: "CategoryView", title: "Kategori", href: "/categories", isActive: false },
-            { component: "AdvertPlaceView", title: "İlan Yeri", href: "/advert-places", isActive: false },
-            { component: "AttributeView", title: "Özellik", href: "/attributes", isActive: false },
+            { component: "CategoryView", title: "Kategoriler", href: "/categories", isActive: false },
+            { component: "AdvertPlaceView", title: "İlan Yerleri", href: "/advert-places", isActive: false },
+            { component: "AttributeView", title: "Özellikler", href: "/attributes", isActive: false },
         ],
     },
     {
@@ -57,8 +57,8 @@ export const ELEMENTS = [
         parentMenuisActive: false,
         submenuIsActive: false,
         submenus: [
-            { component: "StaffView", title: "Alt Kullanıcı", href: "/staffs", isActive: false },
-            { component: "", title: "Kiracı", href: "/categories", isActive: false },
+            { component: "StaffView", title: "Alt Kullanıcılar", href: "/staffs", isActive: false },
+            { component: "TenantView", title: "Kiracılar", href: "/tenants", isActive: false },
         ],
     },
     {
@@ -69,7 +69,7 @@ export const ELEMENTS = [
         parentMenuisActive: false,
         submenuIsActive: false,
         submenus: [
-            { component: "RoleView", title: "Rol Mekanizması", href: "/roles", isActive: false },
+            { component: "RoleView", title: "Roller", href: "/roles", isActive: false },
         ],
     },
 ]

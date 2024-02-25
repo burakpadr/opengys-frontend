@@ -22,7 +22,7 @@ import Header from "./components/Header.vue";
 import LoginView from './views/LoginView.vue';
 import RegisterView from "./views/RegisterView.vue";
 
-import { tokenIsExist, isTokenExpired } from "./service/TokenService";
+import { tokenIsExist, isTokenExpired, removeToken } from "./service/TokenService";
 import { gysClient } from "./assets/js/client";
 
 export default {
