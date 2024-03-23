@@ -17,7 +17,8 @@
             >
               <span class="inline-flex flex-column">
                 <span class="font-bold"> {{ formatNameSurname() }}</span>
-                <span class="text-sm">{{ staff.user.roleLabel }}</span>
+                <span class="text-sm" v-if="staff.user.roleLabel != null">{{ staff.user.roleLabel }}</span>
+                <span class="text-sm" v-else>Tapu Sahibi</span>
               </span>
             </button>
           </template>

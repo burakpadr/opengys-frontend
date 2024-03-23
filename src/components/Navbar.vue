@@ -16,6 +16,9 @@
                 <span class="navbar-item" :class="{ active: navbarElement.parentMenuisActive }"> {{ navbarElement.title }} </span>
                 <i v-if="navbarElement.hasSubMenu" class="bx bxs-chevron-down toogle-sub-menu-icon" @click="toggleSubMenu(i)"></i>
               </router-link>
+
+              <!-- Navbar Tooltip -->
+
               <div class="navbar-tooltip">
                 <div v-if="navbarElement.hasSubMenu" class="sub-menu-header">
                   {{ navbarElement.title }}
@@ -109,9 +112,35 @@ export default {
 
       return false;
     },
+    setNavbarActivityOnInit() {
+      const pathname = window.location.pathname;
+
+      this.navbarElements.forEach((navbarElement) => {
+        if (navbarElement.hasSubMenu) {
+          navbarElement.submenus.forEach((subMenu) => {
+            if (pathname === subMenu.href) {
+              subMenu.isActive = true;
+              navbarElement.submenuIsActive = true
+              navbarElement.parentMenuisActive = true;
+
+              return;
+            }
+          }); 
+        }
+        else {
+          if (pathname === navbarElement.href) {
+            navbarElement.parentMenuisActive = true;
+            
+            return;
+          }
+        }
+      });
+    }
   },
   mounted() {
     this.getAllowedComponentsToBeSeen();
+
+    this.setNavbarActivityOnInit();
   }
 };
 </script>

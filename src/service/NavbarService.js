@@ -14,7 +14,7 @@ export const ELEMENTS = [
         href: "/real-estates",
         iconClass: "bx bx-buildings",
         hasSubMenu: false,
-        parentMenuisActive: true,
+        parentMenuisActive: false,
         submenuIsActive: false,
         submenus: [],
     },
