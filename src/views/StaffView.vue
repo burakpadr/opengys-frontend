@@ -1,220 +1,237 @@
 <template>
-  <div class="staff-container" v-if="isVisible">
-    <Notification
-      :isActive="notification.isActive"
-      :severity="notification.severity"
-      :messageContent="notification.messageContent"
-      @isActive="setVisibilityOfNotification"
-    />
-    <div class="header-container">
-      <Button
-        icon="pi pi-plus"
-        style="background-color: #3b82f6"
-        size="large"
-        class="add-button"
-        rounded
-        @click="openAddEventModal"
-      />
-      <span class="p-input-icon-left search-bar-container">
-        <i class="pi pi-search" />
-        <InputText
-          v-model="searchTerm"
-          size="small"
-          class="search-bar"
-          placeholder="Ara"
-          @input="search"
+  <ViewUsedByStaff>
+    <template #content>
+      <div class="staff-container" v-if="isVisible">
+        <Notification
+          :isActive="notification.isActive"
+          :severity="notification.severity"
+          :messageContent="notification.messageContent"
+          @isActive="setVisibilityOfNotification"
         />
-      </span>
-    </div>
-    <div class="table-container">
-      <table>
-        <tr>
-          <th>Adı Soyadı</th>
-          <th>E-Posta</th>
-          <th>Rol</th>
-          <!-- <th>Aktif</th> -->
-          <th>Aksiyon</th>
-        </tr>
-        <tr
-          v-for="(staff, index) in staffs"
-          :key="index"
-          :class="{
-            disabled: indexOfItIsMe === index,
-          }"
-        >
-          <td>{{ formatNameSurname(staff.user.name, staff.user.surname) }}</td>
-          <td>{{ staff.user.email }}</td>
-          <td>{{ staff.user.roleLabel }}</td>
-          <!-- <td>
+        <div class="header-container">
+          <Button
+            icon="pi pi-plus"
+            style="background-color: #3b82f6"
+            size="large"
+            class="add-button"
+            rounded
+            @click="openAddEventModal"
+          />
+          <span class="p-input-icon-left search-bar-container">
+            <i class="pi pi-search" />
+            <InputText
+              v-model="searchTerm"
+              size="small"
+              class="search-bar"
+              placeholder="Ara"
+              @input="search"
+            />
+          </span>
+        </div>
+        <div class="table-container">
+          <table>
+            <tr>
+              <th>Adı Soyadı</th>
+              <th>E-Posta</th>
+              <th>Rol</th>
+              <!-- <th>Aktif</th> -->
+              <th>Aksiyon</th>
+            </tr>
+            <tr
+              v-for="(staff, index) in staffs"
+              :key="index"
+              :class="{
+                disabled: indexOfItIsMe === index,
+              }"
+            >
+              <td>
+                {{ formatNameSurname(staff.user.name, staff.user.surname) }}
+              </td>
+              <td>{{ staff.user.email }}</td>
+              <td>{{ staff.user.roleLabel }}</td>
+              <!-- <td>
             <InputSwitch
               v-model="staff.isActive"
               @change="changeStaffActivity(index)"
             />
           </td> -->
-          <td data-cell="Aksiyon">
-            <div>
-              <ConfirmPopup
-                :pt="{
-                  root: { class: 'confirmPopup' },
-                }"
-              ></ConfirmPopup>
-              <i
-                class="bx bx-trash"
-                @click="confirmDeleteStaff($event, staff.id)"
-              ></i>
-              <i
-                @click="openUpdateEventModal(staff.id)"
-                class="bx bx-edit-alt"
-              ></i>
+              <td data-cell="Aksiyon">
+                <div>
+                  <ConfirmPopup
+                    :pt="{
+                      root: { class: 'confirmPopup' },
+                    }"
+                  ></ConfirmPopup>
+                  <i
+                    class="bx bx-trash"
+                    @click="confirmDeleteStaff($event, staff.id)"
+                  ></i>
+                  <i
+                    @click="openUpdateEventModal(staff.id)"
+                    class="bx bx-edit-alt"
+                  ></i>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="paginator">
+          <Pagination
+            :totalRecords="pagination.totalRecords"
+            @pageState="getPageState"
+          />
+        </div>
+
+        <!-- Create Modal -->
+
+        <form
+          @submit.prevent="create()"
+          class="modal"
+          v-if="createModalIsVisible"
+          @click.self="toggleCreateModal"
+        >
+          <i class="bx bx-x exit" @click="toggleCreateModal"></i>
+          <div class="modal-content">
+            <div class="modal-content-header">
+              <span>Yeni Ekle</span>
             </div>
-          </td>
-        </tr>
-      </table>
-    </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  v-model="staff.name"
+                  size="small"
+                  required="true"
+                />
+                <label class="input">Ad*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  v-model="staff.surname"
+                  size="small"
+                  required="true"
+                />
+                <label class="input">Soyad*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  v-model="staff.email"
+                  size="small"
+                  required="true"
+                />
+                <label class="input">E-posta*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <Dropdown
+                  v-model="staff.roleId"
+                  :options="roles"
+                  optionLabel="label"
+                  optionValue="id"
+                  class="w-full md:w-14rem input"
+                  inputId="inputType"
+                />
+                <label class="input">Rol*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                label="Kaydet"
+                size="small"
+                class="button"
+                type="submit"
+              />
+            </div>
+          </div>
+        </form>
 
-    <div class="paginator">
-      <Pagination
-        :totalRecords="pagination.totalRecords"
-        @pageState="getPageState"
-      />
-    </div>
+        <!-- Update Modal -->
 
-    <!-- Create Modal -->
-
-    <form
-      @submit.prevent="create()"
-      class="modal"
-      v-if="createModalIsVisible"
-      @click.self="toggleCreateModal"
-    >
-      <i class="bx bx-x exit" @click="toggleCreateModal"></i>
-      <div class="modal-content">
-        <div class="modal-content-header">
-          <span>Yeni Ekle</span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              v-model="staff.name"
-              size="small"
-              required="true"
-            />
-            <label class="input">Ad*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              v-model="staff.surname"
-              size="small"
-              required="true"
-            />
-            <label class="input">Soyad*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              v-model="staff.email"
-              size="small"
-              required="true"
-            />
-            <label class="input">E-posta*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Dropdown
-              v-model="staff.roleId"
-              :options="roles"
-              optionLabel="label"
-              optionValue="id"
-              class="w-full md:w-14rem input"
-              inputId="inputType"
-            />
-            <label class="input">Rol*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <Button label="Kaydet" size="small" class="button" type="submit" />
-        </div>
+        <form
+          @submit.prevent="update()"
+          class="modal"
+          v-if="updateModalIsVisible"
+          @click.self="toggleUpdateModal"
+        >
+          <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
+          <div class="modal-content">
+            <div class="modal-content-header">
+              <span>Güncelle</span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  v-model="staff.name"
+                  size="small"
+                  required="true"
+                  :disabled="true"
+                />
+                <label class="input">Ad*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  v-model="staff.surname"
+                  size="small"
+                  required="true"
+                  :disabled="true"
+                />
+                <label class="input">Soyad*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  v-model="staff.email"
+                  size="small"
+                  required="true"
+                  :disabled="true"
+                />
+                <label class="input">E-posta*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <Dropdown
+                  v-model="staff.roleId"
+                  :options="roles"
+                  optionLabel="label"
+                  optionValue="id"
+                  class="w-full md:w-14rem input"
+                  inputId="inputType"
+                />
+                <label class="input">Rol*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                label="Kaydet"
+                size="small"
+                class="button"
+                type="submit"
+              />
+            </div>
+          </div>
+        </form>
       </div>
-    </form>
-
-    <!-- Update Modal -->
-
-    <form
-      @submit.prevent="update()"
-      class="modal"
-      v-if="updateModalIsVisible"
-      @click.self="toggleUpdateModal"
-    >
-      <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
-      <div class="modal-content">
-        <div class="modal-content-header">
-          <span>Güncelle</span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              v-model="staff.name"
-              size="small"
-              required="true"
-              :disabled="true"
-            />
-            <label class="input">Ad*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              v-model="staff.surname"
-              size="small"
-              required="true"
-              :disabled="true"
-            />
-            <label class="input">Soyad*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              v-model="staff.email"
-              size="small"
-              required="true"
-              :disabled="true"
-            />
-            <label class="input">E-posta*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Dropdown
-              v-model="staff.roleId"
-              :options="roles"
-              optionLabel="label"
-              optionValue="id"
-              class="w-full md:w-14rem input"
-              inputId="inputType"
-            />
-            <label class="input">Rol*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <Button label="Kaydet" size="small" class="button" type="submit" />
-        </div>
-      </div>
-    </form>
-  </div>
+    </template>
+  </ViewUsedByStaff>
 </template>
 
 <script>
+import ViewUsedByStaff from "./base/ViewUsedByStaff.vue";
 import Pagination from "@/components/Pagination.vue";
 import Notification from "@/components/Notification.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
@@ -225,7 +242,7 @@ import { transformToTitle } from "@/util/StringUtil";
 
 export default {
   name: "StaffView",
-  components: { Pagination, Notification },
+  components: { Pagination, Notification, ViewUsedByStaff },
   data() {
     return {
       isVisible: null,

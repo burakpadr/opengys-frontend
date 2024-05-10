@@ -17,6 +17,6 @@ export const FOR_RENT_TABS = [
     {
         label: "Sözleşmeler",
         isActive: false,
-        component: ""
+        component: "RentalContractInformation"
     }
 ]

@@ -1,98 +1,103 @@
 <template>
-  <div class="advert-place-container" v-if="isVisible">
-    <Notification
-      :isActive="notification.isActive"
-      :severity="notification.severity"
-      :messageContent="notification.messageContent"
-      @isActive="setVisibilityOfNotification"
-    />
-    <div class="header-container">
-      <Button
-        icon="pi pi-plus"
-        style="background-color: #3b82f6"
-        size="large"
-        class="add-button"
-        rounded
-        @click="openAddEventModal"
-      />
-      <span class="p-input-icon-left search-bar-container">
-        <i class="pi pi-search" />
-        <InputText
-          v-model="searchTerm"
-          size="small"
-          class="search-bar"
-          placeholder="Ara"
-          @input="search"
+  <ViewUsedByStaff>
+    <template #content>
+      <div class="advert-place-container" v-if="isVisible">
+        <Notification
+          :isActive="notification.isActive"
+          :severity="notification.severity"
+          :messageContent="notification.messageContent"
+          @isActive="setVisibilityOfNotification"
         />
-      </span>
-    </div>
-    <div class="table-container">
-      <table>
-        <tr>
-          <th>İlan Yeri</th>
-          <th>Aksiyon</th>
-        </tr>
-        <tr v-for="(advertPlace, index) in advertPlaces" :key="index">
-          <td data-cell="İlan Yeri">{{ advertPlace.name }}</td>
-          <td data-cell="Aksiyon">
-            <ConfirmPopup
-              :pt="{
-                root: { class: 'confirmPopup' },
-              }"
-            ></ConfirmPopup>
-            <i
-              class="bx bx-trash"
-              @click="confirmDeleteAdvertPlace($event, advertPlace.id)"
-            ></i>
-            <i
-              @click="openUpdateEventModal(advertPlace.id)"
-              class="bx bx-edit-alt"
-            ></i>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div class="paginator">
-      <Pagination
-        :totalRecords="pagination.totalRecords"
-        @pageState="getPageState"
-      />
-    </div>
-    
-    <!-- Create Modal -->
-
-    <form class="modal" v-if="modalIsVisible" @click.self="toggleModal">
-      <i class="bx bx-x exit" @click="toggleModal"></i>
-      <div class="modal-content">
-        <div class="modal-content-header">
-          <span>{{ modalHeader }}</span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
+        <div class="header-container">
+          <Button
+            icon="pi pi-plus"
+            style="background-color: #3b82f6"
+            size="large"
+            class="add-button"
+            rounded
+            @click="openAddEventModal"
+          />
+          <span class="p-input-icon-left search-bar-container">
+            <i class="pi pi-search" />
             <InputText
-              class="input"
-              v-model="advertPlace.name"
+              v-model="searchTerm"
               size="small"
-              required="true"
+              class="search-bar"
+              placeholder="Ara"
+              @input="search"
             />
-            <label class="input" for="İlan Yeri*">İlan Yeri*</label>
           </span>
         </div>
-        <div class="modal-content-row">
-          <Button
-            :loading="loading"
-            label="Kaydet"
-            size="small"
-            class="button"
-            @click="submitForm"
+        <div class="table-container">
+          <table>
+            <tr>
+              <th>İlan Yeri</th>
+              <th>Aksiyon</th>
+            </tr>
+            <tr v-for="(advertPlace, index) in advertPlaces" :key="index">
+              <td data-cell="İlan Yeri">{{ advertPlace.name }}</td>
+              <td data-cell="Aksiyon">
+                <ConfirmPopup
+                  :pt="{
+                    root: { class: 'confirmPopup' },
+                  }"
+                ></ConfirmPopup>
+                <i
+                  class="bx bx-trash"
+                  @click="confirmDeleteAdvertPlace($event, advertPlace.id)"
+                ></i>
+                <i
+                  @click="openUpdateEventModal(advertPlace.id)"
+                  class="bx bx-edit-alt"
+                ></i>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="paginator">
+          <Pagination
+            :totalRecords="pagination.totalRecords"
+            @pageState="getPageState"
           />
         </div>
+
+        <!-- Create Modal -->
+
+        <form class="modal" v-if="modalIsVisible" @click.self="toggleModal">
+          <i class="bx bx-x exit" @click="toggleModal"></i>
+          <div class="modal-content">
+            <div class="modal-content-header">
+              <span>{{ modalHeader }}</span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  v-model="advertPlace.name"
+                  size="small"
+                  required="true"
+                />
+                <label class="input" for="İlan Yeri*">İlan Yeri*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                :loading="loading"
+                label="Kaydet"
+                size="small"
+                class="button"
+                @click="submitForm"
+              />
+            </div>
+          </div>
+        </form>
       </div>
-    </form>
-  </div>
+    </template>
+  </ViewUsedByStaff>
 </template>
 
 <script>
+import ViewUsedByStaff from "./base/ViewUsedByStaff.vue";
 import Pagination from "@/components/Pagination.vue";
 import Notification from "@/components/Notification.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
@@ -101,7 +106,7 @@ import { canSeeComponent } from "@/service/RbacService";
 
 export default {
   name: "AdvertPlaceView",
-  components: { Pagination, Notification },
+  components: { Pagination, Notification, ViewUsedByStaff },
   data() {
     return {
       isVisible: null,
@@ -266,7 +271,9 @@ export default {
     },
   },
   mounted() {
-    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
+    canSeeComponent(this.$options.name).then(
+      (response) => (this.isVisible = response.data)
+    );
 
     this.getAdvertPlaces();
   },

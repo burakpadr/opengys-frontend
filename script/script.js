@@ -48,6 +48,14 @@ const COMPONENTS = [
     {
         componentName: "TenantView",
         label: "Kullanıcı Yönetimi > Kiracılar"
+    },
+    {
+        componentName: "RentalContractInformation",
+        label: "Sözleşmeler"
+    },
+    {
+        componentName: "PaymentDeclarationStaffView",
+        label: "Ödeme İşlemleri > Ödeme Beyanları"
     }
 ]
 

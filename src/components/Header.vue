@@ -17,7 +17,9 @@
             >
               <span class="inline-flex flex-column">
                 <span class="font-bold"> {{ formatNameSurname() }}</span>
-                <span class="text-sm" v-if="staff.user.roleLabel != null">{{ staff.user.roleLabel }}</span>
+                <span class="text-sm" v-if="staff.user.roleLabel != null">{{
+                  staff.user.roleLabel
+                }}</span>
                 <span class="text-sm" v-else>Tapu Sahibi</span>
               </span>
             </button>
@@ -30,7 +32,7 @@
 
 <script>
 import { parseToken, removeToken } from "@/service/TokenService";
-import { transformToTitle } from '@/util/StringUtil'
+import { transformToTitle } from "@/util/StringUtil";
 import { gysClient } from "@/assets/js/client";
 
 export default {
@@ -50,6 +52,9 @@ export default {
         },
       ],
       staff: null,
+      home: {
+        icon: "pi pi-home",
+      },
     };
   },
   methods: {
@@ -59,9 +64,15 @@ export default {
     getUserInformation() {
       var decodedToken = parseToken();
 
-      gysClient.get(`staffs?userId=${decodedToken.sub}`).then((response) => {
-        this.staff = response.data;
-      });
+      if (decodedToken.isStaff) {
+        gysClient.get(`staffs?userId=${decodedToken.sub}`).then((response) => {
+          this.staff = response.data;
+        });
+      } else if (decodedToken.isTenant) {
+        gysClient.get(`tenants?userId=${decodedToken.sub}`).then((response) => {
+          this.staff = response.data;
+        });
+      }
     },
     formatNameSurname() {
       var surnameIsNotNull = this.staff.user.surname != null;

@@ -1,362 +1,371 @@
 <template>
-  <div class="attribute-container" v-if="isVisible">
-    <Notification
-      :isActive="notification.isActive"
-      :severity="notification.severity"
-      :messageContent="notification.messageContent"
-      @isActive="setVisibilityOfNotification"
-    />
-    <div class="header-container">
-      <Button
-        icon="pi pi-plus"
-        style="background-color: #3b82f6"
-        size="large"
-        class="add-button"
-        rounded
-        @click="openAddEventModal"
-      />
-      <span class="p-input-icon-left search-bar-container">
-      </span>
-      <div class="card flex justify-content-center">
-        <div class="card flex justify-content-center">
-          <span class="p-float-label">
-            <TreeSelect
-              v-model="selectedCategorizationFilter"
-              :options="categorizationList"
-              class="md:w-20rem w-full categorization-filter"
-              @change="getAttributes"
-            />
-            <label>Kategorizasyon Filtresi</label>
-          </span>
-        </div>
-      </div>
-    </div>
-    <div class="table-container">
-      <table>
-        <tr>
-          <th>Kod</th>
-          <th>İsim</th>
-          <th>Ekran Sırası</th>
-          <th>Aksiyon</th>
-        </tr>
-        <tr v-for="(attirbute, index) in attributes" :key="index">
-          <td data-cell="Kod">{{ attirbute.alias }}</td>
-          <td data-cell="İsim">{{ attirbute.label }}</td>
-          <td data-cell="Ekran Sırası">{{ attirbute.screenOrder }}</td>
-          <td data-cell="Aksiyon">
-            <ConfirmPopup
-              :pt="{
-                root: { class: 'confirmPopup' },
-              }"
-            ></ConfirmPopup>
-            <i
-              class="bx bx-trash"
-              @click="confirmDeleteAttribute($event, attirbute.id)"
-            ></i>
-            <i
-              @click="openUpdateEventModal(attirbute.id)"
-              class="bx bx-edit-alt"
-            ></i>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div class="paginator">
-      <Pagination
-        :totalRecords="pagination.totalRecords"
-        @pageState="getPageState"
-      />
-    </div>
-
-    <!-- Create Modal -->
-
-    <form
-      class="modal"
-      v-if="createModalIsVisible"
-      @click.self="toggleCreateModal"
-    >
-      <i class="bx bx-x exit" @click="toggleCreateModal"></i>
-      <div class="modal-left-content">
-        <div class="modal-content-header">
-          <span>Özellik Bilgisi</span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              size="small"
-              v-model="attribute.alias"
-              required="true"
-              @input="() => attribute.alias = attribute.alias.toUpperCase()"
-              :class="{ 'p-invalid': formFieldsHasError.alias }"/>
-            <label class="input">Kod*</label>
-          </span>
-          <small
-            class="p-error input"
-            id="text-error"
-            v-if="formFieldsHasError.alias"
-            >{{ fieldErrorMessage || "&nbsp;" }}</small
-          >
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              size="small"
-              v-model="attribute.label"
-              required="true"
-              :class="{ 'p-invalid': formFieldsHasError.label }"
-            />
-            <label class="input">İsim*</label>
-          </span>
-          <small
-            class="p-error input"
-            id="text-error"
-            v-if="formFieldsHasError.label"
-            >{{ fieldErrorMessage || "&nbsp;" }}</small
-          >
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              size="small"
-              v-model="attribute.screenOrder"
-              required="true"
-              type="number"
-              :class="{ 'p-invalid': formFieldsHasError.screenOrder }"
-            />
-            <label class="input">Ekran Sırası*</label>
-          </span>
-          <small
-            class="p-error input"
-            id="text-error"
-            v-if="formFieldsHasError.screenOrder"
-            >{{ fieldErrorMessage || "&nbsp;" }}</small
-          >
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Dropdown
-              v-model="attribute.inputType"
-              :options="inputTypes"
-              optionLabel="alias"
-              class="w-full md:w-14rem input"
-              inputId="inputType"
-              :class="{ 'p-invalid': formFieldsHasError.inputType }"
-            />
-            <label for="inputType" class="input">Girdi Tipi*</label>
-          </span>
-          <small
-            class="p-error input"
-            id="text-error"
-            v-if="formFieldsHasError.inputType"
-            >{{ fieldErrorMessage || "&nbsp;" }}</small
-          >
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Dropdown
-              v-model="attribute.category"
-              :options="categories"
-              optionLabel="name"
-              class="w-full md:w-14rem input"
-              inputId="category"
-              :class="{ 'p-invalid': formFieldsHasError.category }"
-            />
-            <label for="category" class="input">Kategori*</label>
-          </span>
-          <small
-            class="p-error input"
-            id="text-error"
-            v-if="formFieldsHasError.category"
-            >{{ fieldErrorMessage || "&nbsp;" }}</small
-          >
-        </div>
-      </div>
-      <div class="modal-right-content">
-        <div class="modal-content-header">
-          <span>Özellik Değerleri</span>
-        </div>
-        <div class="modal-content-row">
+  <ViewUsedByStaff>
+    <template #content>
+      <div class="attribute-container" v-if="isVisible">
+        <Notification
+          :isActive="notification.isActive"
+          :severity="notification.severity"
+          :messageContent="notification.messageContent"
+          @isActive="setVisibilityOfNotification"
+        />
+        <div class="header-container">
           <Button
-            label="Özellik Değeri Ekle"
-            class="button"
             icon="pi pi-plus"
-            :disabled="attribute.inputType.alias !== 'SELECT'"
-            @click="addAttributeValue"
+            style="background-color: #3b82f6"
+            size="large"
+            class="add-button"
+            rounded
+            @click="openAddEventModal"
+          />
+          <span class="p-input-icon-left search-bar-container"> </span>
+          <div class="card flex justify-content-center">
+            <div class="card flex justify-content-center">
+              <span class="p-float-label">
+                <TreeSelect
+                  v-model="selectedCategorizationFilter"
+                  :options="categorizationList"
+                  class="md:w-20rem w-full categorization-filter"
+                  @change="getAttributes"
+                />
+                <label>Kategorizasyon Filtresi</label>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <tr>
+              <th>Kod</th>
+              <th>İsim</th>
+              <th>Ekran Sırası</th>
+              <th>Aksiyon</th>
+            </tr>
+            <tr v-for="(attirbute, index) in attributes" :key="index">
+              <td data-cell="Kod">{{ attirbute.alias }}</td>
+              <td data-cell="İsim">{{ attirbute.label }}</td>
+              <td data-cell="Ekran Sırası">{{ attirbute.screenOrder }}</td>
+              <td data-cell="Aksiyon">
+                <ConfirmPopup
+                  :pt="{
+                    root: { class: 'confirmPopup' },
+                  }"
+                ></ConfirmPopup>
+                <i
+                  class="bx bx-trash"
+                  @click="confirmDeleteAttribute($event, attirbute.id)"
+                ></i>
+                <i
+                  @click="openUpdateEventModal(attirbute.id)"
+                  class="bx bx-edit-alt"
+                ></i>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="paginator">
+          <Pagination
+            :totalRecords="pagination.totalRecords"
+            @pageState="getPageState"
           />
         </div>
-        <div
-          class="modal-content-row"
-          v-for="(attributeValue, index) in attribute.attributeValues"
-          :key="index"
+
+        <!-- Create Modal -->
+
+        <form
+          class="modal"
+          v-if="createModalIsVisible"
+          @click.self="toggleCreateModal"
         >
-          <span class="p-float-label">
-            <InputText
-              class="input"
-              size="small"
-              v-model="attribute.attributeValues[index].value"
-              required="true"
-            />
-            <label class="input" >Değer*</label>
-            <i
-              class="bx bx-trash"
-              style="margin-left: 15px"
-              @click="deleteAttributeValue(index)"
-            ></i>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <Button
-            :loading="loading"
-            label="Kaydet"
-            size="small"
-            class="button"
-            @click="create"
-          />
-        </div>
-      </div>
-    </form>
+          <i class="bx bx-x exit" @click="toggleCreateModal"></i>
+          <div class="modal-left-content">
+            <div class="modal-content-header">
+              <span>Özellik Bilgisi</span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  size="small"
+                  v-model="attribute.alias"
+                  required="true"
+                  @input="
+                    () => (attribute.alias = attribute.alias.toUpperCase())
+                  "
+                  :class="{ 'p-invalid': formFieldsHasError.alias }"
+                />
+                <label class="input">Kod*</label>
+              </span>
+              <small
+                class="p-error input"
+                id="text-error"
+                v-if="formFieldsHasError.alias"
+                >{{ fieldErrorMessage || "&nbsp;" }}</small
+              >
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  size="small"
+                  v-model="attribute.label"
+                  required="true"
+                  :class="{ 'p-invalid': formFieldsHasError.label }"
+                />
+                <label class="input">İsim*</label>
+              </span>
+              <small
+                class="p-error input"
+                id="text-error"
+                v-if="formFieldsHasError.label"
+                >{{ fieldErrorMessage || "&nbsp;" }}</small
+              >
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  size="small"
+                  v-model="attribute.screenOrder"
+                  required="true"
+                  type="number"
+                  :class="{ 'p-invalid': formFieldsHasError.screenOrder }"
+                />
+                <label class="input">Ekran Sırası*</label>
+              </span>
+              <small
+                class="p-error input"
+                id="text-error"
+                v-if="formFieldsHasError.screenOrder"
+                >{{ fieldErrorMessage || "&nbsp;" }}</small
+              >
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <Dropdown
+                  v-model="attribute.inputType"
+                  :options="inputTypes"
+                  optionLabel="alias"
+                  class="w-full md:w-14rem input"
+                  inputId="inputType"
+                  :class="{ 'p-invalid': formFieldsHasError.inputType }"
+                />
+                <label for="inputType" class="input">Girdi Tipi*</label>
+              </span>
+              <small
+                class="p-error input"
+                id="text-error"
+                v-if="formFieldsHasError.inputType"
+                >{{ fieldErrorMessage || "&nbsp;" }}</small
+              >
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <Dropdown
+                  v-model="attribute.category"
+                  :options="categories"
+                  optionLabel="name"
+                  class="w-full md:w-14rem input"
+                  inputId="category"
+                  :class="{ 'p-invalid': formFieldsHasError.category }"
+                />
+                <label for="category" class="input">Kategori*</label>
+              </span>
+              <small
+                class="p-error input"
+                id="text-error"
+                v-if="formFieldsHasError.category"
+                >{{ fieldErrorMessage || "&nbsp;" }}</small
+              >
+            </div>
+          </div>
+          <div class="modal-right-content">
+            <div class="modal-content-header">
+              <span>Özellik Değerleri</span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                label="Özellik Değeri Ekle"
+                class="button"
+                icon="pi pi-plus"
+                :disabled="attribute.inputType.alias !== 'SELECT'"
+                @click="addAttributeValue"
+              />
+            </div>
+            <div
+              class="modal-content-row"
+              v-for="(attributeValue, index) in attribute.attributeValues"
+              :key="index"
+            >
+              <span class="p-float-label">
+                <InputText
+                  class="input"
+                  size="small"
+                  v-model="attribute.attributeValues[index].value"
+                  required="true"
+                />
+                <label class="input">Değer*</label>
+                <i
+                  class="bx bx-trash"
+                  style="margin-left: 15px"
+                  @click="deleteAttributeValue(index)"
+                ></i>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                :loading="loading"
+                label="Kaydet"
+                size="small"
+                class="button"
+                @click="create"
+              />
+            </div>
+          </div>
+        </form>
 
-    <!-- Update Modal -->
+        <!-- Update Modal -->
 
-    <form
-      class="modal"
-      v-if="updateModalIsVisible"
-      @click.self="toggleUpdateModal"
-    >
-      <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
-      <div class="modal-left-content">
-        <div class="modal-content-header">
-          <span>Özellik Bilgisi</span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              size="small"
-              v-model="attribute.alias"
-              required="true"
-              @input="() => attribute.alias = attribute.alias.toUpperCase()"
-              :disabled="true"
-              :class="{ 'p-invalid': formFieldsHasError.alias }"
-            />
-            <label class="input" >Kod*</label>
-          </span>
-          <small
-            class="p-error input"
-            id="text-error"
-            v-if="formFieldsHasError.alias"
-            >{{ fieldErrorMessage || "&nbsp;" }}</small
-          >
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              size="small"
-              v-model="attribute.label"
-              required="true"
-              :class="{ 'p-invalid': formFieldsHasError.label }"
-            />
-            <label class="input" >İsim*</label>
-          </span>
-          <small
-            class="p-error input"
-            id="text-error"
-            v-if="formFieldsHasError.label"
-            >{{ fieldErrorMessage || "&nbsp;" }}</small
-          >
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              size="small"
-              v-model="attribute.screenOrder"
-              required="true"
-              type="number"
-              :class="{ 'p-invalid': formFieldsHasError.screenOrder }"
-            />
-            <label class="input" >Ekran Sırası*</label>
-          </span>
-          <small
-            class="p-error input"
-            id="text-error"
-            v-if="formFieldsHasError.screenOrder"
-            >{{ fieldErrorMessage || "&nbsp;" }}</small
-          >
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Dropdown
-              v-model="attribute.inputType"
-              :options="inputTypes"
-              optionLabel="alias"
-              class="w-full md:w-14rem input"
-              inputId="inputType"
-              :disabled="true"
-              :class="{ 'p-invalid': formFieldsHasError.inputType }"
-            />
-            <label for="inputType" class="input">Girdi Tipi*</label>
-          </span>
-          <small
-            class="p-error input"
-            id="text-error"
-            v-if="formFieldsHasError.inputType"
-            >{{ fieldErrorMessage || "&nbsp;" }}</small
-          >
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Dropdown
-              v-model="attribute.category"
-              :options="categories"
-              optionLabel="name"
-              class="w-full md:w-14rem input"
-              inputId="category"
-              :disabled="true"
-              :class="{ 'p-invalid': formFieldsHasError.category }"
-            />
-            <label for="category" class="input">Kategori*</label>
-          </span>
-          <small
-            class="p-error input"
-            id="text-error"
-            v-if="formFieldsHasError.category"
-            >{{ fieldErrorMessage || "&nbsp;" }}</small
-          >
-        </div>
+        <form
+          class="modal"
+          v-if="updateModalIsVisible"
+          @click.self="toggleUpdateModal"
+        >
+          <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
+          <div class="modal-left-content">
+            <div class="modal-content-header">
+              <span>Özellik Bilgisi</span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  size="small"
+                  v-model="attribute.alias"
+                  required="true"
+                  @input="
+                    () => (attribute.alias = attribute.alias.toUpperCase())
+                  "
+                  :disabled="true"
+                  :class="{ 'p-invalid': formFieldsHasError.alias }"
+                />
+                <label class="input">Kod*</label>
+              </span>
+              <small
+                class="p-error input"
+                id="text-error"
+                v-if="formFieldsHasError.alias"
+                >{{ fieldErrorMessage || "&nbsp;" }}</small
+              >
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  size="small"
+                  v-model="attribute.label"
+                  required="true"
+                  :class="{ 'p-invalid': formFieldsHasError.label }"
+                />
+                <label class="input">İsim*</label>
+              </span>
+              <small
+                class="p-error input"
+                id="text-error"
+                v-if="formFieldsHasError.label"
+                >{{ fieldErrorMessage || "&nbsp;" }}</small
+              >
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  size="small"
+                  v-model="attribute.screenOrder"
+                  required="true"
+                  type="number"
+                  :class="{ 'p-invalid': formFieldsHasError.screenOrder }"
+                />
+                <label class="input">Ekran Sırası*</label>
+              </span>
+              <small
+                class="p-error input"
+                id="text-error"
+                v-if="formFieldsHasError.screenOrder"
+                >{{ fieldErrorMessage || "&nbsp;" }}</small
+              >
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <Dropdown
+                  v-model="attribute.inputType"
+                  :options="inputTypes"
+                  optionLabel="alias"
+                  class="w-full md:w-14rem input"
+                  inputId="inputType"
+                  :disabled="true"
+                  :class="{ 'p-invalid': formFieldsHasError.inputType }"
+                />
+                <label for="inputType" class="input">Girdi Tipi*</label>
+              </span>
+              <small
+                class="p-error input"
+                id="text-error"
+                v-if="formFieldsHasError.inputType"
+                >{{ fieldErrorMessage || "&nbsp;" }}</small
+              >
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <Dropdown
+                  v-model="attribute.category"
+                  :options="categories"
+                  optionLabel="name"
+                  class="w-full md:w-14rem input"
+                  inputId="category"
+                  :disabled="true"
+                  :class="{ 'p-invalid': formFieldsHasError.category }"
+                />
+                <label for="category" class="input">Kategori*</label>
+              </span>
+              <small
+                class="p-error input"
+                id="text-error"
+                v-if="formFieldsHasError.category"
+                >{{ fieldErrorMessage || "&nbsp;" }}</small
+              >
+            </div>
+          </div>
+          <div class="modal-right-content">
+            <div class="modal-content-header">
+              <span>Özellik Değerleri</span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                label="Özellik Değeri Ekle"
+                class="button"
+                icon="pi pi-plus"
+                :disabled="attribute.inputType.alias !== 'SELECT'"
+                @click="addAttributeValue"
+              />
+            </div>
+            <div class="modal-content-row">
+              <Button
+                :loading="loading"
+                label="Kaydet"
+                size="small"
+                class="button"
+                @click="update"
+              />
+            </div>
+          </div>
+        </form>
       </div>
-      <div class="modal-right-content">
-        <div class="modal-content-header">
-          <span>Özellik Değerleri</span>
-        </div>
-        <div class="modal-content-row">
-          <Button
-            label="Özellik Değeri Ekle"
-            class="button"
-            icon="pi pi-plus"
-            :disabled="attribute.inputType.alias !== 'SELECT'"
-            @click="addAttributeValue"
-          />
-        </div>
-        <div class="modal-content-row">
-          <Button
-            :loading="loading"
-            label="Kaydet"
-            size="small"
-            class="button"
-            @click="update"
-          />
-        </div>
-      </div>
-    </form>
-  </div>
+    </template>
+  </ViewUsedByStaff>
 </template>
 
 <script>
+import ViewUsedByStaff from "./base/ViewUsedByStaff.vue";
 import Pagination from "@/components/Pagination.vue";
 import Notification from "@/components/Notification.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
@@ -365,7 +374,7 @@ import { canSeeComponent } from "@/service/RbacService";
 
 export default {
   name: "AttributeView",
-  components: { Pagination, Notification },
+  components: { Pagination, Notification, ViewUsedByStaff },
   data() {
     return {
       isVisible: null,
@@ -640,7 +649,9 @@ export default {
     },
   },
   mounted() {
-    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
+    canSeeComponent(this.$options.name).then(
+      (response) => (this.isVisible = response.data)
+    );
 
     this.getAttributes();
     this.getCategorizationList();

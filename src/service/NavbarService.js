@@ -1,4 +1,4 @@
-export const ELEMENTS = [
+export const STAFF_NAVBAR_ELEMENTS = [
     {
         title: "Dashboard",
         href: "",
@@ -11,12 +11,23 @@ export const ELEMENTS = [
     {
         component: "RealEstateListView",
         title: "Gayrimenkuller",
-        href: "/real-estates",
+        href: "/administration/real-estates",
         iconClass: "bx bx-buildings",
         hasSubMenu: false,
         parentMenuisActive: false,
         submenuIsActive: false,
         submenus: [],
+    },
+    {
+        title: "Ödeme İşlemleri",
+        href: "",
+        iconClass: "bx bxs-bank",
+        hasSubMenu: true,
+        parentMenuisActive: false,
+        submenuIsActive: false,
+        submenus: [
+            { component: "PaymentDeclarationStaffView", title: "Ödeme Beyanları", href: "/administration/payment-declarations", isActive: false },
+        ],
     },
     {
         title: "Raporlar",
@@ -44,9 +55,9 @@ export const ELEMENTS = [
         parentMenuisActive: false,
         submenuIsActive: false,
         submenus: [
-            { component: "CategoryView", title: "Kategoriler", href: "/categories", isActive: false },
-            { component: "AdvertPlaceView", title: "İlan Yerleri", href: "/advert-places", isActive: false },
-            { component: "AttributeView", title: "Özellikler", href: "/attributes", isActive: false },
+            { component: "CategoryView", title: "Kategoriler", href: "/administration/categories", isActive: false },
+            { component: "AdvertPlaceView", title: "İlan Yerleri", href: "/administration/advert-places", isActive: false },
+            { component: "AttributeView", title: "Özellikler", href: "/administration/attributes", isActive: false },
         ],
     },
     {
@@ -57,8 +68,8 @@ export const ELEMENTS = [
         parentMenuisActive: false,
         submenuIsActive: false,
         submenus: [
-            { component: "StaffView", title: "Alt Kullanıcılar", href: "/staffs", isActive: false },
-            { component: "TenantView", title: "Kiracılar", href: "/tenants", isActive: false },
+            { component: "StaffView", title: "Alt Kullanıcılar", href: "/administration/staffs", isActive: false },
+            { component: "TenantView", title: "Kiracılar", href: "/administration/tenants", isActive: false },
         ],
     },
     {
@@ -69,7 +80,20 @@ export const ELEMENTS = [
         parentMenuisActive: false,
         submenuIsActive: false,
         submenus: [
-            { component: "RoleView", title: "Roller", href: "/roles", isActive: false },
+            { component: "RoleView", title: "Roller", href: "/administration/roles", isActive: false },
         ],
+    },
+]
+
+export const TENANT_NAVBAR_ELEMENTS = [
+    {
+        component: "RealEstateListView",
+        title: "Ödeme Beyanları",
+        href: "/customer/payment-declarations",
+        iconClass: "bx bxs-bank",
+        hasSubMenu: false,
+        parentMenuisActive: false,
+        submenuIsActive: false,
+        submenus: [],
     },
 ]

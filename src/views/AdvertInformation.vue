@@ -1,231 +1,243 @@
 <template>
-  <div class="advert-information-container" v-if="isVisible">
-    <div class="modal-left-content">
-      <div class="modal-content-header">
-        <span class="text">İlan Listesi</span>
-        <Button
-          icon="pi pi-plus"
-          style="background-color: #3b82f6; position: absolute; right: 20px"
-          size="large"
-          :disabled="createModalIsVisible"
-          rounded
-          @click="openCreateEventModal()"
-        />
-      </div>
-      <div class="table-container">
-        <table>
-          <tr>
-            <th>İlan Yeri</th>
-            <th>İlan Başlangıç T.</th>
-            <th>İlan Bitiş T.</th>
-            <th>İlan Fiyatı</th>
-            <th>Durumu</th>
-            <th>Aksiyon</th>
-          </tr>
-          <tr v-for="(advert, index) in adverts" :key="index">
-            <td>{{ advert.advertPlaceName }}</td>
-            <td>{{ advert.startDate }}</td>
-            <td>{{ advert.endDate }}</td>
-            <td>
-              {{
-                new Intl.NumberFormat("en-US", {
-                  style: "currency",
-                  currency: "TRY",
-                }).format(advert.price)
-              }}
-            </td>
-            <td v-if="advert.isPublished">
-              <Tag severity="success" value="Yayında"></Tag>
-            </td>
-            <td v-else>
-              <Tag severity="danger" value="Yayında Değil"></Tag>
-            </td>
-            <td>
-              <ConfirmPopup
-                :pt="{
-                  root: { class: 'confirmPopup' },
-                }"
-              ></ConfirmPopup>
-              <i
-                class="bx bx-trash"
-                v-tooltip.top="'Sil'"
-                @click="confirmDeleteAdvert($event, advert.id)"
-              ></i>
-              <i
-                @click="openUpdateEventModal(advert.id)"
-                v-tooltip.top="'Düzenle'"
-                class="bx bx-edit-alt"
-              ></i>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="paginator">
-        <Pagination
-          :totalRecords="pagination.totalRecords"
-          @pageState="getPageState"
-        />
-      </div>
-    </div>
+  <ViewUsedByStaff>
+    <template #content>
+      <div class="advert-information-container" v-if="isVisible">
+        <div class="modal-left-content">
+          <div class="modal-content-header">
+            <span class="text">İlan Listesi</span>
+            <Button
+              icon="pi pi-plus"
+              style="background-color: #3b82f6; position: absolute; right: 20px"
+              size="large"
+              :disabled="createModalIsVisible"
+              rounded
+              @click="openCreateEventModal()"
+            />
+          </div>
+          <div class="table-container">
+            <table>
+              <tr>
+                <th>İlan Yeri</th>
+                <th>İlan Başlangıç T.</th>
+                <th>İlan Bitiş T.</th>
+                <th>İlan Fiyatı</th>
+                <th>Durumu</th>
+                <th>Aksiyon</th>
+              </tr>
+              <tr v-for="(advert, index) in adverts" :key="index">
+                <td>{{ advert.advertPlaceName }}</td>
+                <td>{{ advert.startDate }}</td>
+                <td>{{ advert.endDate }}</td>
+                <td>
+                  {{
+                    new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "TRY",
+                    }).format(advert.price)
+                  }}
+                </td>
+                <td v-if="advert.isPublished">
+                  <Tag severity="success" value="Yayında"></Tag>
+                </td>
+                <td v-else>
+                  <Tag severity="danger" value="Yayında Değil"></Tag>
+                </td>
+                <td>
+                  <ConfirmPopup
+                    :pt="{
+                      root: { class: 'confirmPopup' },
+                    }"
+                  ></ConfirmPopup>
+                  <i
+                    class="bx bx-trash"
+                    v-tooltip.top="'Sil'"
+                    @click="confirmDeleteAdvert($event, advert.id)"
+                  ></i>
+                  <i
+                    @click="openUpdateEventModal(advert.id)"
+                    v-tooltip.top="'Düzenle'"
+                    class="bx bx-edit-alt"
+                  ></i>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="paginator">
+            <Pagination
+              :totalRecords="pagination.totalRecords"
+              @pageState="getPageState"
+            />
+          </div>
+        </div>
 
-    <!-- İlan Bilgisi Oluşturma -->
+        <!-- İlan Bilgisi Oluşturma -->
 
-    <div class="modal-right-content" v-if="createModalIsVisible">
-      <div>
-        <div class="modal-content-header">
-          <span>İlan Bilgisi Oluştur</span>
+        <div class="modal-right-content" v-if="createModalIsVisible">
+          <div>
+            <div class="modal-content-header">
+              <span>İlan Bilgisi Oluştur</span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <Dropdown
+                  v-model="advert.advertPlaceId"
+                  :options="advertPlaces"
+                  optionLabel="name"
+                  optionValue="id"
+                  class="w-full md:w-14rem input"
+                  inputId="inputType"
+                />
+                <label for="inputType" class="input">İlan Yeri*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <Calendar
+                  v-model="advert.startDate"
+                  class="input"
+                  dateFormat="dd-mm-yy"
+                  showIcon
+                  iconDisplay="input"
+                />
+                <label for="inputType" class="input"
+                  >İlan Başlangıç Tarihi*</label
+                >
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <Calendar
+                  v-model="advert.endDate"
+                  class="input"
+                  dateFormat="dd-mm-yy"
+                  showIcon
+                  iconDisplay="input"
+                />
+                <label for="inputType" class="input">İlan Bitiş Tarihi</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputNumber
+                  v-model="advert.price"
+                  locale="tr-TR"
+                  :minFractionDigits="2"
+                  mode="currency"
+                  currency="TRY"
+                  class="input"
+                />
+                <label for="inputType" class="input">İlan Fiyatı*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <Dropdown
+                  v-model="advert.isPublished"
+                  :options="advertStatusOptions"
+                  optionLabel="label"
+                  optionValue="value"
+                  class="w-full md:w-14rem input"
+                />
+                <label for="inputType" class="input">Durumu*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                label="Kaydet"
+                size="small"
+                class="button"
+                @click="create()"
+              />
+            </div>
+          </div>
         </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Dropdown
-              v-model="advert.advertPlaceId"
-              :options="advertPlaces"
-              optionLabel="name"
-              optionValue="id"
-              class="w-full md:w-14rem input"
-              inputId="inputType"
+
+        <!-- İlan Bilgisi Güncelleme -->
+
+        <div class="modal-right-content" v-if="updateModalIsVisible">
+          <div class="modal-content-header">
+            <span>İlan Bilgisi Güncelle</span>
+          </div>
+          <div class="modal-content-row">
+            <span class="p-float-label" style="margin: 0 auto">
+              <Dropdown
+                v-model="advert.advertPlaceId"
+                :options="advertPlaces"
+                optionLabel="name"
+                optionValue="id"
+                class="w-full md:w-14rem input"
+                inputId="inputType"
+              />
+              <label for="inputType" class="input">İlan Yeri*</label>
+            </span>
+          </div>
+          <div class="modal-content-row">
+            <span class="p-float-label" style="margin: 0 auto">
+              <Calendar
+                v-model="advert.startDate"
+                class="input"
+                dateFormat="dd-mm-yy"
+                showIcon
+                iconDisplay="input"
+              />
+              <label for="inputType" class="input"
+                >İlan Başlangıç Tarihi*</label
+              >
+            </span>
+          </div>
+          <div class="modal-content-row">
+            <span class="p-float-label" style="margin: 0 auto">
+              <Calendar
+                v-model="advert.endDate"
+                class="input"
+                dateFormat="dd-mm-yy"
+                showIcon
+                iconDisplay="input"
+              />
+              <label for="inputType" class="input">İlan Bitiş Tarihi</label>
+            </span>
+          </div>
+          <div class="modal-content-row">
+            <span class="p-float-label" style="margin: 0 auto">
+              <InputNumber
+                v-model="advert.price"
+                locale="tr-TR"
+                :minFractionDigits="2"
+                mode="currency"
+                currency="TRY"
+                class="input"
+              />
+              <label for="inputType" class="input">İlan Fiyatı*</label>
+            </span>
+          </div>
+          <div class="modal-content-row">
+            <span class="p-float-label" style="margin: 0 auto">
+              <Dropdown
+                v-model="advert.isPublished"
+                :options="advertStatusOptions"
+                optionLabel="label"
+                optionValue="value"
+                class="w-full md:w-14rem input"
+              />
+              <label for="inputType" class="input">Durumu*</label>
+            </span>
+          </div>
+          <div class="modal-content-row">
+            <Button
+              label="Kaydet"
+              size="small"
+              class="button"
+              @click="update(advert.id)"
             />
-            <label for="inputType" class="input">İlan Yeri*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Calendar
-              v-model="advert.startDate"
-              class="input"
-              dateFormat="dd-mm-yy"
-              showIcon
-              iconDisplay="input"
-            />
-            <label for="inputType" class="input">İlan Başlangıç Tarihi*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Calendar
-              v-model="advert.endDate"
-              class="input"
-              dateFormat="dd-mm-yy"
-              showIcon
-              iconDisplay="input"
-            />
-            <label for="inputType" class="input">İlan Bitiş Tarihi</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputNumber
-              v-model="advert.price"
-              locale="tr-TR"
-              :minFractionDigits="2"
-              mode="currency"
-              currency="TRY"
-              class="input"
-            />
-            <label for="inputType" class="input">İlan Fiyatı*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <Dropdown
-              v-model="advert.isPublished"
-              :options="advertStatusOptions"
-              optionLabel="label"
-              optionValue="value"
-              class="w-full md:w-14rem input"
-            />
-            <label for="inputType" class="input">Durumu*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <Button
-            label="Kaydet"
-            size="small"
-            class="button"
-            @click="create()"
-          />
+          </div>
         </div>
       </div>
-    </div>
-    <div class="modal-right-content" v-if="updateModalIsVisible">
-      <div class="modal-content-header">
-        <span>İlan Bilgisi Güncelle</span>
-      </div>
-      <div class="modal-content-row">
-        <span class="p-float-label" style="margin: 0 auto">
-          <Dropdown
-            v-model="advert.advertPlaceId"
-            :options="advertPlaces"
-            optionLabel="name"
-            optionValue="id"
-            class="w-full md:w-14rem input"
-            inputId="inputType"
-          />
-          <label for="inputType" class="input">İlan Yeri*</label>
-        </span>
-      </div>
-      <div class="modal-content-row">
-        <span class="p-float-label" style="margin: 0 auto">
-          <Calendar
-            v-model="advert.startDate"
-            class="input"
-            dateFormat="dd-mm-yy"
-            showIcon
-            iconDisplay="input"
-          />
-          <label for="inputType" class="input">İlan Başlangıç Tarihi*</label>
-        </span>
-      </div>
-      <div class="modal-content-row">
-        <span class="p-float-label" style="margin: 0 auto">
-          <Calendar
-            v-model="advert.endDate"
-            class="input"
-            dateFormat="dd-mm-yy"
-            showIcon
-            iconDisplay="input"
-          />
-          <label for="inputType" class="input">İlan Bitiş Tarihi</label>
-        </span>
-      </div>
-      <div class="modal-content-row">
-        <span class="p-float-label" style="margin: 0 auto">
-          <InputNumber
-            v-model="advert.price"
-            locale="tr-TR"
-            :minFractionDigits="2"
-            mode="currency"
-            currency="TRY"
-            class="input"
-          />
-          <label for="inputType" class="input">İlan Fiyatı*</label>
-        </span>
-      </div>
-      <div class="modal-content-row">
-        <span class="p-float-label" style="margin: 0 auto">
-          <Dropdown
-            v-model="advert.isPublished"
-            :options="advertStatusOptions"
-            optionLabel="label"
-            optionValue="value"
-            class="w-full md:w-14rem input"
-          />
-          <label for="inputType" class="input">Durumu*</label>
-        </span>
-      </div>
-      <div class="modal-content-row">
-        <Button
-          label="Kaydet"
-          size="small"
-          class="button"
-          @click="update(advert.id)"
-        />
-      </div>
-    </div>
-  </div>
+    </template>
+  </ViewUsedByStaff>
 </template>
 
 <script>
+import ViewUsedByStaff from "./base/ViewUsedByStaff.vue";
 import { gysClient } from "@/assets/js/client.js";
 import Pagination from "@/components/Pagination.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
@@ -238,6 +250,7 @@ export default {
   },
   components: {
     Pagination,
+    ViewUsedByStaff,
   },
   data() {
     return {
@@ -358,11 +371,14 @@ export default {
       if (!(typeof this.advert.startDate === "string")) {
         startDate = new Date(startDate.toISOString());
         startDate.setDate(startDate.getDate() + 1);
-      }
-      else {
+      } else {
         var startDateStrSplitted = startDate.split("-");
 
-        startDate = new Date(startDateStrSplitted[2], startDateStrSplitted[1] - 1, startDateStrSplitted[0]);
+        startDate = new Date(
+          startDateStrSplitted[2],
+          startDateStrSplitted[1] - 1,
+          startDateStrSplitted[0]
+        );
 
         startDate.setDate(startDate.getDate() + 1);
       }
@@ -370,11 +386,14 @@ export default {
       if (!(typeof this.advert.endDate === "string")) {
         endDate = new Date(endDate.toISOString());
         endDate.setDate(endDate.getDate() + 1);
-      }
-      else {
+      } else {
         var endDateDateStrSplitted = endDate.split("-");
 
-        endDate = new Date(endDateDateStrSplitted[2], endDateDateStrSplitted[1] - 1, endDateDateStrSplitted[0]);
+        endDate = new Date(
+          endDateDateStrSplitted[2],
+          endDateDateStrSplitted[1] - 1,
+          endDateDateStrSplitted[0]
+        );
 
         endDate.setDate(endDate.getDate() + 1);
       }
@@ -450,7 +469,9 @@ export default {
     },
   },
   mounted() {
-    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
+    canSeeComponent(this.$options.name).then(
+      (response) => (this.isVisible = response.data)
+    );
 
     this.getAdverts();
     this.getAdvertPlaces();
@@ -487,13 +508,6 @@ export default {
   overflow-y: auto;
   padding-bottom: 50px;
   background: #fafafa;
-}
-
-.advert-information-container table th,
-.advert-information-container table td {
-  padding: 0.8rem 0.13rem 0.8rem 0.13rem;
-  text-align: left;
-  font-size: 0.95rem;
 }
 
 .advert-information-container .modal-content-header {

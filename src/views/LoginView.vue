@@ -5,7 +5,11 @@
     :messageContent="notification.messageContent"
     @isActive="setVisibilityOfNotification"
   />
-  <form class="card flex align-items-center justify-content-center" @submit.prevent="signIn()" v-if="loginModalIsVisible">
+  <form
+    class="card flex align-items-center justify-content-center"
+    @submit.prevent="signIn()"
+    v-if="loginModalIsVisible"
+  >
     <Card style="width: 25em">
       <template #header>
         <div class="logo">
@@ -19,11 +23,7 @@
       <template #content>
         <div style="margin-top: 30px">
           <span class="p-float-label">
-            <InputText
-              class="input"
-              size="small"
-              v-model="email"
-            />
+            <InputText class="input" size="small" v-model="email" />
             <label class="input">E-Posta*</label>
           </span>
           <span class="p-float-label" style="margin-top: 15px">
@@ -55,10 +55,17 @@
 </template>
 
 <script>
+import RealEstateListView from "./RealEstateListView.vue";
+import PaymentDeclarationTenantView from "./PaymentDeclarationTenantView.vue";
 import Notification from "@/components/Notification.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
-import { getTokenFromBackend, setTokenToLocalStorage, removeToken } from "@/service/TokenService";
-import ResetPasswordView from './ResetPasswordView.vue';
+import {
+  getTokenFromBackend,
+  setTokenToLocalStorage,
+  removeToken,
+  parseToken,
+} from "@/service/TokenService";
+import ResetPasswordView from "./ResetPasswordView.vue";
 
 export default {
   name: "LoginView",
@@ -81,20 +88,43 @@ export default {
     },
     signIn() {
       removeToken();
-      
-      getTokenFromBackend(this.email, this.password)
-      .then((response) => {
-        setTokenToLocalStorage(response.headers.authorization);
 
-        window.location.href = "/real-estates";
-      })
-      .then(() => {
-        if (window.PasswordCredential) {
-          const passwordCredential = new PasswordCredential({ id: this.email, password: this.password });
-          navigator.credentials.store(passwordCredential);
-        }
-      })
-      .catch((error) => {
+      getTokenFromBackend(this.email, this.password)
+        .then((response) => {
+          setTokenToLocalStorage(response.headers.authorization);
+
+          let decodedJwt = parseToken();
+
+          let url = "/";
+
+          if (decodedJwt.isStaff) {
+            url = this.$router
+              .getRoutes()
+              .find(
+                (r) => r.components.default.name === RealEstateListView.name
+              ).path;
+          } else if (decodedJwt.isTenant) {
+            
+
+            url = this.$router
+              .getRoutes()
+              .find(
+                (r) => r.components.default.name === PaymentDeclarationTenantView.name
+              ).path;
+          }
+
+          window.location.href = url;
+        })
+        .then(() => {
+          if (window.PasswordCredential) {
+            const passwordCredential = new PasswordCredential({
+              id: this.email,
+              password: this.password,
+            });
+            navigator.credentials.store(passwordCredential);
+          }
+        })
+        .catch((error) => {
           this.notification.isActive = true;
           this.notification.severity = NotificationConstants.SEVERITY_ERROR;
           this.notification.messageContent = error.response.data.message;
@@ -102,8 +132,8 @@ export default {
     },
     openResetPasswordModal() {
       this.loginModalIsVisible = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -130,5 +160,4 @@ export default {
 .login-container .logo span {
   font-size: 1.3rem;
 }
-
 </style>

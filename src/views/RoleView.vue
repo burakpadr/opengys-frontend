@@ -1,221 +1,226 @@
 <template>
-  <div class="role-container" v-if="isVisible">
-    <Notification
-      :isActive="notification.isActive"
-      :severity="notification.severity"
-      :messageContent="notification.messageContent"
-      @isActive="setVisibilityOfNotification"
-    />
-    <div class="header-container">
-      <Button
-        icon="pi pi-plus"
-        style="background-color: #3b82f6"
-        size="large"
-        class="add-button"
-        rounded
-        @click="toggleCreateModal"
-      />
-      <span class="p-input-icon-left search-bar-container">
-        <i class="pi pi-search" />
-        <InputText
-          v-model="searchTerm"
-          size="small"
-          class="search-bar"
-          placeholder="Ara"
-          @input="search"
+  <ViewUsedByStaff>
+    <template #content>
+      <div class="role-container" v-if="isVisible">
+        <Notification
+          :isActive="notification.isActive"
+          :severity="notification.severity"
+          :messageContent="notification.messageContent"
+          @isActive="setVisibilityOfNotification"
         />
-      </span>
-    </div>
-    <div class="table-container">
-      <table>
-        <tr>
-          <th>Rol Adı</th>
-          <th>Aksiyon</th>
-        </tr>
-        <tr v-for="(role, index) in roles" :key="index">
-          <td>{{ role.label }}</td>
-          <td>
-            <ConfirmPopup
-              :pt="{
-                root: { class: 'confirmPopup' },
-              }"
-            ></ConfirmPopup>
-            <i
-              class="bx bx-trash"
-              @click="confirmDeleteRole($event, role.id)"
-            ></i>
-            <i
-              @click="openUpdateEventModal(role.id)"
-              class="bx bx-edit-alt"
-            ></i>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div class="paginator">
-      <Pagination
-        :totalRecords="pagination.totalRecords"
-        @pageState="getPageState"
-      />
-    </div>
-
-    <!-- Create Modal -->
-
-    <form
-      class="modal"
-      v-if="createModalIsVisible"
-      @click.self="toggleCreateModal"
-    >
-      <i class="bx bx-x exit" @click="toggleCreateModal"></i>
-      <div class="modal-left-content">
-        <div class="modal-content-header">
-          <span>Rol Bilgisi</span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              size="small"
-              v-model="role.label"
-              required="true"
-            />
-            <label class="input">Rol Adı*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
+        <div class="header-container">
           <Button
-            label="Kaydet"
-            size="small"
-            class="button"
-            @click="create()"
+            icon="pi pi-plus"
+            style="background-color: #3b82f6"
+            size="large"
+            class="add-button"
+            rounded
+            @click="toggleCreateModal"
           />
-        </div>
-      </div>
-      <div class="modal-right-content">
-        <div class="modal-content-header">
-          <span>Sayfalar</span>
+          <span class="p-input-icon-left search-bar-container">
+            <i class="pi pi-search" />
+            <InputText
+              v-model="searchTerm"
+              size="small"
+              class="search-bar"
+              placeholder="Ara"
+              @input="search"
+            />
+          </span>
         </div>
         <div class="table-container">
           <table>
             <tr>
-              <th>Sayfa Adı</th>
-              <th></th>
+              <th>Rol Adı</th>
+              <th>Aksiyon</th>
             </tr>
-            <tr v-for="(uiElement, index) in uiElements" :key="index">
-              <td>{{ uiElement.label }}</td>
+            <tr v-for="(role, index) in roles" :key="index">
+              <td>{{ role.label }}</td>
               <td>
-                <Checkbox
-                  v-model="role.selectedUIElements"
-                  name="uiElement"
-                  :value="uiElement"
-                />
+                <ConfirmPopup
+                  :pt="{
+                    root: { class: 'confirmPopup' },
+                  }"
+                ></ConfirmPopup>
+                <i
+                  class="bx bx-trash"
+                  @click="confirmDeleteRole($event, role.id)"
+                ></i>
+                <i
+                  @click="openUpdateEventModal(role.id)"
+                  class="bx bx-edit-alt"
+                ></i>
               </td>
             </tr>
           </table>
         </div>
-      </div>
-      <div class="modal-right-content">
-        <div class="modal-content-header">
-          <span>Seçilen Sayfalar</span>
-        </div>
-        <div class="table-container">
-          <table>
-            <tr>
-              <th>Sayfa Adı</th>
-              <th></th>
-            </tr>
-            <tr
-              v-for="(uiElement, index) in role.selectedUIElements"
-              :key="index"
-            >
-              <td>{{ uiElement.label }}</td>
-              <td></td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </form>
-
-    <!-- Update Modal -->
-
-    <form
-      class="modal"
-      v-if="updateModalIsVisible"
-      @click.self="toggleUpdateModal"
-    >
-      <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
-      <div class="modal-left-content">
-        <div class="modal-content-header">
-          <span>Rol Bilgisi</span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              size="small"
-              v-model="role.label"
-              required="true"
-            />
-            <label class="input">Rol Adı*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <Button
-            label="Kaydet"
-            size="small"
-            class="button"
-            @click="update()"
+        <div class="paginator">
+          <Pagination
+            :totalRecords="pagination.totalRecords"
+            @pageState="getPageState"
           />
         </div>
-      </div>
-      <div class="modal-right-content">
-        <div class="modal-content-header">
-          <span>Sayfalar</span>
-        </div>
-        <div class="table-container">
-          <table>
-            <tr>
-              <th>Sayfa Adı</th>
-              <th></th>
-            </tr>
-            <tr v-for="(uiElement, index) in uiElements" :key="index">
-              <td>{{ uiElement.label }}</td>
-              <td>
-                <Checkbox
-                  v-model="role.selectedUIElements"
-                  name="uiElement"
-                  :value="uiElement"
+
+        <!-- Create Modal -->
+
+        <form
+          class="modal"
+          v-if="createModalIsVisible"
+          @click.self="toggleCreateModal"
+        >
+          <i class="bx bx-x exit" @click="toggleCreateModal"></i>
+          <div class="modal-left-content">
+            <div class="modal-content-header">
+              <span>Rol Bilgisi</span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  size="small"
+                  v-model="role.label"
+                  required="true"
                 />
-              </td>
-            </tr>
-          </table>
-        </div>
+                <label class="input">Rol Adı*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                label="Kaydet"
+                size="small"
+                class="button"
+                @click="create()"
+              />
+            </div>
+          </div>
+          <div class="modal-right-content">
+            <div class="modal-content-header">
+              <span>Sayfalar</span>
+            </div>
+            <div class="table-container">
+              <table>
+                <tr>
+                  <th>Sayfa Adı</th>
+                  <th></th>
+                </tr>
+                <tr v-for="(uiElement, index) in uiElements" :key="index">
+                  <td>{{ uiElement.label }}</td>
+                  <td>
+                    <Checkbox
+                      v-model="role.selectedUIElements"
+                      name="uiElement"
+                      :value="uiElement"
+                    />
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="modal-right-content">
+            <div class="modal-content-header">
+              <span>Seçilen Sayfalar</span>
+            </div>
+            <div class="table-container">
+              <table>
+                <tr>
+                  <th>Sayfa Adı</th>
+                  <th></th>
+                </tr>
+                <tr
+                  v-for="(uiElement, index) in role.selectedUIElements"
+                  :key="index"
+                >
+                  <td>{{ uiElement.label }}</td>
+                  <td></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </form>
+
+        <!-- Update Modal -->
+
+        <form
+          class="modal"
+          v-if="updateModalIsVisible"
+          @click.self="toggleUpdateModal"
+        >
+          <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
+          <div class="modal-left-content">
+            <div class="modal-content-header">
+              <span>Rol Bilgisi</span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  size="small"
+                  v-model="role.label"
+                  required="true"
+                />
+                <label class="input">Rol Adı*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                label="Kaydet"
+                size="small"
+                class="button"
+                @click="update()"
+              />
+            </div>
+          </div>
+          <div class="modal-right-content">
+            <div class="modal-content-header">
+              <span>Sayfalar</span>
+            </div>
+            <div class="table-container">
+              <table>
+                <tr>
+                  <th>Sayfa Adı</th>
+                  <th></th>
+                </tr>
+                <tr v-for="(uiElement, index) in uiElements" :key="index">
+                  <td>{{ uiElement.label }}</td>
+                  <td>
+                    <Checkbox
+                      v-model="role.selectedUIElements"
+                      name="uiElement"
+                      :value="uiElement"
+                    />
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="modal-right-content">
+            <div class="modal-content-header">
+              <span>Seçilen Sayfalar</span>
+            </div>
+            <div class="table-container">
+              <table>
+                <tr>
+                  <th>Sayfa Adı</th>
+                  <th></th>
+                </tr>
+                <tr
+                  v-for="(uiElement, index) in role.selectedUIElements"
+                  :key="index"
+                >
+                  <td>{{ uiElement.label }}</td>
+                  <td></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </form>
       </div>
-      <div class="modal-right-content">
-        <div class="modal-content-header">
-          <span>Seçilen Sayfalar</span>
-        </div>
-        <div class="table-container">
-          <table>
-            <tr>
-              <th>Sayfa Adı</th>
-              <th></th>
-            </tr>
-            <tr
-              v-for="(uiElement, index) in role.selectedUIElements"
-              :key="index"
-            >
-              <td>{{ uiElement.label }}</td>
-              <td></td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </form>
-  </div>
+    </template>
+  </ViewUsedByStaff>
 </template>
 
 <script>
+import ViewUsedByStaff from "./base/ViewUsedByStaff.vue";
 import Pagination from "@/components/Pagination.vue";
 import Notification from "@/components/Notification.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
@@ -224,7 +229,7 @@ import { canSeeComponent } from "@/service/RbacService";
 
 export default {
   name: "RoleView",
-  components: { Pagination, Notification },
+  components: { Pagination, Notification, ViewUsedByStaff },
   data() {
     return {
       isVisible: null,
@@ -307,7 +312,7 @@ export default {
     toggleCreateModal() {
       this.role = {
         label: null,
-        selectedUIElements: []
+        selectedUIElements: [],
       };
 
       if (this.createModalIsVisible) this.createModalIsVisible = false;
@@ -320,7 +325,7 @@ export default {
     toggleUpdateModal() {
       this.role = {
         label: null,
-        selectedUIElements: []
+        selectedUIElements: [],
       };
 
       if (this.updateModalIsVisible) this.updateModalIsVisible = false;
@@ -428,8 +433,10 @@ export default {
     },
   },
   mounted() {
-    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
-    
+    canSeeComponent(this.$options.name).then(
+      (response) => (this.isVisible = response.data)
+    );
+
     this.getRoles();
     this.getUIElements();
   },

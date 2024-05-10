@@ -1,197 +1,203 @@
 <template>
-  <div class="real-estate-basic-information-container" v-if="isVisible">
-    <!-- Temel Bilgiler -->
+  <ViewUsedByStaff>
+    <template #content>
+      <div class="real-estate-basic-information-container" v-if="isVisible">
+        <!-- Temel Bilgiler -->
 
-    <div class="modal-left-content">
-      <div class="modal-content-header">
-        <span>Temel Bilgiler</span>
-      </div>
-      <div class="modal-content-row">
-        <span class="p-float-label" style="margin: 0 auto">
-          <Dropdown
-            v-model="realEstate.mainStatus"
-            :options="mainStatusList"
-            optionValue="alias"
-            optionLabel="value"
-            class="w-full md:w-14rem input"
-            :disabled="isUpdateAction ? true : false"
-          />
-          <label class="input">Ana Statü*</label>
-        </span>
-      </div>
-      <div class="modal-content-row">
-        <span class="p-float-label" style="margin: 0 auto">
-          <InputText
-            class="input"
-            size="small"
-            required="true"
-            v-model="realEstate.no"
-          />
-          <label class="input">Gayrimenkul No*</label>
-        </span>
-      </div>
-    </div>
+        <div class="modal-left-content">
+          <div class="modal-content-header">
+            <span>Temel Bilgiler</span>
+          </div>
+          <div class="modal-content-row">
+            <span class="p-float-label" style="margin: 0 auto">
+              <Dropdown
+                v-model="realEstate.mainStatus"
+                :options="mainStatusList"
+                optionValue="alias"
+                optionLabel="value"
+                class="w-full md:w-14rem input"
+                :disabled="isUpdateAction ? true : false"
+              />
+              <label class="input">Ana Statü*</label>
+            </span>
+          </div>
+          <div class="modal-content-row">
+            <span class="p-float-label" style="margin: 0 auto">
+              <InputText
+                class="input"
+                size="small"
+                required="true"
+                v-model="realEstate.no"
+              />
+              <label class="input">Gayrimenkul No*</label>
+            </span>
+          </div>
+        </div>
 
-    <!-- Adres Bilgisi -->
+        <!-- Adres Bilgisi -->
 
-    <div class="modal-right-content">
-      <div class="modal-content-header">
-        <span>Adres Bilgisi</span>
-      </div>
-      <div class="modal-content-row"></div>
-      <div class="modal-content-row">
-        <span class="p-float-label" style="margin: 0 auto">
-          <Dropdown
-            v-model="realEstate.address.cityName"
-            :options="cities"
-            optionLabel="name"
-            optionValue="name"
-            class="w-full md:w-14rem input"
-            inputId="inputType"
-            @change="getDistricts"
-          />
-          <label for="inputType" class="input">İl*</label>
-        </span>
-      </div>
-      <div class="modal-content-row" v-if="districts != null">
-        <span class="p-float-label" style="margin: 0 auto">
-          <Dropdown
-            v-model="realEstate.address.districtName"
-            :options="districts"
-            optionLabel="name"
-            optionValue="name"
-            class="w-full md:w-14rem input"
-            inputId="inputType"
-            @change="getNeighborhoods"
-          />
-          <label for="inputType" class="input">İlçe*</label>
-        </span>
-      </div>
-      <div class="modal-content-row" v-if="neighborhoods != null">
-        <span class="p-float-label" style="margin: 0 auto">
-          <Dropdown
-            v-model="realEstate.address.neighborhoodName"
-            :options="neighborhoods"
-            optionLabel="name"
-            optionValue="name"
-            class="w-full md:w-14rem input"
-            inputId="inputType"
-          />
-          <label for="inputType" class="input">Mahalle*</label>
-        </span>
-      </div>
-      <div class="modal-content-row">
-        <span class="p-float-label">
-          <InputText
-            class="input"
-            size="small"
-            required="true"
-            v-model="realEstate.address.postCode"
-          />
-          <label class="input">Posta Kodu</label>
-        </span>
-      </div>
-      <div class="modal-content-row">
-        <span class="p-float-label">
-          <InputText
-            class="input"
-            size="small"
-            required="true"
-            v-model="realEstate.address.latitude"
-          />
-          <label class="input">Enlem</label>
-        </span>
-      </div>
-      <div class="modal-content-row">
-        <span class="p-float-label">
-          <InputText
-            class="input"
-            size="small"
-            required="true"
-            v-model="realEstate.address.longitude"
-          />
-          <label class="input">Boylam</label>
-        </span>
-      </div>
-      <div class="modal-content-row">
-        <span class="p-float-label">
-          <Textarea
-            v-model="realEstate.address.openAddress"
-            class="input"
-            rows="5"
-            cols="30"
-            required="true"
-            autoResize
-          />
-          <label class="input">Açık Adres</label>
-        </span>
-      </div>
-    </div>
+        <div class="modal-right-content">
+          <div class="modal-content-header">
+            <span>Adres Bilgisi</span>
+          </div>
+          <div class="modal-content-row"></div>
+          <div class="modal-content-row">
+            <span class="p-float-label" style="margin: 0 auto">
+              <Dropdown
+                v-model="realEstate.address.cityName"
+                :options="cities"
+                optionLabel="name"
+                optionValue="name"
+                class="w-full md:w-14rem input"
+                inputId="inputType"
+                @change="getDistricts"
+              />
+              <label for="inputType" class="input">İl*</label>
+            </span>
+          </div>
+          <div class="modal-content-row" v-if="districts != null">
+            <span class="p-float-label" style="margin: 0 auto">
+              <Dropdown
+                v-model="realEstate.address.districtName"
+                :options="districts"
+                optionLabel="name"
+                optionValue="name"
+                class="w-full md:w-14rem input"
+                inputId="inputType"
+                @change="getNeighborhoods"
+              />
+              <label for="inputType" class="input">İlçe*</label>
+            </span>
+          </div>
+          <div class="modal-content-row" v-if="neighborhoods != null">
+            <span class="p-float-label" style="margin: 0 auto">
+              <Dropdown
+                v-model="realEstate.address.neighborhoodName"
+                :options="neighborhoods"
+                optionLabel="name"
+                optionValue="name"
+                class="w-full md:w-14rem input"
+                inputId="inputType"
+              />
+              <label for="inputType" class="input">Mahalle*</label>
+            </span>
+          </div>
+          <div class="modal-content-row">
+            <span class="p-float-label">
+              <InputText
+                class="input"
+                size="small"
+                required="true"
+                v-model="realEstate.address.postCode"
+              />
+              <label class="input">Posta Kodu</label>
+            </span>
+          </div>
+          <div class="modal-content-row">
+            <span class="p-float-label">
+              <InputText
+                class="input"
+                size="small"
+                required="true"
+                v-model="realEstate.address.latitude"
+              />
+              <label class="input">Enlem</label>
+            </span>
+          </div>
+          <div class="modal-content-row">
+            <span class="p-float-label">
+              <InputText
+                class="input"
+                size="small"
+                required="true"
+                v-model="realEstate.address.longitude"
+              />
+              <label class="input">Boylam</label>
+            </span>
+          </div>
+          <div class="modal-content-row">
+            <span class="p-float-label">
+              <Textarea
+                v-model="realEstate.address.openAddress"
+                class="input"
+                rows="5"
+                cols="30"
+                required="true"
+                autoResize
+              />
+              <label class="input">Açık Adres</label>
+            </span>
+          </div>
+        </div>
 
-    <!-- Ek Özellikler -->
+        <!-- Ek Özellikler -->
 
-    <div class="modal-right-content">
-      <div class="modal-content-header">
-        <span>Ek Özellikler</span>
+        <div class="modal-right-content">
+          <div class="modal-content-header">
+            <span>Ek Özellikler</span>
+          </div>
+          <div class="modal-content-row">
+            <span class="p-float-label" style="margin: 0 auto">
+              <Dropdown
+                v-model="realEstate.categoryId"
+                :options="categories"
+                optionLabel="name"
+                optionValue="id"
+                class="w-full md:w-14rem input"
+                inputId="inputType"
+                @change="getSubCategories"
+              />
+              <label for="inputType" class="input">Kategori*</label>
+            </span>
+          </div>
+          <div
+            class="modal-content-row"
+            v-if="subCategories != null && subCategories.length"
+          >
+            <span class="p-float-label" style="margin: 0 auto">
+              <Dropdown
+                v-model="realEstate.subCategoryId"
+                :options="subCategories"
+                optionLabel="name"
+                optionValue="id"
+                class="w-full md:w-14rem input"
+                inputId="inputType"
+              />
+              <label for="inputType" class="input">Alt Kategori*</label>
+            </span>
+          </div>
+          <div class="modal-content-row" v-if="isInsertAction">
+            <Button
+              label="Kaydet"
+              size="small"
+              class="button"
+              @click="create"
+              :loading="loading"
+            />
+          </div>
+          <div class="modal-content-row" v-if="isUpdateAction">
+            <Button
+              label="Kaydet"
+              size="small"
+              class="button"
+              @click="update"
+              :loading="loading"
+            />
+          </div>
+        </div>
       </div>
-      <div class="modal-content-row">
-        <span class="p-float-label" style="margin: 0 auto">
-          <Dropdown
-            v-model="realEstate.categoryId"
-            :options="categories"
-            optionLabel="name"
-            optionValue="id"
-            class="w-full md:w-14rem input"
-            inputId="inputType"
-            @change="getSubCategories"
-          />
-          <label for="inputType" class="input">Kategori*</label>
-        </span>
-      </div>
-      <div
-        class="modal-content-row"
-        v-if="subCategories != null && subCategories.length"
-      >
-        <span class="p-float-label" style="margin: 0 auto">
-          <Dropdown
-            v-model="realEstate.subCategoryId"
-            :options="subCategories"
-            optionLabel="name"
-            optionValue="id"
-            class="w-full md:w-14rem input"
-            inputId="inputType"
-          />
-          <label for="inputType" class="input">Alt Kategori*</label>
-        </span>
-      </div>
-      <div class="modal-content-row" v-if="isInsertAction">
-        <Button
-          label="Kaydet"
-          size="small"
-          class="button"
-          @click="create"
-          :loading="loading"
-        />
-      </div>
-      <div class="modal-content-row" v-if="isUpdateAction">
-        <Button
-          label="Kaydet"
-          size="small"
-          class="button"
-          @click="update"
-          :loading="loading"
-        />
-      </div>
-    </div>
-  </div>
+    </template>
+  </ViewUsedByStaff>
 </template>
 
 <script>
+import ViewUsedByStaff from "./base/ViewUsedByStaff.vue";
 import { gysClient } from "@/assets/js/client.js";
 import { canSeeComponent } from "@/service/RbacService";
 
 export default {
   name: "RealEstateBasicInformation",
+  components: { ViewUsedByStaff },
   props: {
     realEstate: {
       type: Object,
@@ -290,7 +296,7 @@ export default {
     },
     update() {
       this.loading = true;
-      
+
       gysClient
         .put(`real-estates/${this.realEstate.id}`, this.realEstate)
         .then(() => {
@@ -314,7 +320,9 @@ export default {
     },
   },
   mounted() {
-    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
+    canSeeComponent(this.$options.name).then(
+      (response) => (this.isVisible = response.data)
+    );
 
     this.getMainStatusList();
     this.getCities();

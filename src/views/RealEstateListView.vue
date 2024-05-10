@@ -1,179 +1,187 @@
 <template>
-  <div class="real-estate-list-container" v-if="isVisible">
-    <Notification
-      :isActive="notification.isActive"
-      :severity="notification.severity"
-      :messageContent="notification.messageContent"
-      @isActive="setVisibilityOfNotification"
-    />
-    <div class="header-container">
-      <Button
-        icon="pi pi-plus"
-        style="background-color: #3b82f6"
-        size="large"
-        class="add-button"
-        @click="toggleCreateModal"
-        rounded
-      />
-      <span class="p-input-icon-left search-bar-container">
-        <i class="pi pi-search" />
-        <InputText size="small" class="search-bar" placeholder="Ara" />
-      </span>
-      <div class="card flex justify-content-center">
-        <div class="card flex justify-content-center">
-          <span class="p-float-label">
-            <TreeSelect
-              v-model="selectedStatusFilter"
-              :options="statusList"
-              class="md:w-20rem w-full status-filter"
-            />
-            <label>Statü Filtresi</label>
+  <ViewUsedByStaff>
+    <template #content>
+      <div class="real-estate-list-container" v-if="isVisible">
+        <Notification
+          :isActive="notification.isActive"
+          :severity="notification.severity"
+          :messageContent="notification.messageContent"
+          @isActive="setVisibilityOfNotification"
+        />
+        <div class="header-container">
+          <Button
+            icon="pi pi-plus"
+            style="background-color: #3b82f6"
+            size="large"
+            class="add-button"
+            @click="toggleCreateModal"
+            rounded
+          />
+          <span class="p-input-icon-left search-bar-container">
+            <i class="pi pi-search" />
+            <InputText size="small" class="search-bar" placeholder="Ara" />
           </span>
+          <div class="card flex justify-content-center">
+            <div class="card flex justify-content-center">
+              <span class="p-float-label">
+                <TreeSelect
+                  v-model="selectedStatusFilter"
+                  :options="statusList"
+                  class="md:w-20rem w-full status-filter"
+                />
+                <label>Statü Filtresi</label>
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="card real-estate-list">
-      <div>
-        <DataView
-          :value="realEstates"
-          :layout="layout"
-          :pt="{
-            header: { class: 'header' },
-            content: { class: 'body' },
-          }"
-        >
-          <template #header> </template>
+        <div class="card real-estate-list">
+          <div>
+            <DataView
+              :value="realEstates"
+              :layout="layout"
+              :pt="{
+                header: { class: 'header' },
+                content: { class: 'body' },
+              }"
+            >
+              <template #header> </template>
 
-          <!-- List view -->
-          <template #list="realEstate">
-            <div class="col-12">
-              <div
-                class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4"
-              >
-                <img
-                  v-if="realEstate.data.coverPhotoPath == null"
-                  class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
-                  src="../assets/img/no-photo.jpeg"
-                />
-                <img
-                  v-else
-                  class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
-                  :src="realEstate.data.coverPhotoPath"
-                />
-                <div
-                  class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4"
-                >
+              <!-- List view -->
+              <template #list="realEstate">
+                <div class="col-12">
                   <div
-                    class="flex flex-column align-items-center sm:align-items-start gap-3"
+                    class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4"
                   >
-                    <div class="text-xl font-bold text-700">
-                      {{ realEstate.data.no }}
+                    <img
+                      v-if="realEstate.data.coverPhotoPath == null"
+                      class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
+                      src="../assets/img/no-photo.jpeg"
+                    />
+                    <img
+                      v-else
+                      class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
+                      :src="realEstate.data.coverPhotoPath"
+                    />
+                    <div
+                      class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4"
+                    >
+                      <div
+                        class="flex flex-column align-items-center sm:align-items-start gap-3"
+                      >
+                        <div class="text-xl font-bold text-700">
+                          {{ realEstate.data.no }}
+                        </div>
+                        <div class="flex align-items-center gap-3">
+                          <span class="flex align-items-center gap-1">
+                            <i class="bx bx-purchase-tag"></i>
+                            <span>{{ realEstate.data.mainStatus }}</span>
+                          </span>
+                        </div>
+                        <div class="flex align-items-center gap-3">
+                          <span class="flex align-items-center gap-2">
+                            <i class="pi pi-map-marker"></i>
+                            <span
+                              >{{ realEstate.data.cityName }},
+                              {{ realEstate.data.districtName }}</span
+                            >
+                          </span>
+                        </div>
+                      </div>
+                      <div
+                        class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2"
+                      >
+                        <!-- <span class="text-xl font-semibold">₺0</span> -->
+                        <Button
+                          icon="pi pi-pencil"
+                          @click="openUpdateEventModal(realEstate.data.id)"
+                          rounded
+                        ></Button>
+                        <ConfirmPopup
+                          :pt="{
+                            root: { class: 'confirmPopup' },
+                          }"
+                        ></ConfirmPopup>
+                        <Button
+                          icon="pi pi-trash"
+                          rounded
+                          @click="
+                            confirmDeleteRealEstate($event, realEstate.data.id)
+                          "
+                        ></Button>
+                      </div>
                     </div>
-                    <div class="flex align-items-center gap-3">
-                      <span class="flex align-items-center gap-1">
-                        <i class="bx bx-purchase-tag"></i>
-                        <span
-                          >{{ realEstate.data.mainStatus }} >
-                          {{ realEstate.data.subStatus }}</span
-                        >
-                      </span>
-                    </div>
-                    <div class="flex align-items-center gap-3">
-                      <span class="flex align-items-center gap-2">
-                        <i class="pi pi-map-marker"></i>
-                        <span
-                          >{{ realEstate.data.districtName }},
-                          {{ realEstate.data.cityName }}</span
-                        >
-                      </span>
-                    </div>
-                  </div>
-                  <div
-                    class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2"
-                  >
-                    <!-- <span class="text-xl font-semibold">₺0</span> -->
-                    <Button
-                      icon="pi pi-pencil"
-                      @click="openUpdateEventModal(realEstate.data.id)"
-                      rounded
-                    ></Button>
-                    <ConfirmPopup
-                      :pt="{
-                        root: { class: 'confirmPopup' },
-                      }"
-                    ></ConfirmPopup>
-                    <Button
-                      icon="pi pi-trash"
-                      rounded
-                      @click="
-                        confirmDeleteRealEstate($event, realEstate.data.id)
-                      "
-                    ></Button>
                   </div>
                 </div>
-              </div>
-            </div>
-          </template>
-        </DataView>
+              </template>
+            </DataView>
+          </div>
+        </div>
+        <div class="paginator">
+          <Pagination
+            :totalRecords="pagination.totalRecords"
+            @pageState="getPageState"
+          />
+        </div>
+
+        <!-- Create Modal -->
+
+        <div
+          class="modal"
+          v-if="createModalIsVisible"
+          @click.self="toggleCreateModal"
+        >
+          <RealEstateBasicInformation
+            :realEstate="basicInformationOfRealEstate"
+            :isInsertAction="true"
+            @createResult="handleCreateModalAction"
+          />
+        </div>
+
+        <!-- Update Modal -->
+
+        <div
+          class="modal"
+          v-if="updateModalIsVisible"
+          @click.self="toggleUpdateModal"
+        >
+          <Stepper
+            :options="stepperOptions"
+            @stepState="changeTab"
+            style="margin-top: 50px"
+          />
+
+          <RealEstateBasicInformation
+            v-if="selectedTabComponentName === 'RealEstateBasicInformation'"
+            :realEstate="basicInformationOfRealEstate"
+            :isUpdateAction="true"
+            @updateResult="handleUpdateModalAction"
+          />
+
+          <RealEstatePhoto
+            v-if="selectedTabComponentName === 'RealEstatePhoto'"
+            @updateResult="handleUpdateModalAction"
+            :realEstateId="selectedRealEstateId"
+          />
+
+          <AdvertInformation
+            v-if="selectedTabComponentName == 'AdvertInformation'"
+            :realEstateId="selectedRealEstateId"
+            @updateResult="handleUpdateModalAction"
+          />
+
+          <RentalContractInformation
+            v-if="selectedTabComponentName == 'RentalContractInformation'"
+            :realEstateId="selectedRealEstateId"
+            @updateResult="handleUpdateModalAction"
+          />
+        </div>
       </div>
-    </div>
-    <div class="paginator">
-      <Pagination
-        :totalRecords="pagination.totalRecords"
-        @pageState="getPageState"
-      />
-    </div>
-
-    <!-- Create Modal -->
-
-    <div
-      class="modal"
-      v-if="createModalIsVisible"
-      @click.self="toggleCreateModal"
-    >
-      <RealEstateBasicInformation
-        :realEstate="basicInformationOfRealEstate"
-        :isInsertAction="true"
-        @createResult="handleCreateModalAction"
-      />
-    </div>
-
-    <!-- Update Modal -->
-
-    <div
-      class="modal"
-      v-if="updateModalIsVisible"
-      @click.self="toggleUpdateModal"
-    >
-      <Stepper
-        :options="stepperOptions"
-        @stepState="changeTab"
-        style="margin-top: 50px"
-      />
-      
-      <RealEstateBasicInformation
-        v-if="selectedTabComponentName === 'RealEstateBasicInformation'"
-        :realEstate="basicInformationOfRealEstate"
-        :isUpdateAction="true"
-        @updateResult="handleUpdateModalAction"
-      />
-
-      <RealEstatePhoto
-        v-if="selectedTabComponentName === 'RealEstatePhoto'"
-        @updateResult="handleUpdateModalAction"
-        :realEstateId="selectedRealEstateId"
-      />
-
-      <AdvertInformation
-        v-if="selectedTabComponentName == 'AdvertInformation'"
-        :realEstateId="selectedRealEstateId"
-        @updateResult="handleUpdateModalAction"
-      />
-    </div>
-  </div>
+    </template>
+  </ViewUsedByStaff>
 </template>
 
 <script>
+import ViewUsedByStaff from "./base/ViewUsedByStaff.vue";
 import Pagination from "@/components/Pagination.vue";
 import Notification from "@/components/Notification.vue";
 import Stepper from "@/components/Stepper.vue";
@@ -184,6 +192,7 @@ import { gysClient } from "@/assets/js/client.js";
 import { FOR_RENT_TABS } from "@/assets/js/realEstateTabs";
 import AdvertInformation from "@/views/AdvertInformation.vue";
 import { canSeeComponent } from "@/service/RbacService";
+import RentalContractInformation from "./RentalContractInformation.vue";
 
 export default {
   name: "RealEstateListView",
@@ -194,6 +203,8 @@ export default {
     RealEstatePhoto,
     AdvertInformation,
     Notification,
+    RentalContractInformation,
+    ViewUsedByStaff,
   },
   data() {
     return {
@@ -265,25 +276,11 @@ export default {
     },
     getStatusList() {
       gysClient.get("status").then((response) => {
-        response.data.forEach((mainStatus) => {
-          gysClient
-            .get(`status/${mainStatus.alias}/sub-status`)
-            .then((subStatusListRepsonse) => {
-              let statusListItem = {
-                key: mainStatus.alias,
-                label: mainStatus.value,
-                children: [],
-              };
-
-              subStatusListRepsonse.data.forEach((subStatus) => {
-                statusListItem.children.push({
-                  key: mainStatus.alias + "." + subStatus.alias,
-                  label: subStatus.value,
-                });
-              });
-
-              this.statusList.push(statusListItem);
-            });
+        response.data.forEach((status) => {
+          this.statusList.push({
+            key: status.alias,
+            label: status.value,
+          });
         });
       });
     },
@@ -423,7 +420,9 @@ export default {
     },
   },
   mounted() {
-    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
+    canSeeComponent(this.$options.name).then(
+      (response) => (this.isVisible = response.data)
+    );
 
     this.getRealEstates();
     this.getStatusList();

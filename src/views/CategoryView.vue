@@ -1,209 +1,214 @@
 <template>
-  <div class="category-container" v-if="isVisible">
-    <Notification
-      :isActive="notification.isActive"
-      :severity="notification.severity"
-      :messageContent="notification.messageContent"
-      @isActive="setVisibilityOfNotification"
-    />
-    <div class="header-container">
-      <Button
-        icon="pi pi-plus"
-        style="background-color: #3b82f6"
-        size="large"
-        class="add-button"
-        rounded
-        @click="openAddEventModal"
-      />
-      <span class="p-input-icon-left search-bar-container">
-        <i class="pi pi-search" />
-        <InputText
-          v-model="searchTerm"
-          size="small"
-          class="search-bar"
-          placeholder="Ara"
-          @input="search"
+  <ViewUsedByStaff>
+    <template #content>
+      <div class="category-container" v-if="isVisible">
+        <Notification
+          :isActive="notification.isActive"
+          :severity="notification.severity"
+          :messageContent="notification.messageContent"
+          @isActive="setVisibilityOfNotification"
         />
-      </span>
-    </div>
-    <div class="table-container">
-      <table>
-        <tr>
-          <th>Kategori Adı</th>
-          <th>Aksiyon</th>
-        </tr>
-        <tr v-for="(category, index) in categories" :key="index">
-          <td data-cell="Kategori Adı">{{ category.name }}</td>
-          <td data-cell="Aksiyon">
-            <ConfirmPopup
-              :pt="{
-                root: { class: 'confirmPopup' },
-              }"
-            ></ConfirmPopup>
-            <i
-              class="bx bx-trash"
-              @click="confirmDeleteCategory($event, category.id)"
-            ></i>
-            <i
-              @click="openUpdateEventModal(category.id)"
-              class="bx bx-edit-alt"
-            ></i>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div class="paginator">
-      <Pagination
-        :totalRecords="pagination.totalRecords"
-        @pageState="getPageState"
-      />
-    </div>
-
-    <!-- Create Modal -->
-
-    <form
-      class="modal"
-      v-if="createModalIsVisible"
-      @click.self="toggleCreateModal"
-    >
-      <i class="bx bx-x exit" @click="toggleCreateModal"></i>
-      <div class="modal-left-content">
-        <div class="modal-content-header">
-          <span>Kategori Bilgisi</span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              size="small"
-              v-model="category.name"
-              required="true"
-            />
-            <label class="input" for="Kategori Adı*">Kategori Adı*</label>
-          </span>
-        </div>
-      </div>
-      <div class="modal-right-content">
-        <div class="modal-content-header">
-          <span>Alt Kategori Bilgisi</span>
-        </div>
-        <div class="modal-content-row">
+        <div class="header-container">
           <Button
-            label="Alt Kategori Ekle"
-            size="small"
-            class="button"
             icon="pi pi-plus"
-            @click="addSubCategory"
+            style="background-color: #3b82f6"
+            size="large"
+            class="add-button"
+            rounded
+            @click="openAddEventModal"
           />
-        </div>
-        <div
-          class="modal-content-row"
-          v-for="(subCategory, index) in category.subCategories"
-          :key="index"
-        >
-          <span class="p-float-label">
+          <span class="p-input-icon-left search-bar-container">
+            <i class="pi pi-search" />
             <InputText
-              class="input"
+              v-model="searchTerm"
               size="small"
-              v-model="category.subCategories[index].name"
-              required="true"
+              class="search-bar"
+              placeholder="Ara"
+              @input="search"
             />
-            <label class="input" for="Alt Kategori Adı*"
-              >Alt Kategori Adı*</label
-            >
-            <i
-              class="bx bx-trash"
-              style="margin-left: 15px"
-              @click="deleteSubCategory(index)"
-            ></i>
           </span>
         </div>
-        <div class="modal-content-row">
-          <Button
-            :loading="loading"
-            label="Kaydet"
-            size="small"
-            class="button"
-            @click="create"
+        <div class="table-container">
+          <table>
+            <tr>
+              <th>Kategori Adı</th>
+              <th>Aksiyon</th>
+            </tr>
+            <tr v-for="(category, index) in categories" :key="index">
+              <td data-cell="Kategori Adı">{{ category.name }}</td>
+              <td data-cell="Aksiyon">
+                <ConfirmPopup
+                  :pt="{
+                    root: { class: 'confirmPopup' },
+                  }"
+                ></ConfirmPopup>
+                <i
+                  class="bx bx-trash"
+                  @click="confirmDeleteCategory($event, category.id)"
+                ></i>
+                <i
+                  @click="openUpdateEventModal(category.id)"
+                  class="bx bx-edit-alt"
+                ></i>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="paginator">
+          <Pagination
+            :totalRecords="pagination.totalRecords"
+            @pageState="getPageState"
           />
         </div>
-      </div>
-    </form>
 
-    <!-- Update Modal -->
+        <!-- Create Modal -->
 
-    <form
-      class="modal"
-      v-if="updateModalIsVisible"
-      @click.self="toggleUpdateModal"
-    >
-      <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
-      <div class="modal-left-content">
-        <div class="modal-content-header">
-          <span>Kategori Bilgisi</span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              size="small"
-              v-model="category.name"
-              required="true"
-            />
-            <label class="input" for="Kategori Adı*">Kategori Adı*</label>
-          </span>
-        </div>
-      </div>
-      <div class="modal-right-content">
-        <div class="modal-content-header">
-          <span>Alt Kategori Bilgisi</span>
-        </div>
-        <div class="modal-content-row">
-          <Button
-            label="Alt Kategori Ekle"
-            size="small"
-            class="button"
-            icon="pi pi-plus"
-            @click="addSubCategory"
-          />
-        </div>
-        <div
-          class="modal-content-row"
-          v-for="(subCategory, index) in category.subCategories"
-          :key="index"
+        <form
+          class="modal"
+          v-if="createModalIsVisible"
+          @click.self="toggleCreateModal"
         >
-          <span class="p-float-label">
-            <InputText
-              class="input"
-              size="small"
-              v-model="category.subCategories[index].name"
-              required="true"
-            />
-            <label class="input" for="Alt Kategori Adı*"
-              >Alt Kategori Adı*</label
+          <i class="bx bx-x exit" @click="toggleCreateModal"></i>
+          <div class="modal-left-content">
+            <div class="modal-content-header">
+              <span>Kategori Bilgisi</span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  size="small"
+                  v-model="category.name"
+                  required="true"
+                />
+                <label class="input" for="Kategori Adı*">Kategori Adı*</label>
+              </span>
+            </div>
+          </div>
+          <div class="modal-right-content">
+            <div class="modal-content-header">
+              <span>Alt Kategori Bilgisi</span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                label="Alt Kategori Ekle"
+                size="small"
+                class="button"
+                icon="pi pi-plus"
+                @click="addSubCategory"
+              />
+            </div>
+            <div
+              class="modal-content-row"
+              v-for="(subCategory, index) in category.subCategories"
+              :key="index"
             >
-            <i
-              class="bx bx-trash"
-              style="margin-left: 15px"
-              @click="deleteSubCategory(index)"
-            ></i>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <Button
-            :loading="loading"
-            label="Güncelle"
-            size="small"
-            class="button"
-            @click="update"
-          />
-        </div>
+              <span class="p-float-label">
+                <InputText
+                  class="input"
+                  size="small"
+                  v-model="category.subCategories[index].name"
+                  required="true"
+                />
+                <label class="input" for="Alt Kategori Adı*"
+                  >Alt Kategori Adı*</label
+                >
+                <i
+                  class="bx bx-trash"
+                  style="margin-left: 15px"
+                  @click="deleteSubCategory(index)"
+                ></i>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                :loading="loading"
+                label="Kaydet"
+                size="small"
+                class="button"
+                @click="create"
+              />
+            </div>
+          </div>
+        </form>
+
+        <!-- Update Modal -->
+
+        <form
+          class="modal"
+          v-if="updateModalIsVisible"
+          @click.self="toggleUpdateModal"
+        >
+          <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
+          <div class="modal-left-content">
+            <div class="modal-content-header">
+              <span>Kategori Bilgisi</span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  size="small"
+                  v-model="category.name"
+                  required="true"
+                />
+                <label class="input" for="Kategori Adı*">Kategori Adı*</label>
+              </span>
+            </div>
+          </div>
+          <div class="modal-right-content">
+            <div class="modal-content-header">
+              <span>Alt Kategori Bilgisi</span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                label="Alt Kategori Ekle"
+                size="small"
+                class="button"
+                icon="pi pi-plus"
+                @click="addSubCategory"
+              />
+            </div>
+            <div
+              class="modal-content-row"
+              v-for="(subCategory, index) in category.subCategories"
+              :key="index"
+            >
+              <span class="p-float-label">
+                <InputText
+                  class="input"
+                  size="small"
+                  v-model="category.subCategories[index].name"
+                  required="true"
+                />
+                <label class="input" for="Alt Kategori Adı*"
+                  >Alt Kategori Adı*</label
+                >
+                <i
+                  class="bx bx-trash"
+                  style="margin-left: 15px"
+                  @click="deleteSubCategory(index)"
+                ></i>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                :loading="loading"
+                label="Güncelle"
+                size="small"
+                class="button"
+                @click="update"
+              />
+            </div>
+          </div>
+        </form>
       </div>
-    </form>
-  </div>
+    </template>
+  </ViewUsedByStaff>
 </template>
 
 <script>
+import ViewUsedByStaff from "./base/ViewUsedByStaff.vue";
 import Pagination from "@/components/Pagination.vue";
 import Notification from "@/components/Notification.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
@@ -212,7 +217,7 @@ import { canSeeComponent } from "@/service/RbacService";
 
 export default {
   name: "CategoryView",
-  components: { Pagination, Notification },
+  components: { Pagination, Notification, ViewUsedByStaff },
   data() {
     return {
       isVisible: null,
@@ -382,7 +387,9 @@ export default {
     },
   },
   mounted() {
-    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
+    canSeeComponent(this.$options.name).then(
+      (response) => (this.isVisible = response.data)
+    );
 
     this.getCategories();
   },

@@ -1,20 +1,48 @@
 <template>
-    <div class="navbar" :class="{ active: navbarIsActive }">
-      <div class="top">
-        <div class="logo">
-          <i class="bx bx-home-smile"></i>
-          <span>OpenGYS</span>
-        </div>
-        <i class="bx bx-menu" @click="toggleNavbar" id="navbarButton"></i>
+  <div class="navbar" :class="{ active: navbarIsActive }">
+    <div class="top">
+      <div class="logo">
+        <i class="bx bx-home-smile"></i>
+        <span>OpenGYS</span>
       </div>
-      <div class="navbar-body">
-        <div class="navbar-element" v-for="(navbarElement, i) in navbarElements" :key="i">
-          <div v-if="(navbarElement.hasSubMenu && allowedComponentsContainAnySubMenu(navbarElement.submenus)) || allowedComponentsContainSubMenuByName(navbarElement.component)">
+      <i class="bx bx-menu" @click="toggleNavbar" id="navbarButton"></i>
+    </div>
+    <div class="navbar-body">
+      <div
+        class="navbar-element"
+        v-for="(navbarElement, i) in navbarElements"
+        :key="i"
+      >
+        <div v-if="isStaff">
+          <div
+            v-if="
+              (navbarElement.hasSubMenu &&
+                allowedComponentsContainAnySubMenu(navbarElement.submenus)) ||
+              allowedComponentsContainSubMenuByName(navbarElement.component)
+            "
+          >
             <li>
-              <router-link :to="navbarElement.href" @click="changeActivityStatus(i, null)">
-                <i :class="[navbarElement.iconClass, changeActivityOfIcon(navbarElement.parentMenuisActive)]" ></i>
-                <span class="navbar-item" :class="{ active: navbarElement.parentMenuisActive }"> {{ navbarElement.title }} </span>
-                <i v-if="navbarElement.hasSubMenu" class="bx bxs-chevron-down toogle-sub-menu-icon" @click="toggleSubMenu(i)"></i>
+              <router-link
+                :to="navbarElement.href"
+                @click="changeActivityStatus(i, null)"
+              >
+                <i
+                  :class="[
+                    navbarElement.iconClass,
+                    changeActivityOfIcon(navbarElement.parentMenuisActive),
+                  ]"
+                ></i>
+                <span
+                  class="navbar-item"
+                  :class="{ active: navbarElement.parentMenuisActive }"
+                >
+                  {{ navbarElement.title }}
+                </span>
+                <i
+                  v-if="navbarElement.hasSubMenu"
+                  class="bx bxs-chevron-down toogle-sub-menu-icon"
+                  @click="toggleSubMenu(i)"
+                ></i>
               </router-link>
 
               <!-- Navbar Tooltip -->
@@ -24,38 +52,141 @@
                   {{ navbarElement.title }}
                 </div>
                 <div v-else>
-                  <router-link :to="navbarElement.href" @click="changeActivityStatus(i, null)" >{{ navbarElement.title }}</router-link>
+                  <router-link
+                    :to="navbarElement.href"
+                    @click="changeActivityStatus(i, null)"
+                    >{{ navbarElement.title }}</router-link
+                  >
                 </div>
                 <div v-for="(submenu, j) in navbarElement.submenus" :key="j">
-                  <router-link :to="submenu.href" @click="changeActivityStatus(i, j)" :class="{ active: submenu.isActive }">{{ submenu.title }}</router-link>
+                  <router-link
+                    :to="submenu.href"
+                    @click="changeActivityStatus(i, j)"
+                    :class="{ active: submenu.isActive }"
+                    >{{ submenu.title }}</router-link
+                  >
                 </div>
               </div>
             </li>
-            <div class="sub-menu" :class="{active: navbarElement.submenuIsActive}" v-if="navbarElement.hasSubMenu">
+            <div
+              class="sub-menu"
+              :class="{ active: navbarElement.submenuIsActive }"
+              v-if="navbarElement.hasSubMenu"
+            >
               <div v-for="(submenu, j) in navbarElement.submenus" :key="j">
-                <li v-if="allowedComponentsContainSubMenuByName(submenu.component)">
-                  <router-link :to="submenu.href" @click="changeActivityStatus(i, j)">
-                    <span class="navbar-item" :class="{ active: submenu.isActive }">{{ submenu.title }}</span>
+                <li
+                  v-if="
+                    allowedComponentsContainSubMenuByName(submenu.component)
+                  "
+                >
+                  <router-link
+                    :to="submenu.href"
+                    @click="changeActivityStatus(i, j)"
+                  >
+                    <span
+                      class="navbar-item"
+                      :class="{ active: submenu.isActive }"
+                      >{{ submenu.title }}</span
+                    >
                   </router-link>
                 </li>
+              </div>
             </div>
+          </div>
+        </div>
+        <div v-else-if="isTenant">
+          <div>
+            <li>
+              <router-link
+                :to="navbarElement.href"
+                @click="changeActivityStatus(i, null)"
+              >
+                <i
+                  :class="[
+                    navbarElement.iconClass,
+                    changeActivityOfIcon(navbarElement.parentMenuisActive),
+                  ]"
+                ></i>
+                <span
+                  class="navbar-item"
+                  :class="{ active: navbarElement.parentMenuisActive }"
+                >
+                  {{ navbarElement.title }}
+                </span>
+                <i
+                  v-if="navbarElement.hasSubMenu"
+                  class="bx bxs-chevron-down toogle-sub-menu-icon"
+                  @click="toggleSubMenu(i)"
+                ></i>
+              </router-link>
+
+              <!-- Navbar Tooltip -->
+
+              <div class="navbar-tooltip">
+                <div v-if="navbarElement.hasSubMenu" class="sub-menu-header">
+                  {{ navbarElement.title }}
+                </div>
+                <div v-else>
+                  <router-link
+                    :to="navbarElement.href"
+                    @click="changeActivityStatus(i, null)"
+                    >{{ navbarElement.title }}</router-link
+                  >
+                </div>
+                <div v-for="(submenu, j) in navbarElement.submenus" :key="j">
+                  <router-link
+                    :to="submenu.href"
+                    @click="changeActivityStatus(i, j)"
+                    :class="{ active: submenu.isActive }"
+                    >{{ submenu.title }}</router-link
+                  >
+                </div>
+              </div>
+            </li>
+            <div
+              class="sub-menu"
+              :class="{ active: navbarElement.submenuIsActive }"
+              v-if="navbarElement.hasSubMenu"
+            >
+              <div v-for="(submenu, j) in navbarElement.submenus" :key="j">
+                <li>
+                  <router-link
+                    :to="submenu.href"
+                    @click="changeActivityStatus(i, j)"
+                  >
+                    <span
+                      class="navbar-item"
+                      :class="{ active: submenu.isActive }"
+                      >{{ submenu.title }}</span
+                    >
+                  </router-link>
+                </li>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
-import { gysClient } from '@/assets/js/client';
-import { ELEMENTS } from '@/service/NavbarService'
+import { gysClient } from "@/assets/js/client";
+import {
+  STAFF_NAVBAR_ELEMENTS,
+  TENANT_NAVBAR_ELEMENTS,
+} from "@/service/NavbarService";
+import { parseToken } from "@/service/TokenService";
+
 export default {
   name: "Navbar",
   data() {
     return {
       navbarIsActive: true,
-      navbarElements: ELEMENTS,
-      allowedComponentsToBeSeen: []
+      navbarElements: TENANT_NAVBAR_ELEMENTS,
+      allowedComponentsToBeSeen: [],
+      isStaff: null,
+      isTenant: null,
     };
   },
   methods: {
@@ -91,16 +222,19 @@ export default {
       return parentMenuisActive ? "active" : "";
     },
     getAllowedComponentsToBeSeen() {
-        gysClient
+      gysClient
         .get("ui-elements/allowed-components-to-be-seen")
         .then((response) => {
           this.allowedComponentsToBeSeen = response.data;
-        })
+        });
     },
     allowedComponentsContainAnySubMenu(subMenus) {
       for (var i = 0; i < subMenus.length; i++)
         for (var j = 0; j < this.allowedComponentsToBeSeen.length; j++)
-          if (this.allowedComponentsToBeSeen[j].componentName === subMenus[i].component)
+          if (
+            this.allowedComponentsToBeSeen[j].componentName ===
+            subMenus[i].component
+          )
             return true;
 
       return false;
@@ -120,28 +254,38 @@ export default {
           navbarElement.submenus.forEach((subMenu) => {
             if (pathname === subMenu.href) {
               subMenu.isActive = true;
-              navbarElement.submenuIsActive = true
+              navbarElement.submenuIsActive = true;
               navbarElement.parentMenuisActive = true;
 
               return;
             }
-          }); 
-        }
-        else {
+          });
+        } else {
           if (pathname === navbarElement.href) {
             navbarElement.parentMenuisActive = true;
-            
+
             return;
           }
         }
       });
-    }
+    },
   },
   mounted() {
-    this.getAllowedComponentsToBeSeen();
+    let decodedJwt = parseToken();
 
+    if (decodedJwt.isStaff) {
+      this.navbarElements = STAFF_NAVBAR_ELEMENTS;
+
+      this.isStaff = true;
+    } else if (decodedJwt.isTenant) {
+      this.navbarElements = TENANT_NAVBAR_ELEMENTS;
+
+      this.isTenant = true;
+    }
+
+    this.getAllowedComponentsToBeSeen();
     this.setNavbarActivityOnInit();
-  }
+  },
 };
 </script>
 
@@ -327,6 +471,6 @@ export default {
 }
 
 .toogle-sub-menu-icon {
-    cursor: pointer;
+  cursor: pointer;
 }
 </style>

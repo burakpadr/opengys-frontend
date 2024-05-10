@@ -1,175 +1,189 @@
 <template>
-  <div class="tenant-container" v-if="isVisible">
-    <Notification
-      :isActive="notification.isActive"
-      :severity="notification.severity"
-      :messageContent="notification.messageContent"
-      @isActive="setVisibilityOfNotification"
-    />
-    <div class="header-container">
-      <Button
-        icon="pi pi-plus"
-        style="background-color: #3b82f6"
-        size="large"
-        class="add-button"
-        rounded
-        @click="openAddEventModal"
-      />
-      <span class="p-input-icon-left search-bar-container">
-        <i class="pi pi-search" />
-        <InputText
-          v-model="searchTerm"
-          size="small"
-          class="search-bar"
-          placeholder="Ara"
-          @input="search"
+  <ViewUsedByStaff>
+    <template #content>
+      <div class="tenant-container" v-if="isVisible">
+        <Notification
+          :isActive="notification.isActive"
+          :severity="notification.severity"
+          :messageContent="notification.messageContent"
+          @isActive="setVisibilityOfNotification"
         />
-      </span>
-    </div>
-    <div class="table-container">
-      <table>
-        <tr>
-          <th>Adı Soyadı</th>
-          <th>E-Posta</th>
-          <th>Bağlı Gayrimenkul No</th>
-          <th>Aksiyon</th>
-        </tr>
-        <tr v-for="(tenant, index) in tenants" :key="index">
-          <td>
-            {{ formatNameSurname(tenant.user.name, tenant.user.surname) }}
-          </td>
-          <td>{{ tenant.user.email }}</td>
-          <td>{{ tenant.realEstateNo }}</td>
-          <td>
-            <ConfirmPopup
-              :pt="{
-                root: { class: 'confirmPopup' },
-              }"
-            ></ConfirmPopup>
-            <i
-              class="bx bx-trash"
-              @click="confirmDeleteTenant($event, tenant.id)"
-            ></i>
-            <i
-              @click="openUpdateEventModal(tenant.id)"
-              class="bx bx-edit-alt"
-            ></i>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <div class="paginator">
-      <Pagination
-        :totalRecords="pagination.totalRecords"
-        @pageState="getPageState"
-      />
-    </div>
-
-    <!-- Create Modal -->
-
-    <form
-      @submit.prevent="create()"
-      class="modal"
-      v-if="createModalIsVisible"
-      @click.self="toggleCreateModal"
-    >
-      <i class="bx bx-x exit" @click="toggleCreateModal"></i>
-      <div class="modal-content">
-        <div class="modal-content-header">
-          <span>Yeni Ekle</span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
+        <div class="header-container">
+          <Button
+            icon="pi pi-plus"
+            style="background-color: #3b82f6"
+            size="large"
+            class="add-button"
+            rounded
+            @click="openAddEventModal"
+          />
+          <span class="p-input-icon-left search-bar-container">
+            <i class="pi pi-search" />
             <InputText
-              class="input"
-              v-model="tenant.name"
+              v-model="searchTerm"
               size="small"
-              required="true"
+              class="search-bar"
+              placeholder="Ara"
+              @input="search"
             />
-            <label class="input">Ad*</label>
           </span>
         </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              v-model="tenant.surname"
-              size="small"
-              required="true"
-            />
-            <label class="input">Soyad*</label>
-          </span>
+        <div class="table-container">
+          <table>
+            <tr>
+              <th>Adı Soyadı</th>
+              <th>E-Posta</th>
+              <th>Bağlı Gayrimenkul No</th>
+              <th>Aksiyon</th>
+            </tr>
+            <tr v-for="(tenant, index) in tenants" :key="index">
+              <td>
+                {{ formatNameSurname(tenant.user.name, tenant.user.surname) }}
+              </td>
+              <td>{{ tenant.user.email }}</td>
+              <td>{{ tenant.realEstateNo }}</td>
+              <td>
+                <ConfirmPopup
+                  :pt="{
+                    root: { class: 'confirmPopup' },
+                  }"
+                ></ConfirmPopup>
+                <i
+                  class="bx bx-trash"
+                  @click="confirmDeleteTenant($event, tenant.id)"
+                ></i>
+                <i
+                  @click="openUpdateEventModal(tenant.id)"
+                  class="bx bx-edit-alt"
+                ></i>
+              </td>
+            </tr>
+          </table>
         </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              v-model="tenant.email"
-              size="small"
-              required="true"
-            />
-            <label class="input">E-posta*</label>
-          </span>
+
+        <div class="paginator">
+          <Pagination
+            :totalRecords="pagination.totalRecords"
+            @pageState="getPageState"
+          />
         </div>
-        <div class="modal-content-row">
-          <Button label="Kaydet" size="small" class="button" type="submit" />
-        </div>
+
+        <!-- Create Modal -->
+
+        <form
+          @submit.prevent="create()"
+          class="modal"
+          v-if="createModalIsVisible"
+          @click.self="toggleCreateModal"
+        >
+          <i class="bx bx-x exit" @click="toggleCreateModal"></i>
+          <div class="modal-content">
+            <div class="modal-content-header">
+              <span>Yeni Ekle</span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  v-model="tenant.name"
+                  size="small"
+                  required="true"
+                />
+                <label class="input">Ad*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  v-model="tenant.surname"
+                  size="small"
+                  required="true"
+                />
+                <label class="input">Soyad*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  v-model="tenant.email"
+                  size="small"
+                  required="true"
+                />
+                <label class="input">E-posta*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                label="Kaydet"
+                size="small"
+                class="button"
+                type="submit"
+              />
+            </div>
+          </div>
+        </form>
+
+        <!-- Update Modal -->
+
+        <form
+          @submit.prevent="update()"
+          class="modal"
+          v-if="updateModalIsVisible"
+          @click.self="toggleUpdateModal"
+        >
+          <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
+          <div class="modal-content">
+            <div class="modal-content-header">
+              <span>Güncelle</span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  v-model="tenant.name"
+                  size="small"
+                  required="true"
+                />
+                <label class="input">Ad*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  v-model="tenant.surname"
+                  size="small"
+                  required="true"
+                />
+                <label class="input">Soyad*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <span class="p-float-label" style="margin: 0 auto">
+                <InputText
+                  class="input"
+                  v-model="tenant.email"
+                  size="small"
+                  required="true"
+                />
+                <label class="input">E-posta*</label>
+              </span>
+            </div>
+            <div class="modal-content-row">
+              <Button
+                label="Kaydet"
+                size="small"
+                class="button"
+                type="submit"
+              />
+            </div>
+          </div>
+        </form>
       </div>
-    </form>
-
-    <!-- Update Modal -->
-
-    <form
-      @submit.prevent="update()"
-      class="modal"
-      v-if="updateModalIsVisible"
-      @click.self="toggleUpdateModal"
-    >
-      <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
-      <div class="modal-content">
-        <div class="modal-content-header">
-          <span>Güncelle</span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              v-model="tenant.name"
-              size="small"
-              required="true"
-            />
-            <label class="input">Ad*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              v-model="tenant.surname"
-              size="small"
-              required="true"
-            />
-            <label class="input">Soyad*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <span class="p-float-label" style="margin: 0 auto">
-            <InputText
-              class="input"
-              v-model="tenant.email"
-              size="small"
-              required="true"
-            />
-            <label class="input">E-posta*</label>
-          </span>
-        </div>
-        <div class="modal-content-row">
-          <Button label="Kaydet" size="small" class="button" type="submit" />
-        </div>
-      </div>
-    </form>
-  </div>
+    </template>
+  </ViewUsedByStaff>
 </template>
 
 <script>
@@ -179,10 +193,11 @@ import * as NotificationConstants from "../assets/js/notificationConstants";
 import { gysClient } from "@/assets/js/client.js";
 import { canSeeComponent } from "@/service/RbacService";
 import { transformToTitle } from "@/util/StringUtil";
+import ViewUsedByStaff from "./base/ViewUsedByStaff.vue";
 
 export default {
   name: "TenantsView",
-  components: { Pagination, Notification },
+  components: { Pagination, Notification, ViewUsedByStaff },
   data() {
     return {
       isVisible: null,
@@ -321,6 +336,31 @@ export default {
           this.notification.isActive = true;
           this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
           this.notification.messageContent = "Kiraci oluşturuldu.";
+        })
+        .catch((error) => {
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+          this.notification.messageContent = error.response.data.message;
+        });
+    },
+    update() {
+      const payload = {
+        user: {
+          name: this.tenant.name,
+          surname: this.tenant.surname,
+          email: this.tenant.email,
+        },
+      };
+
+      gysClient
+        .put(`tenants/${this.tenant.id}`, payload)
+        .then(() => {
+          this.toggleUpdateModal();
+          this.getTenants();
+
+          this.notification.isActive = true;
+          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+          this.notification.messageContent = "Alt kullanıcı güncellendi.";
         })
         .catch((error) => {
           this.notification.isActive = true;

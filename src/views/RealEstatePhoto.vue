@@ -1,77 +1,83 @@
 <template>
-  <div class="real-estate-photo-container" v-if="isVisible">
-    <div class="modal-left-content">
-      <div class="card">
-        <FileUpload
-          name="images"
-          @before-send="beforeUploadImages($event)"
-          @error="onImageUploadError($event)"
-          @upload="afterUploadImages($event)"
-          :url="baseServiceUrl + `real-estates/${this.realEstateId}/photos`"
-          :multiple="true"
-          accept="image/*"
-          :maxFileSize="1000000"
-          chooseLabel="Ekle"
-          uploadLabel="Yükle"
-          cancelLabel="İptal"
-          :pt="{
-            root: { class: 'file-upload' },
-          }"
-        >
-          <template #empty>
-            <p>Dosyaları yüklemek için sürükle ve bırak.</p>
-          </template>
-        </FileUpload>
+  <ViewUsedByStaff>
+    <template #content>
+      <div class="real-estate-photo-container" v-if="isVisible">
+        <div class="modal-left-content">
+          <div class="card">
+            <FileUpload
+              name="images"
+              @before-send="beforeUploadImages($event)"
+              @error="onImageUploadError($event)"
+              @upload="afterUploadImages($event)"
+              :url="baseServiceUrl + `real-estates/${this.realEstateId}/photos`"
+              :multiple="true"
+              accept="*"
+              :maxFileSize="1000000"
+              chooseLabel="Ekle"
+              uploadLabel="Yükle"
+              cancelLabel="İptal"
+              :pt="{
+                root: { class: 'file-upload' },
+              }"
+            >
+              <template #empty>
+                <p>Dosyaları yüklemek için sürükle ve bırak.</p>
+              </template>
+            </FileUpload>
+          </div>
+        </div>
+        <div class="modal-right-content">
+          <div class="card">
+            <Galleria
+              :value="images"
+              :numVisible="5"
+              containerStyle="max-width: 640px"
+              :showThumbnails="false"
+              :showIndicators="true"
+              :changeItemOnIndicatorHover="false"
+              :showIndicatorsOnItem="inside"
+              :indicatorsPosition="position"
+              :activeIndex="galleryActiveIndex"
+              @update:active-index="changeGalleryActiveIndex($event)"
+            >
+              <template #item="slotProps">
+                <div class="photo-action-container">
+                  <Button
+                    icon="pi pi-trash"
+                    class="button"
+                    v-tooltip.top="'Sil'"
+                    rounded
+                    @click="deletePhoto()"
+                  ></Button>
+                  <Button
+                    icon="pi pi-image"
+                    class="button"
+                    v-tooltip.top="'Kapak Fotoğrafı Yap'"
+                    rounded
+                    @click="changeCoverPhoto()"
+                  ></Button>
+                </div>
+                <img
+                  :src="slotProps.item.path"
+                  style="width: 100%; display: block"
+                />
+              </template>
+            </Galleria>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="modal-right-content">
-      <div class="card">
-        <Galleria
-          :value="images"
-          :numVisible="5"
-          containerStyle="max-width: 640px"
-          :showThumbnails="false"
-          :showIndicators="true"
-          :changeItemOnIndicatorHover="false"
-          :showIndicatorsOnItem="inside"
-          :indicatorsPosition="position"
-          :activeIndex="galleryActiveIndex"
-          @update:active-index="changeGalleryActiveIndex($event)"
-        >
-          <template #item="slotProps">
-            <div class="photo-action-container">
-              <Button
-                icon="pi pi-trash"
-                class="button"
-                v-tooltip.top="'Sil'"
-                rounded
-                @click="deletePhoto()"
-              ></Button>
-              <Button
-                icon="pi pi-image"
-                class="button"
-                v-tooltip.top="'Kapak Fotoğrafı Yap'"
-                rounded
-                @click="changeCoverPhoto()"
-              ></Button>
-            </div>
-            <img
-              :src="slotProps.item.path"
-              style="width: 100%; display: block"
-            />
-          </template>
-        </Galleria>
-      </div>
-    </div>
-  </div>
+    </template>
+  </ViewUsedByStaff>
 </template>
 
 <script>
+import ViewUsedByStaff from "./base/ViewUsedByStaff.vue";
 import { gysClient } from "@/assets/js/client.js";
 import { canSeeComponent } from "@/service/RbacService";
 
 export default {
   name: "RealEstatePhoto",
+  components: { ViewUsedByStaff },
   props: {
     realEstateId: null,
   },
@@ -155,7 +161,9 @@ export default {
       let realEstatePhotoId = this.images[this.galleryActiveIndex].id;
 
       gysClient
-        .patch(`real-estates/${this.realEstateId}/change-cover-photo?coverPhotoId=${realEstatePhotoId}`)
+        .patch(
+          `real-estates/${this.realEstateId}/change-cover-photo?coverPhotoId=${realEstatePhotoId}`
+        )
         .then(() => {
           const result = {
             success: true,
@@ -175,10 +183,12 @@ export default {
     },
     changeGalleryActiveIndex(event) {
       this.galleryActiveIndex = event;
-    }
+    },
   },
   mounted() {
-    canSeeComponent(this.$options.name).then(response => this.isVisible = response.data );
+    canSeeComponent(this.$options.name).then(
+      (response) => (this.isVisible = response.data)
+    );
 
     this.getRealEstatePhotos();
 

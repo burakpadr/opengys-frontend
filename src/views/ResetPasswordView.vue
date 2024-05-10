@@ -169,8 +169,13 @@ export default {
 
       gysClient
         .post("users/validate-reset-password-otp", payload)
-        .then(() => {
-          this.step = 3;
+        .then((response) => {
+          if (response.data.isMatched) this.step = 3;
+          else {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+            this.notification.messageContent = "Girdiğiniz kod hatalı.";
+          }
         })
         .catch((error) => {
           this.notification.isActive = true;
