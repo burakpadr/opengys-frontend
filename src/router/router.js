@@ -9,6 +9,7 @@ import StaffView from '@/views/StaffView.vue'
 import ResetPasswordView from '@/views/ResetPasswordView.vue'
 import TenantView from '@/views/TenantView.vue'
 import PaymentDeclarationStaffView from '@/views/PaymentDeclarationStaffView.vue'
+import DashboardStaffView from '@/views/DashboardStaffView.vue'
 
 import PaymentDeclarationTenantView from '@/views/PaymentDeclarationTenantView.vue'
 
@@ -17,12 +18,13 @@ const routes = [
     { path: "/administration/categories", component: CategoryView },
     { path: "/administration/real-estates", component: RealEstateListView },
     { path: "/administration/attributes", component: AttributeView },
-    { path: "/administration/roles", component: RoleView},
+    { path: "/administration/roles", component: RoleView },
     { path: "/administration/staffs", component: StaffView },
     { path: "/administration/reset-password", component: ResetPasswordView },
     { path: "/administration/tenants", component: TenantView },
     { path: "/administration/payment-declarations", component: PaymentDeclarationStaffView },
-    { path: "/customer/payment-declarations", component: PaymentDeclarationTenantView }
+    { path: "/administration/dashboard", component: DashboardStaffView },
+    { path: "/tenant/payment-declarations", component: PaymentDeclarationTenantView }
 ]
 
 const router = createRouter({

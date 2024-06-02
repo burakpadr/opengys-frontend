@@ -306,9 +306,10 @@ export default {
     },
   },
   mounted() {
-    // canSeeComponent(this.$options.name).then(
-    //   (response) => (this.isVisible = response.data)
-    // );
+    canSeeComponent(this.$options.name).then(
+      (response) => (this.isVisible = response.data)
+    );
+    
     this.getPaymentDeclarations();
   },
 };

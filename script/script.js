@@ -56,6 +56,10 @@ const COMPONENTS = [
     {
         componentName: "PaymentDeclarationStaffView",
         label: "Ödeme İşlemleri > Ödeme Beyanları"
+    },
+    {
+        componentName: "DashboardStaffView",
+        label: "Dashboard"
     }
 ]
 

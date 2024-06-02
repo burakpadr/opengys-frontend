@@ -17,10 +17,7 @@
             >
               <span class="inline-flex flex-column">
                 <span class="font-bold"> {{ formatNameSurname() }}</span>
-                <span class="text-sm" v-if="staff.user.roleLabel != null">{{
-                  staff.user.roleLabel
-                }}</span>
-                <span class="text-sm" v-else>Tapu Sahibi</span>
+                <span class="text-sm">{{ userTitle }}</span>
               </span>
             </button>
           </template>
@@ -55,6 +52,7 @@ export default {
       home: {
         icon: "pi pi-home",
       },
+      userTitle: null
     };
   },
   methods: {
@@ -67,10 +65,19 @@ export default {
       if (decodedToken.isStaff) {
         gysClient.get(`staffs?userId=${decodedToken.sub}`).then((response) => {
           this.staff = response.data;
+
+          if (response.data.user.roleLabel) {
+            this.userTitle = response.data.user.roleLabel;
+          }
+          else {
+            this.userTitle = "Tapu Sahibi";
+          }
         });
       } else if (decodedToken.isTenant) {
         gysClient.get(`tenants?userId=${decodedToken.sub}`).then((response) => {
           this.staff = response.data;
+
+          this.userTitle = "Kiracı";
         });
       }
     },

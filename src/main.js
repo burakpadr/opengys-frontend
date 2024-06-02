@@ -31,6 +31,8 @@ import InputSwitch from 'primevue/inputswitch';
 
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
+import Chart from 'primevue/chart';
+import Knob from 'primevue/knob';
 
 import 'primevue/resources/themes/mdc-light-indigo/theme.css';
 import 'primevue/resources/primevue.min.css';
@@ -68,6 +70,8 @@ app.component("OverlayPanel", OverlayPanel);
 app.component("Menu", Menu);
 app.component("Avatar", Avatar);
 app.component("InputSwitch", InputSwitch);
+app.component("Chart", Chart);
+app.component("Knob", Knob);
 
 app.directive('tooltip', Tooltip);
 

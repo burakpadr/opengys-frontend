@@ -1,7 +1,8 @@
 export const STAFF_NAVBAR_ELEMENTS = [
     {
+        component: "DashboardStaffView",
         title: "Dashboard",
-        href: "",
+        href: "/administration/dashboard",
         iconClass: "bx bxs-dashboard",
         hasSubMenu: false,
         parentMenuisActive: false,
@@ -89,7 +90,7 @@ export const TENANT_NAVBAR_ELEMENTS = [
     {
         component: "RealEstateListView",
         title: "Ödeme Beyanları",
-        href: "/customer/payment-declarations",
+        href: "/tenant/payment-declarations",
         iconClass: "bx bxs-bank",
         hasSubMenu: false,
         parentMenuisActive: false,
