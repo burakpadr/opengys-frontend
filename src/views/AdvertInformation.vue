@@ -32,7 +32,7 @@
                   {{
                     new Intl.NumberFormat("en-US", {
                       style: "currency",
-                      currency: "TRY",
+                      currency: "USD",
                     }).format(advert.price)
                   }}
                 </td>
@@ -120,10 +120,10 @@
               <span class="p-float-label" style="margin: 0 auto">
                 <InputNumber
                   v-model="advert.price"
-                  locale="tr-TR"
+                  locale="en-US"
                   :minFractionDigits="2"
                   mode="currency"
-                  currency="TRY"
+                  currency="USD"
                   class="input"
                 />
                 <label for="inputType" class="input">İlan Fiyatı*</label>
@@ -201,10 +201,10 @@
             <span class="p-float-label" style="margin: 0 auto">
               <InputNumber
                 v-model="advert.price"
-                locale="tr-TR"
+                locale="en-US"
                 :minFractionDigits="2"
                 mode="currency"
-                currency="TRY"
+                currency="USD"
                 class="input"
               />
               <label for="inputType" class="input">İlan Fiyatı*</label>

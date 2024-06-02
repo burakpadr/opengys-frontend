@@ -10,7 +10,7 @@
                   <div class="flex flex-column gap-1">
                     <span class="text-secondary">Ödenmemiş Kira</span>
                     <br />
-                    <span class="font-bold text-lg">{{
+                    <span class="font-bold text-lg">${{
                       new Intl.NumberFormat("en-US").format(
                         statistics.rentPaymentStatusStatistic
                           .unpaidStatisticElement.invoiceRevenue
@@ -45,7 +45,7 @@
                   <div class="flex flex-column gap-1">
                     <span class="text-secondary">Ödemesi Yaklaşan Kira</span>
                     <br />
-                    <span class="font-bold text-lg">{{
+                    <span class="font-bold text-lg">${{
                       new Intl.NumberFormat("en-US").format(
                         statistics.rentPaymentStatusStatistic
                           .upcomingStatisticElement.invoiceRevenue
@@ -82,7 +82,7 @@
                       >Onay Bekleyen Kira Beyanı</span
                     >
                     <br />
-                    <span class="font-bold text-lg">{{
+                    <span class="font-bold text-lg">${{
                       new Intl.NumberFormat("en-US").format(
                         statistics.rentPaymentStatusStatistic
                           .pendingStatisticsElement.invoiceRevenue

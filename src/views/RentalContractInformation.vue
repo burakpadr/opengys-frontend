@@ -143,27 +143,12 @@
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
-                <Dropdown
-                  v-model="rentalContract.currencyCodeOfRentFee"
-                  :options="Intl.supportedValuesOf('currency')"
-                  class="w-full md:w-14rem input"
-                  inputId="inputType"
-                />
-                <label for="inputType" class="input">Kira Döviz Cinsi*</label>
-              </span>
-            </div>
-            <div class="modal-content-row">
-              <span class="p-float-label" style="margin: 0 auto">
                 <InputNumber
                   v-model="rentalContract.monthlyRentFee"
-                  locale="tr-TR"
+                  locale="en-US"
                   :minFractionDigits="2"
                   mode="currency"
-                  :currency="
-                    rentalContract.currencyCodeOfRentFee == null
-                      ? 'TRY'
-                      : rentalContract.currencyCodeOfRentFee
-                  "
+                  currency="USD"
                   class="input"
                 />
                 <label for="inputType" class="input">Aylık Kira Bedeli*</label>
@@ -268,28 +253,12 @@
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
-                <Dropdown
-                  v-model="rentalContract.currencyCodeOfRentFee"
-                  :options="Intl.supportedValuesOf('currency')"
-                  class="w-full md:w-14rem input"
-                  inputId="inputType"
-                  :disabled="!rentalContract.isUpdatable"
-                />
-                <label for="inputType" class="input">Kira Döviz Cinsi*</label>
-              </span>
-            </div>
-            <div class="modal-content-row">
-              <span class="p-float-label" style="margin: 0 auto">
                 <InputNumber
                   v-model="rentalContract.monthlyRentFee"
-                  locale="tr-TR"
+                  locale="en-US"
                   :minFractionDigits="2"
                   mode="currency"
-                  :currency="
-                    rentalContract.currencyCodeOfRentFee == null
-                      ? 'TRY'
-                      : rentalContract.currencyCodeOfRentFee
-                  "
+                  currency="USD"
                   class="input"
                   :disabled="!rentalContract.isUpdatable"
                 />
@@ -448,7 +417,6 @@ export default {
 
       const payload = {
         monthlyRentFee: this.rentalContract.monthlyRentFee,
-        currencyCodeOfRentFee: this.rentalContract.currencyCodeOfRentFee,
         rentalPaymentDay: this.rentalContract.rentalPaymentDay,
         startDate: startDate.toISOString().slice(0, 10),
         endDate: endDate.toISOString().slice(0, 10),
@@ -492,7 +460,6 @@ export default {
         realEstateId: null,
         isPublished: false,
         monthlyRentFee: null,
-        currencyCodeOfRentFee: null,
         rentalPaymentDay: null,
         startDate: null,
         endDate: null,
@@ -563,7 +530,6 @@ export default {
       }
       const payload = {
         monthlyRentFee: this.rentalContract.monthlyRentFee,
-        currencyCodeOfRentFee: this.rentalContract.currencyCodeOfRentFee,
         rentalPaymentDay: this.rentalContract.rentalPaymentDay,
         startDate: startDate.toISOString().slice(0, 10),
         endDate: endDate.toISOString().slice(0, 10),
