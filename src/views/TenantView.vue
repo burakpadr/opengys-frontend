@@ -84,7 +84,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   v-model="tenant.name"
                   size="small"
                   required="true"
@@ -95,7 +95,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   v-model="tenant.surname"
                   size="small"
                   required="true"
@@ -106,7 +106,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   v-model="tenant.email"
                   size="small"
                   required="true"
@@ -141,7 +141,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   v-model="tenant.name"
                   size="small"
                   required="true"
@@ -152,7 +152,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   v-model="tenant.surname"
                   size="small"
                   required="true"
@@ -163,7 +163,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   v-model="tenant.email"
                   size="small"
                   required="true"

@@ -84,7 +84,7 @@
                   :options="advertPlaces"
                   optionLabel="name"
                   optionValue="id"
-                  class="w-full md:w-14rem input"
+                  class="w-full md:w-14rem input p-invalid"
                   inputId="inputType"
                 />
                 <label for="inputType" class="input">İlan Yeri*</label>
@@ -94,7 +94,7 @@
               <span class="p-float-label" style="margin: 0 auto">
                 <Calendar
                   v-model="advert.startDate"
-                  class="input"
+                  class="input p-invalid"
                   dateFormat="dd-mm-yy"
                   showIcon
                   iconDisplay="input"
@@ -124,7 +124,7 @@
                   :minFractionDigits="2"
                   mode="currency"
                   currency="USD"
-                  class="input"
+                  class="input p-invalid"
                 />
                 <label for="inputType" class="input">İlan Fiyatı*</label>
               </span>
@@ -136,7 +136,7 @@
                   :options="advertStatusOptions"
                   optionLabel="label"
                   optionValue="value"
-                  class="w-full md:w-14rem input"
+                  class="w-full md:w-14rem input p-invalid"
                 />
                 <label for="inputType" class="input">Durumu*</label>
               </span>
@@ -165,7 +165,7 @@
                 :options="advertPlaces"
                 optionLabel="name"
                 optionValue="id"
-                class="w-full md:w-14rem input"
+                class="w-full md:w-14rem input p-invalid"
                 inputId="inputType"
               />
               <label for="inputType" class="input">İlan Yeri*</label>
@@ -175,7 +175,7 @@
             <span class="p-float-label" style="margin: 0 auto">
               <Calendar
                 v-model="advert.startDate"
-                class="input"
+                class="input p-invalid"
                 dateFormat="dd-mm-yy"
                 showIcon
                 iconDisplay="input"
@@ -205,7 +205,7 @@
                 :minFractionDigits="2"
                 mode="currency"
                 currency="USD"
-                class="input"
+                class="input p-invalid"
               />
               <label for="inputType" class="input">İlan Fiyatı*</label>
             </span>
@@ -217,7 +217,7 @@
                 :options="advertStatusOptions"
                 optionLabel="label"
                 optionValue="value"
-                class="w-full md:w-14rem input"
+                class="w-full md:w-14rem input p-invalid"
               />
               <label for="inputType" class="input">Durumu*</label>
             </span>

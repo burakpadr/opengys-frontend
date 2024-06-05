@@ -11,31 +11,31 @@ const gysClient = axios.create({
 const COMPONENTS = [
     {
         componentName: "AdvertInformation",
-        label: "İlanlar"
+        label: "Gayrimenkul > İlanlar"
     },
     {
         componentName: "RealEstateBasicInformation",
-        label: "Gayrimenkul temel bilgileri"
+        label: "Gayrimenkul > Temel Bilgiler"
     },
     {
         componentName: "RealEstatePhoto",
-        label: "Gayrimenkul fotoğrafları"
+        label: "Gayrimenkul > Fotoğraflar"
     },
     {
         componentName: "RealEstateListView",
-        label: "Gayrimenkul listesi"
+        label: "Gayrimenkuller"
     },
     {
         componentName: "CategoryView",
-        label: "Kategori tanımı"
+        label: "Sistem Tanımları > Kategoriler"
     },
     {
         componentName: "AttributeView",
-        label: "Gayrimenkul özelliği tanımı"
+        label: "Sistem Tanımları > Özellikler"
     },
     {
         componentName: "AdvertPlaceView",
-        label: "İlan teri tanımı"
+        label: "Sistem Tanımları > İlan Yerleri"
     },
     {
         componentName: "RoleView",
@@ -51,7 +51,7 @@ const COMPONENTS = [
     },
     {
         componentName: "RentalContractInformation",
-        label: "Sözleşmeler"
+        label: "Gayrimenkul > Sözleşmeler"
     },
     {
         componentName: "PaymentDeclarationStaffView",

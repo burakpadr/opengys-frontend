@@ -19,9 +19,15 @@
           />
           <span class="p-input-icon-left search-bar-container">
             <i class="pi pi-search" />
-            <InputText size="small" class="search-bar" placeholder="Ara" />
+            <InputText
+              size="small"
+              class="search-bar"
+              placeholder="Ara"
+              v-model="searchTerm"
+              @input="search"
+            />
           </span>
-          <div class="card flex justify-content-center">
+          <!-- <div class="card flex justify-content-center">
             <div class="card flex justify-content-center">
               <span class="p-float-label">
                 <TreeSelect
@@ -32,7 +38,7 @@
                 <label>Statü Filtresi</label>
               </span>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="card real-estate-list">
           <div>
@@ -250,6 +256,7 @@ export default {
       createModalIsVisible: false,
       updateModalIsVisible: false,
       selectedTabComponentName: "RealEstateBasicInformation",
+      searchTerm: null,
     };
   },
   methods: {
@@ -417,6 +424,28 @@ export default {
           this.notification.severity = NotificationConstants.SEVERITY_ERROR;
           this.notification.messageContent = error.response.data.message;
         });
+    },
+    search() {
+      if (this.searchTerm !== "") {
+        gysClient
+          .get(
+            `real-estates/search?search=${this.searchTerm}&page=${this.pagination.currentPageIndex}&size=${this.pagination.dataSizePerPage}`
+          )
+          .then((response) => {
+            response.data.content.forEach((realEstate) => {
+              if (realEstate.coverPhotoPath)
+                realEstate.coverPhotoPath =
+                  process.env.VUE_APP_GYS_API_BASE_URL +
+                  realEstate.coverPhotoPath;
+            });
+            
+            this.realEstates = response.data.content;
+
+            this.pagination.totalRecords = response.data.totalElements;
+          });
+      } else {
+        this.getRealEstates();
+      }
     },
   },
   mounted() {

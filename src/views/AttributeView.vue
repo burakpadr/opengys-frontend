@@ -84,7 +84,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   size="small"
                   v-model="attribute.alias"
                   required="true"
@@ -95,49 +95,29 @@
                 />
                 <label class="input">Kod*</label>
               </span>
-              <small
-                class="p-error input"
-                id="text-error"
-                v-if="formFieldsHasError.alias"
-                >{{ fieldErrorMessage || "&nbsp;" }}</small
-              >
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   size="small"
                   v-model="attribute.label"
                   required="true"
-                  :class="{ 'p-invalid': formFieldsHasError.label }"
                 />
                 <label class="input">İsim*</label>
               </span>
-              <small
-                class="p-error input"
-                id="text-error"
-                v-if="formFieldsHasError.label"
-                >{{ fieldErrorMessage || "&nbsp;" }}</small
-              >
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   size="small"
                   v-model="attribute.screenOrder"
                   required="true"
                   type="number"
-                  :class="{ 'p-invalid': formFieldsHasError.screenOrder }"
                 />
                 <label class="input">Ekran Sırası*</label>
               </span>
-              <small
-                class="p-error input"
-                id="text-error"
-                v-if="formFieldsHasError.screenOrder"
-                >{{ fieldErrorMessage || "&nbsp;" }}</small
-              >
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -145,18 +125,11 @@
                   v-model="attribute.inputType"
                   :options="inputTypes"
                   optionLabel="alias"
-                  class="w-full md:w-14rem input"
+                  class="w-full md:w-14rem input p-invalid"
                   inputId="inputType"
-                  :class="{ 'p-invalid': formFieldsHasError.inputType }"
                 />
                 <label for="inputType" class="input">Girdi Tipi*</label>
               </span>
-              <small
-                class="p-error input"
-                id="text-error"
-                v-if="formFieldsHasError.inputType"
-                >{{ fieldErrorMessage || "&nbsp;" }}</small
-              >
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -164,18 +137,11 @@
                   v-model="attribute.category"
                   :options="categories"
                   optionLabel="name"
-                  class="w-full md:w-14rem input"
+                  class="w-full md:w-14rem input p-invalid"
                   inputId="category"
-                  :class="{ 'p-invalid': formFieldsHasError.category }"
                 />
                 <label for="category" class="input">Kategori*</label>
               </span>
-              <small
-                class="p-error input"
-                id="text-error"
-                v-if="formFieldsHasError.category"
-                >{{ fieldErrorMessage || "&nbsp;" }}</small
-              >
             </div>
           </div>
           <div class="modal-right-content">
@@ -198,7 +164,7 @@
             >
               <span class="p-float-label">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   size="small"
                   v-model="attribute.attributeValues[index].value"
                   required="true"
@@ -238,7 +204,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   size="small"
                   v-model="attribute.alias"
                   required="true"
@@ -246,53 +212,32 @@
                     () => (attribute.alias = attribute.alias.toUpperCase())
                   "
                   :disabled="true"
-                  :class="{ 'p-invalid': formFieldsHasError.alias }"
                 />
                 <label class="input">Kod*</label>
               </span>
-              <small
-                class="p-error input"
-                id="text-error"
-                v-if="formFieldsHasError.alias"
-                >{{ fieldErrorMessage || "&nbsp;" }}</small
-              >
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   size="small"
                   v-model="attribute.label"
                   required="true"
-                  :class="{ 'p-invalid': formFieldsHasError.label }"
                 />
                 <label class="input">İsim*</label>
               </span>
-              <small
-                class="p-error input"
-                id="text-error"
-                v-if="formFieldsHasError.label"
-                >{{ fieldErrorMessage || "&nbsp;" }}</small
-              >
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   size="small"
                   v-model="attribute.screenOrder"
                   required="true"
                   type="number"
-                  :class="{ 'p-invalid': formFieldsHasError.screenOrder }"
                 />
                 <label class="input">Ekran Sırası*</label>
               </span>
-              <small
-                class="p-error input"
-                id="text-error"
-                v-if="formFieldsHasError.screenOrder"
-                >{{ fieldErrorMessage || "&nbsp;" }}</small
-              >
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -300,19 +245,12 @@
                   v-model="attribute.inputType"
                   :options="inputTypes"
                   optionLabel="alias"
-                  class="w-full md:w-14rem input"
+                  class="w-full md:w-14rem input p-invalid"
                   inputId="inputType"
                   :disabled="true"
-                  :class="{ 'p-invalid': formFieldsHasError.inputType }"
                 />
                 <label for="inputType" class="input">Girdi Tipi*</label>
               </span>
-              <small
-                class="p-error input"
-                id="text-error"
-                v-if="formFieldsHasError.inputType"
-                >{{ fieldErrorMessage || "&nbsp;" }}</small
-              >
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -320,19 +258,12 @@
                   v-model="attribute.category"
                   :options="categories"
                   optionLabel="name"
-                  class="w-full md:w-14rem input"
+                  class="w-full md:w-14rem input p-invalid"
                   inputId="category"
                   :disabled="true"
-                  :class="{ 'p-invalid': formFieldsHasError.category }"
                 />
                 <label for="category" class="input">Kategori*</label>
               </span>
-              <small
-                class="p-error input"
-                id="text-error"
-                v-if="formFieldsHasError.category"
-                >{{ fieldErrorMessage || "&nbsp;" }}</small
-              >
             </div>
           </div>
           <div class="modal-right-content">

@@ -72,7 +72,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   v-model="advertPlace.name"
                   size="small"
                   required="true"

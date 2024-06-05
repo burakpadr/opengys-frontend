@@ -95,7 +95,7 @@
                   :options="availableTenants"
                   optionLabel="user.fullName"
                   optionValue="id"
-                  class="w-full md:w-14rem input"
+                  class="w-full md:w-14rem input p-invalid"
                   inputId="inputType"
                 />
                 <label for="inputType" class="input">Kiracı*</label>
@@ -105,7 +105,7 @@
               <span class="p-float-label" style="margin: 0 auto">
                 <Calendar
                   v-model="rentalContract.startDate"
-                  class="input"
+                  class="input p-invalid"
                   dateFormat="dd-mm-yy"
                   showIcon
                   iconDisplay="input"
@@ -119,7 +119,7 @@
               <span class="p-float-label" style="margin: 0 auto">
                 <Calendar
                   v-model="rentalContract.endDate"
-                  class="input"
+                  class="input p-invalid"
                   dateFormat="dd-mm-yy"
                   showIcon
                   iconDisplay="input"
@@ -136,7 +136,7 @@
                   :useGrouping="false"
                   :max="31"
                   :min="1"
-                  class="input"
+                  class="input p-invalid"
                 />
                 <label for="inputType" class="input">Kira Günü*</label>
               </span>
@@ -149,7 +149,7 @@
                   :minFractionDigits="2"
                   mode="currency"
                   currency="USD"
-                  class="input"
+                  class="input p-invalid"
                 />
                 <label for="inputType" class="input">Aylık Kira Bedeli*</label>
               </span>
@@ -161,7 +161,7 @@
                   :options="rentalContractStatusOptions"
                   optionLabel="label"
                   optionValue="value"
-                  class="w-full md:w-14rem input"
+                  class="w-full md:w-14rem input p-invalid"
                 />
                 <label for="inputType" class="input">Durumu*</label>
               </span>
@@ -169,7 +169,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <FileUpload
-                  class="input"
+                  class="input p-invalid"
                   chooseLabel="Kira Sözleşmesi Ekle"
                   mode="basic"
                   @select="onSelectRentalContractFile($event)"
@@ -202,7 +202,7 @@
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
                   v-model="rentalContract.tenantFullName"
-                  class="input"
+                  class="input p-invalid"
                   :disabled="true"
                 />
                 <label for="inputType" class="input">Kiracı*</label>
@@ -212,7 +212,7 @@
               <span class="p-float-label" style="margin: 0 auto">
                 <Calendar
                   v-model="rentalContract.startDate"
-                  class="input"
+                  class="input p-invalid"
                   dateFormat="dd-mm-yy"
                   showIcon
                   iconDisplay="input"
@@ -227,7 +227,7 @@
               <span class="p-float-label" style="margin: 0 auto">
                 <Calendar
                   v-model="rentalContract.endDate"
-                  class="input"
+                  class="input p-invalid"
                   dateFormat="dd-mm-yy"
                   showIcon
                   iconDisplay="input"
@@ -245,7 +245,7 @@
                   :useGrouping="false"
                   :max="31"
                   :min="1"
-                  class="input"
+                  class="input p-invalid"
                   :disabled="!rentalContract.isUpdatable"
                 />
                 <label for="inputType" class="input">Kira Günü*</label>
@@ -259,7 +259,7 @@
                   :minFractionDigits="2"
                   mode="currency"
                   currency="USD"
-                  class="input"
+                  class="input p-invalid"
                   :disabled="!rentalContract.isUpdatable"
                 />
                 <label for="inputType" class="input">Aylık Kira Bedeli*</label>
@@ -272,7 +272,7 @@
                   :options="rentalContractStatusOptions"
                   optionLabel="label"
                   optionValue="value"
-                  class="w-full md:w-14rem input"
+                  class="w-full md:w-14rem input p-invalid"
                   :disabled="!rentalContract.isUpdatable"
                 />
                 <label for="inputType" class="input">Durumu*</label>
@@ -288,7 +288,7 @@
                   v-if="rentalContract.rentalContractFileRelativeUrl != null"
                 />
                 <FileUpload
-                  class="input"
+                  class="input p-invalid"
                   chooseLabel="Kira Sözleşmesini Güncelle"
                   mode="basic"
                   @select="onSelectRentalContractFile($event)"

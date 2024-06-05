@@ -76,7 +76,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   size="small"
                   v-model="category.name"
                   required="true"
@@ -105,7 +105,7 @@
             >
               <span class="p-float-label">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   size="small"
                   v-model="category.subCategories[index].name"
                   required="true"
@@ -147,7 +147,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   size="small"
                   v-model="category.name"
                   required="true"
@@ -176,7 +176,7 @@
             >
               <span class="p-float-label">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   size="small"
                   v-model="category.subCategories[index].name"
                   required="true"

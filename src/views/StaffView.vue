@@ -99,7 +99,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   v-model="staff.name"
                   size="small"
                   required="true"
@@ -110,7 +110,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   v-model="staff.surname"
                   size="small"
                   required="true"
@@ -121,7 +121,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   v-model="staff.email"
                   size="small"
                   required="true"
@@ -136,7 +136,7 @@
                   :options="roles"
                   optionLabel="label"
                   optionValue="id"
-                  class="w-full md:w-14rem input"
+                  class="w-full md:w-14rem input p-invalid"
                   inputId="inputType"
                 />
                 <label class="input">Rol*</label>
@@ -169,7 +169,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   v-model="staff.name"
                   size="small"
                   required="true"
@@ -181,7 +181,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   v-model="staff.surname"
                   size="small"
                   required="true"
@@ -193,7 +193,7 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input"
+                  class="input p-invalid"
                   v-model="staff.email"
                   size="small"
                   required="true"
@@ -209,7 +209,7 @@
                   :options="roles"
                   optionLabel="label"
                   optionValue="id"
-                  class="w-full md:w-14rem input"
+                  class="w-full md:w-14rem input p-invalid"
                   inputId="inputType"
                 />
                 <label class="input">Rol*</label>

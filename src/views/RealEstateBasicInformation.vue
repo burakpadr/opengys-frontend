@@ -15,7 +15,7 @@
                 :options="mainStatusList"
                 optionValue="alias"
                 optionLabel="value"
-                class="w-full md:w-14rem input"
+                class="w-full md:w-14rem input p-invalid"
                 :disabled="isUpdateAction ? true : false"
               />
               <label class="input">Ana Statü*</label>
@@ -24,7 +24,7 @@
           <div class="modal-content-row">
             <span class="p-float-label" style="margin: 0 auto">
               <InputText
-                class="input"
+                class="input p-invalid"
                 size="small"
                 required="true"
                 v-model="realEstate.no"
@@ -48,7 +48,7 @@
                 :options="cities"
                 optionLabel="name"
                 optionValue="name"
-                class="w-full md:w-14rem input"
+                class="w-full md:w-14rem input p-invalid"
                 inputId="inputType"
                 @change="getDistricts"
               />
@@ -62,7 +62,7 @@
                 :options="districts"
                 optionLabel="name"
                 optionValue="name"
-                class="w-full md:w-14rem input"
+                class="w-full md:w-14rem input p-invalid"
                 inputId="inputType"
                 @change="getNeighborhoods"
               />
@@ -76,7 +76,7 @@
                 :options="neighborhoods"
                 optionLabel="name"
                 optionValue="name"
-                class="w-full md:w-14rem input"
+                class="w-full md:w-14rem input p-invalid"
                 inputId="inputType"
               />
               <label for="inputType" class="input">Mahalle*</label>
@@ -143,7 +143,7 @@
                 :options="categories"
                 optionLabel="name"
                 optionValue="id"
-                class="w-full md:w-14rem input"
+                class="w-full md:w-14rem input p-invalid"
                 inputId="inputType"
                 @change="getSubCategories"
               />
@@ -160,7 +160,7 @@
                 :options="subCategories"
                 optionLabel="name"
                 optionValue="id"
-                class="w-full md:w-14rem input"
+                class="w-full md:w-14rem input p-invalid"
                 inputId="inputType"
               />
               <label for="inputType" class="input">Alt Kategori*</label>

@@ -11,7 +11,6 @@
               <tr>
                 <th>Kira Sayısı</th>
                 <th>Kira Tarihi</th>
-                <th>Döviz Cinsi</th>
                 <th>Kira Tutarı</th>
                 <th>Dekont</th>
                 <th>Durumu</th>
@@ -19,12 +18,11 @@
               <tr v-for="(rentInvoice, index) in rentInvoices" :key="index">
                 <td>{{ index + 1 }}</td>
                 <td>{{ rentInvoice.dateOfInvoicePaid }}</td>
-                <td>{{ rentInvoice.currencyCode }}</td>
                 <td>
                   {{
                     new Intl.NumberFormat("en-US", {
                       style: "currency",
-                      currency: rentInvoice.currencyCode,
+                      currency: "USD",
                     }).format(rentInvoice.amount)
                   }}
                 </td>
