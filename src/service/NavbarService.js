@@ -58,7 +58,7 @@ export const STAFF_NAVBAR_ELEMENTS = [
         submenus: [
             { component: "CategoryView", title: "Kategoriler", href: "/administration/categories", isActive: false },
             { component: "AdvertPlaceView", title: "İlan Yerleri", href: "/administration/advert-places", isActive: false },
-            { component: "AttributeView", title: "Özellikler", href: "/administration/attributes", isActive: false },
+            // { component: "AttributeView", title: "Özellikler", href: "/administration/attributes", isActive: false },
         ],
     },
     {
