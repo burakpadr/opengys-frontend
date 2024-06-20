@@ -202,7 +202,7 @@
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
                   v-model="rentalContract.tenantFullName"
-                  class="input p-invalid"
+                  class="input"
                   :disabled="true"
                 />
                 <label for="inputType" class="input">Kiracı*</label>
@@ -216,7 +216,7 @@
                   dateFormat="dd-mm-yy"
                   showIcon
                   iconDisplay="input"
-                  :disabled="!rentalContract.isUpdatable"
+                  :disabled="true"
                 />
                 <label for="inputType" class="input"
                   >Sözleşme Başlangıç Tarihi*</label
@@ -231,7 +231,7 @@
                   dateFormat="dd-mm-yy"
                   showIcon
                   iconDisplay="input"
-                  :disabled="!rentalContract.isUpdatable"
+                  :disabled="true"
                 />
                 <label for="inputType" class="input"
                   >Sözleşme Bitiş Tarihi*</label
@@ -246,7 +246,7 @@
                   :max="31"
                   :min="1"
                   class="input p-invalid"
-                  :disabled="!rentalContract.isUpdatable"
+                  :disabled="true"
                 />
                 <label for="inputType" class="input">Kira Günü*</label>
               </span>
@@ -260,7 +260,7 @@
                   mode="currency"
                   currency="USD"
                   class="input p-invalid"
-                  :disabled="!rentalContract.isUpdatable"
+                  :disabled="true"
                 />
                 <label for="inputType" class="input">Aylık Kira Bedeli*</label>
               </span>
@@ -325,7 +325,6 @@
 import ViewUsedByStaff from "./base/ViewUsedByStaff.vue";
 import { gysClient } from "@/assets/js/client.js";
 import Pagination from "@/components/Pagination.vue";
-import * as NotificationConstants from "../assets/js/notificationConstants";
 import { canSeeComponent } from "@/service/RbacService";
 import RentPaymentPlanInformation from "./RentPaymentPlanInformation.vue";
 
@@ -408,50 +407,120 @@ export default {
     onSelectRentalContractFile(event) {
       this.rentalContract.rentalContractFile = event.files[0];
     },
+    createFormIsValid() {
+      if (!this.rentalContract.tenantId) {
+        return false;
+      }
+
+      if (!this.rentalContract.startDate) {
+        return false;
+      }
+
+      if (!this.rentalContract.endDate) {
+        return false;
+      }
+
+      if (!this.rentalContract.rentalPaymentDay) {
+        return false;
+      }
+
+      if (!this.rentalContract.monthlyRentFee) {
+        return false;
+      }
+
+      if (this.rentalContract.isPublished == null) {
+        return false;
+      }
+
+      if (this.rentalContract.startDate > this.rentalContract.endDate) {
+        const result = {
+              success: false,
+              message: "Sözleşme başlangıç tarihi sözleşme bitiş tarihinden büyük olamaz!",
+            };
+
+        this.$emit("updateResult", result);
+        
+        return false;
+      }
+
+      return true;
+    },  
+    updateFormIsValid() {
+      if (!this.rentalContract.startDate) {
+        return false;
+      }
+
+      if (!this.rentalContract.endDate) {
+        return false;
+      }
+
+      if (!this.rentalContract.rentalPaymentDay) {
+        return false;
+      }
+
+      if (!this.rentalContract.monthlyRentFee) {
+        return false;
+      }
+
+      if (this.rentalContract.isPublished == null) {
+        return false;
+      }
+
+      return true;
+    },  
     create() {
-      let startDate = new Date(this.rentalContract.startDate.toISOString());
-      let endDate = new Date(this.rentalContract.endDate.toISOString());
+      if (this.createFormIsValid()) {
+        let startDate = null;
+        let endDate = null;
 
-      startDate.setDate(startDate.getDate() + 1);
-      endDate.setDate(endDate.getDate() + 1);
+        if (this.rentalContract.startDate) {
+          startDate = new Date(this.rentalContract.startDate.toISOString());
+          startDate.setDate(startDate.getDate() + 1);
+        }
 
-      const payload = {
-        monthlyRentFee: this.rentalContract.monthlyRentFee,
-        rentalPaymentDay: this.rentalContract.rentalPaymentDay,
-        startDate: startDate.toISOString().slice(0, 10),
-        endDate: endDate.toISOString().slice(0, 10),
-        isPublished: this.rentalContract.isPublished,
-        realEstateId: this.realEstateId,
-        tenantId: this.rentalContract.tenantId,
-        rentalContractFile: this.rentalContract.rentalContractFile,
-      };
+        if (this.rentalContract.endDate) {
+          endDate = new Date(this.rentalContract.endDate.toISOString());
+          endDate.setDate(endDate.getDate() + 1);
+        }
 
-      gysClient
-        .post("rental-contracts", payload, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then(() => {
-          const result = {
-            success: true,
-            message: "Sözleşme oluşturuldu.",
-          };
+        const payload = {
+          monthlyRentFee: this.rentalContract.monthlyRentFee,
+          rentalPaymentDay: this.rentalContract.rentalPaymentDay,
+          startDate: startDate ? startDate.toISOString().slice(0, 10) : "",
+          endDate: endDate ? endDate.toISOString().slice(0, 10) : "",
+          isPublished: this.rentalContract.isPublished,
+          realEstateId: this.realEstateId,
+          tenantId: this.rentalContract.tenantId,
+          rentalContractFile: this.rentalContract.rentalContractFile,
+        };
 
-          this.getRentalContracts();
-          this.getAvailableTenants();
-          this.resetRentalContract();
+        gysClient
+          .post("rental-contracts", payload, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then(() => {
+            const result = {
+              success: true,
+              message: "Sözleşme oluşturuldu.",
+            };
 
-          this.$emit("updateResult", result);
-        })
-        .catch((error) => {
-          const result = {
-            success: false,
-            message: error.response.data.message,
-          };
+            this.getRentalContracts();
+            this.getAvailableTenants();
+            this.resetRentalContract();
 
-          this.$emit("updateResult", result);
-        });
+            this.$emit("updateResult", result);
+          })
+          .catch((error) => {
+            const result = {
+              success: false,
+              message: error.response.data.message,
+            };
+
+            this.$emit("updateResult", result);
+          });
+      }
     },
     resetRentalContract() {
       this.rentalContract = {
@@ -496,73 +565,85 @@ export default {
       window.open(this.rentalContract.rentalContractFileRelativeUrl, "_blank");
     },
     update(id) {
-      let startDate = this.rentalContract.startDate;
-      let endDate = this.rentalContract.endDate;
+      if (this.updateFormIsValid()) {
+        let startDate = null;
+        let endDate = null;
 
-      if (!(typeof this.rentalContract.startDate === "string")) {
-        startDate = new Date(startDate.toISOString());
-        startDate.setDate(startDate.getDate() + 1);
-      } else {
-        var startDateStrSplitted = startDate.split("-");
+        if (this.rentalContract.startDate) {
+          startDate = this.rentalContract.startDate;
 
-        startDate = new Date(
-          startDateStrSplitted[2],
-          startDateStrSplitted[1] - 1,
-          startDateStrSplitted[0]
-        );
+          if (!(typeof this.rentalContract.startDate === "string")) {
+            startDate = new Date(startDate.toISOString());
+            startDate.setDate(startDate.getDate() + 1);
+          } else {
+            var startDateStrSplitted = startDate.split("-");
 
-        startDate.setDate(startDate.getDate() + 1);
+            startDate = new Date(
+              startDateStrSplitted[2],
+              startDateStrSplitted[1] - 1,
+              startDateStrSplitted[0]
+            );
+
+            startDate.setDate(startDate.getDate() + 1);
+          }
+        }
+
+        if (this.rentalContract.endDate) {
+          endDate = this.rentalContract.endDate;
+
+          if (!(typeof this.rentalContract.endDate === "string")) {
+            endDate = new Date(endDate.toISOString());
+            endDate.setDate(endDate.getDate() + 1);
+          } else {
+            console.log("girdi2")
+            var endDateDateStrSplitted = endDate.split("-");
+
+            endDate = new Date(
+              endDateDateStrSplitted[2],
+              endDateDateStrSplitted[1] - 1,
+              endDateDateStrSplitted[0]
+            );
+
+            endDate.setDate(endDate.getDate() + 1);
+          }
+        }
+
+        const payload = {
+          monthlyRentFee: this.rentalContract.monthlyRentFee,
+          rentalPaymentDay: this.rentalContract.rentalPaymentDay,
+          startDate: startDate ? startDate.toISOString().slice(0, 10) : "",
+          endDate: endDate ? endDate.toISOString().slice(0, 10) : "",
+          isPublished: this.rentalContract.isPublished,
+          rentalContractFile: this.rentalContract.rentalContractFile,
+        };
+
+        gysClient
+          .put(`rental-contracts/${id}`, payload, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then(() => {
+            const result = {
+              success: true,
+              message: "Kira sözleşmesi kaydı güncellendi.",
+            };
+
+            this.getRentalContracts();
+            this.getAvailableTenants();
+            this.getRentalContract(id);
+
+            this.$emit("updateResult", result);
+          })
+          .catch((error) => {
+            const result = {
+              success: false,
+              message: error.response.data.message,
+            };
+
+            this.$emit("updateResult", result);
+          });
       }
-
-      if (!(typeof this.rentalContract.endDate === "string")) {
-        endDate = new Date(endDate.toISOString());
-        endDate.setDate(endDate.getDate() + 1);
-      } else {
-        var endDateDateStrSplitted = endDate.split("-");
-
-        endDate = new Date(
-          endDateDateStrSplitted[2],
-          endDateDateStrSplitted[1] - 1,
-          endDateDateStrSplitted[0]
-        );
-
-        endDate.setDate(endDate.getDate() + 1);
-      }
-      const payload = {
-        monthlyRentFee: this.rentalContract.monthlyRentFee,
-        rentalPaymentDay: this.rentalContract.rentalPaymentDay,
-        startDate: startDate.toISOString().slice(0, 10),
-        endDate: endDate.toISOString().slice(0, 10),
-        isPublished: this.rentalContract.isPublished,
-        rentalContractFile: this.rentalContract.rentalContractFile,
-      };
-
-      gysClient
-        .put(`rental-contracts/${id}`, payload, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then(() => {
-          const result = {
-            success: true,
-            message: "Kira sözleşmesi kaydı güncellendi.",
-          };
-
-          this.getRentalContracts();
-          this.getAvailableTenants();
-          this.getRentalContract(id);
-
-          this.$emit("updateResult", result);
-        })
-        .catch((error) => {
-          const result = {
-            success: false,
-            message: error.response.data.message,
-          };
-
-          this.$emit("updateResult", result);
-        });
     },
     closeRentPaymentPlanInformationModal() {
       this.selectedRentalContractId = null;

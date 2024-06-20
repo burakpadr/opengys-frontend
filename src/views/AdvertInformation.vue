@@ -326,105 +326,155 @@ export default {
 
       this.getAdvertPlace(id);
     },
+    formIsValid() {
+      if (!this.advert.advertPlaceId) {
+        return false;
+      }
+
+      if (!this.advert.startDate) {
+        return false;
+      }
+
+      if (!this.advert.price) {
+        return false;
+      }
+
+      if (this.advert.isPublished == null) {
+        return false;
+      }
+
+      if (this.advert.endDate && (this.advert.startDate > this.advert.endDate)) {
+        const result = {
+              success: false,
+              message: "İlan başlangıç tarihi ilan bitiş tarihinden büyük olamaz!",
+            };
+
+        this.$emit("updateResult", result);
+
+        return false;
+      }
+
+      return true;
+    },
     create() {
-      let startDate = new Date(this.advert.startDate.toISOString());
-      let endDate = new Date(this.advert.endDate.toISOString());
+      if (this.formIsValid()) {
+        let startDate = null;
+        let endDate = null;
 
-      startDate.setDate(startDate.getDate() + 1);
-      endDate.setDate(endDate.getDate() + 1);
+        if (this.advert.startDate) {
+          startDate = new Date(this.advert.startDate.toISOString());
+          startDate.setDate(startDate.getDate() + 1);
+        }
 
-      const payload = {
-        realEstateId: this.realEstateId,
-        advertPlaceId: this.advert.advertPlaceId,
-        startDate: startDate,
-        endDate: endDate,
-        price: this.advert.price,
-        isPublished: this.advert.isPublished,
-      };
+        if (this.advert.endDate) {
+          endDate = new Date(this.advert.endDate.toISOString());
+          endDate.setDate(endDate.getDate() + 1);
+        }
 
-      gysClient
-        .post("adverts", payload)
-        .then(() => {
-          const result = {
-            success: true,
-            message: "İlan oluşturuldu.",
-          };
+        const payload = {
+          realEstateId: this.realEstateId,
+          advertPlaceId: this.advert.advertPlaceId,
+          startDate: startDate,
+          endDate: endDate,
+          price: this.advert.price,
+          isPublished: this.advert.isPublished,
+        };
 
-          this.getAdverts();
-          this.resetAdvert();
+        gysClient
+          .post("adverts", payload)
+          .then(() => {
+            const result = {
+              success: true,
+              message: "İlan oluşturuldu.",
+            };
 
-          this.$emit("updateResult", result);
-        })
-        .catch((error) => {
-          const result = {
-            success: false,
-            message: error.response.data.message,
-          };
+            this.getAdverts();
+            this.resetAdvert();
 
-          this.$emit("updateResult", result);
-        });
+            this.$emit("updateResult", result);
+          })
+          .catch((error) => {
+            const result = {
+              success: false,
+              message: error.response.data.message,
+            };
+
+            this.$emit("updateResult", result);
+          });
+      }
     },
     update(id) {
-      let startDate = this.advert.startDate;
-      let endDate = this.advert.endDate;
+      if (this.formIsValid()) {
+        let startDate = null;
+        let endDate = null;
 
-      if (!(typeof this.advert.startDate === "string")) {
-        startDate = new Date(startDate.toISOString());
-        startDate.setDate(startDate.getDate() + 1);
-      } else {
-        var startDateStrSplitted = startDate.split("-");
+        if (this.advert.startDate) {
+          startDate = this.advert.startDate;
 
-        startDate = new Date(
-          startDateStrSplitted[2],
-          startDateStrSplitted[1] - 1,
-          startDateStrSplitted[0]
-        );
+          if (!(typeof this.advert.startDate === "string")) {
+            startDate = new Date(startDate.toISOString());
+            startDate.setDate(startDate.getDate() + 1);
+          } else {
+            var startDateStrSplitted = startDate.split("-");
 
-        startDate.setDate(startDate.getDate() + 1);
+            startDate = new Date(
+              startDateStrSplitted[2],
+              startDateStrSplitted[1] - 1,
+              startDateStrSplitted[0]
+            );
+
+            startDate.setDate(startDate.getDate() + 1);
+          }
+        }
+
+        if (this.advert.endDate) {
+          endDate = this.advert.endDate;
+
+          if (!(typeof this.advert.endDate === "string")) {
+            endDate = new Date(endDate.toISOString());
+            endDate.setDate(endDate.getDate() + 1);
+          } else {
+            var endDateDateStrSplitted = endDate.split("-");
+
+            endDate = new Date(
+              endDateDateStrSplitted[2],
+              endDateDateStrSplitted[1] - 1,
+              endDateDateStrSplitted[0]
+            );
+
+            endDate.setDate(endDate.getDate() + 1);
+          }
+        }
+
+        const payload = {
+          advertPlaceId: this.advert.advertPlaceId,
+          startDate: startDate,
+          endDate: endDate,
+          price: this.advert.price,
+          isPublished: this.advert.isPublished,
+        };
+
+        gysClient
+          .put(`adverts/${id}`, payload)
+          .then(() => {
+            const result = {
+              success: true,
+              message: "İlan güncellendi.",
+            };
+
+            this.getAdverts();
+
+            this.$emit("updateResult", result);
+          })
+          .catch((error) => {
+            const result = {
+              success: false,
+              message: error.response.data.message,
+            };
+
+            this.$emit("updateResult", result);
+          });
       }
-
-      if (!(typeof this.advert.endDate === "string")) {
-        endDate = new Date(endDate.toISOString());
-        endDate.setDate(endDate.getDate() + 1);
-      } else {
-        var endDateDateStrSplitted = endDate.split("-");
-
-        endDate = new Date(
-          endDateDateStrSplitted[2],
-          endDateDateStrSplitted[1] - 1,
-          endDateDateStrSplitted[0]
-        );
-
-        endDate.setDate(endDate.getDate() + 1);
-      }
-      const payload = {
-        advertPlaceId: this.advert.advertPlaceId,
-        startDate: startDate,
-        endDate: endDate,
-        price: this.advert.price,
-        isPublished: this.advert.isPublished,
-      };
-
-      gysClient
-        .put(`adverts/${id}`, payload)
-        .then(() => {
-          const result = {
-            success: true,
-            message: "İlan güncellendi.",
-          };
-
-          this.getAdverts();
-
-          this.$emit("updateResult", result);
-        })
-        .catch((error) => {
-          const result = {
-            success: false,
-            message: error.response.data.message,
-          };
-
-          this.$emit("updateResult", result);
-        });
     },
     confirmDeleteAdvert(event, id) {
       this.$confirm.require({

@@ -318,55 +318,74 @@ export default {
           });
       } else this.search();
     },
+    formIsValid() {
+      if (!this.tenant.name) {
+        return false;
+      }
+
+      if (!this.tenant.surname) {
+        return false;
+      }
+
+      if (!this.tenant.email) {
+        return false;
+      }
+
+      return true;
+    },  
     create() {
-      const payload = {
-        user: {
-          name: this.tenant.name,
-          surname: this.tenant.surname,
-          email: this.tenant.email,
-        },
-      };
+      if (this.formIsValid()) {
+        const payload = {
+          user: {
+            name: this.tenant.name,
+            surname: this.tenant.surname,
+            email: this.tenant.email,
+          },
+        };
 
-      gysClient
-        .post("tenants", payload)
-        .then(() => {
-          this.toggleCreateModal();
-          this.getTenants();
+        gysClient
+          .post("tenants", payload)
+          .then(() => {
+            this.toggleCreateModal();
+            this.getTenants();
 
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Kiraci oluşturuldu.";
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
-        });
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+            this.notification.messageContent = "Kiraci oluşturuldu.";
+          })
+          .catch((error) => {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+            this.notification.messageContent = error.response.data.message;
+          });
+        }
     },
     update() {
-      const payload = {
-        user: {
-          name: this.tenant.name,
-          surname: this.tenant.surname,
-          email: this.tenant.email,
-        },
-      };
+      if (this.formIsValid()) {
+          const payload = {
+          user: {
+            name: this.tenant.name,
+            surname: this.tenant.surname,
+            email: this.tenant.email,
+          },
+        };
 
-      gysClient
-        .put(`tenants/${this.tenant.id}`, payload)
-        .then(() => {
-          this.toggleUpdateModal();
-          this.getTenants();
+        gysClient
+          .put(`tenants/${this.tenant.id}`, payload)
+          .then(() => {
+            this.toggleUpdateModal();
+            this.getTenants();
 
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Alt kullanıcı güncellendi.";
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
-        });
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+            this.notification.messageContent = "Alt kullanıcı güncellendi.";
+          })
+          .catch((error) => {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+            this.notification.messageContent = error.response.data.message;
+          });
+        }
     },
     search() {
       gysClient

@@ -359,65 +359,76 @@ export default {
 
       this.getCategories();
     },
+    formIsValid() {
+      if (!this.role.label) {
+        return false;
+      }
+
+      return true;
+    },
     create() {
-      let selectedUIElementIds = [];
+      if (this.formIsValid()) {
+        let selectedUIElementIds = [];
 
-      this.role.selectedUIElements.forEach((selectedUIElement) => {
-        selectedUIElementIds.push(selectedUIElement.id);
-      });
-
-      let payload = {
-        role: {
-          label: this.role.label,
-        },
-        uiElementIds: selectedUIElementIds,
-      };
-
-      gysClient
-        .post("role-ui-elements", payload)
-        .then(() => {
-          this.toggleCreateModal();
-          this.getRoles();
-
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Rol oluşturuldu.";
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
+        this.role.selectedUIElements.forEach((selectedUIElement) => {
+          selectedUIElementIds.push(selectedUIElement.id);
         });
+
+        let payload = {
+          role: {
+            label: this.role.label,
+          },
+          uiElementIds: selectedUIElementIds,
+        };
+
+        gysClient
+          .post("role-ui-elements", payload)
+          .then(() => {
+            this.toggleCreateModal();
+            this.getRoles();
+
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+            this.notification.messageContent = "Rol oluşturuldu.";
+          })
+          .catch((error) => {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+            this.notification.messageContent = error.response.data.message;
+          });
+      }
     },
     update() {
-      let selectedUIElementIds = [];
+      if (this.formIsValid()) {
+        let selectedUIElementIds = [];
 
-      this.role.selectedUIElements.forEach((selectedUIElement) => {
-        selectedUIElementIds.push(selectedUIElement.id);
-      });
-
-      let payload = {
-        role: {
-          label: this.role.label,
-        },
-        uiElementIds: selectedUIElementIds,
-      };
-
-      gysClient
-        .put(`role-ui-elements?roleId=${this.role.id}`, payload)
-        .then(() => {
-          this.getRoles();
-          this.toggleUpdateModal();
-
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Rol güncellendi.";
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
+        this.role.selectedUIElements.forEach((selectedUIElement) => {
+          selectedUIElementIds.push(selectedUIElement.id);
         });
+
+        let payload = {
+          role: {
+            label: this.role.label,
+          },
+          uiElementIds: selectedUIElementIds,
+        };
+
+        gysClient
+          .put(`role-ui-elements?roleId=${this.role.id}`, payload)
+          .then(() => {
+            this.getRoles();
+            this.toggleUpdateModal();
+
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+            this.notification.messageContent = "Rol güncellendi.";
+          })
+          .catch((error) => {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+            this.notification.messageContent = error.response.data.message;
+          });
+      }
     },
     deleteRole(id) {
       gysClient

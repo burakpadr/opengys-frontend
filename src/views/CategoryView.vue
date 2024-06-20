@@ -293,10 +293,22 @@ export default {
           this.notification.messageContent = error.response.data.message;
         });
     },
-    create() {
-      this.loading = true;
+    formIsValid() {
+        if (!this.category.name) {
+          return false;
+        }
 
-      gysClient
+        for (var subCategory of this.category.subCategories) {
+          if (!subCategory.name) {
+            return false;
+          }
+        }
+
+        return true;
+    },
+    create() {
+      if (this.formIsValid()) {
+        gysClient
         .post("categories", this.category)
         .then(() => {
           this.toggleCreateModal();
@@ -311,13 +323,11 @@ export default {
           this.notification.severity = NotificationConstants.SEVERITY_ERROR;
           this.notification.messageContent = error.response.data.message;
         });
-
-      this.loading = false;
+      }
     },
     update() {
-      this.loading = true;
-
-      gysClient
+      if (this.formIsValid()) {
+        gysClient
         .put(`categories/${this.category.id}`, this.category)
         .then(() => {
           this.toggleUpdateModal();
@@ -332,8 +342,7 @@ export default {
           this.notification.severity = NotificationConstants.SEVERITY_ERROR;
           this.notification.messageContent = error.response.data.message;
         });
-
-      this.loading = false;
+      }
     },
     addSubCategory() {
       this.category.subCategories.push({ name: "" });

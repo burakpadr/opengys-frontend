@@ -191,8 +191,16 @@ export default {
 
       this.loading = false;
     },
+    formIsValid() {
+      if (!this.advertPlace.name) {
+        return false;
+      }
+
+      return true;
+    },
     create() {
-      gysClient
+      if (this.formIsValid()) {
+        gysClient
         .post("advert-places", this.advertPlace)
         .then(() => {
           this.toggleModal();
@@ -207,9 +215,11 @@ export default {
           this.notification.severity = NotificationConstants.SEVERITY_ERROR;
           this.notification.messageContent = error.response.data.message;
         });
+      }
     },
     update() {
-      gysClient
+      if (this.formIsValid()) {
+        gysClient
         .put(`advert-places/${this.advertPlace.id}`, this.advertPlace)
         .then(() => {
           this.toggleModal();
@@ -224,6 +234,7 @@ export default {
           this.notification.severity = NotificationConstants.SEVERITY_ERROR;
           this.notification.messageContent = error.response.data.message;
         });
+      }
     },
     confirmDeleteAdvertPlace(event, advertPlaceId) {
       this.$confirm.require({

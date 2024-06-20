@@ -102,7 +102,6 @@
                   class="input p-invalid"
                   v-model="staff.name"
                   size="small"
-                  required="true"
                 />
                 <label class="input">Ad*</label>
               </span>
@@ -113,7 +112,6 @@
                   class="input p-invalid"
                   v-model="staff.surname"
                   size="small"
-                  required="true"
                 />
                 <label class="input">Soyad*</label>
               </span>
@@ -124,7 +122,6 @@
                   class="input p-invalid"
                   v-model="staff.email"
                   size="small"
-                  required="true"
                 />
                 <label class="input">E-posta*</label>
               </span>
@@ -169,10 +166,9 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input p-invalid"
+                  class="input"
                   v-model="staff.name"
                   size="small"
-                  required="true"
                   :disabled="true"
                 />
                 <label class="input">Ad*</label>
@@ -181,10 +177,9 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input p-invalid"
+                  class="input"
                   v-model="staff.surname"
                   size="small"
-                  required="true"
                   :disabled="true"
                 />
                 <label class="input">Soyad*</label>
@@ -193,10 +188,9 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input p-invalid"
+                  class="input"
                   v-model="staff.email"
                   size="small"
-                  required="true"
                   :disabled="true"
                 />
                 <label class="input">E-posta*</label>
@@ -354,59 +348,89 @@ export default {
 
       return transformToTitle(formattedNameSurname);
     },
+    createFormIsValid() {
+      if (!this.staff.name) {
+        return false;
+      }
+
+      if (!this.staff.surname) {
+        return false;
+      }
+
+      if (!this.staff.email) {
+        return false;
+      }
+
+      if (this.staff.roleId == null) {
+        return false;
+      }
+
+      return true;
+    },
+    updateFormIsValid() {
+      if (this.staff.roleId == null) {
+        return false;
+      }
+
+      return true;
+    },
     create() {
-      const payload = {
-        user: {
-          name: this.staff.name,
-          surname: this.staff.surname,
-          email: this.staff.email,
-          roleId: this.staff.roleId,
-        },
-        isDeedOwner: false,
-      };
+      if (this.createFormIsValid()) {
+        const payload = {
+          user: {
+            name: this.staff.name,
+            surname: this.staff.surname,
+            email: this.staff.email,
+            roleId: this.staff.roleId,
+          },
+          isDeedOwner: false,
+        };
 
-      gysClient
-        .post("staffs", payload)
-        .then(() => {
-          this.toggleCreateModal();
-          this.getStaffs();
+        gysClient
+          .post("staffs", payload)
+          .then(() => {
+            this.toggleCreateModal();
+            this.getStaffs();
 
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Alt kullanıcı oluşturuldu.";
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
-        });
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+            this.notification.messageContent = "Alt kullanıcı oluşturuldu.";
+          })
+          .catch((error) => {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+            this.notification.messageContent = error.response.data.message;
+          });
+      }
     },
     update() {
-      const payload = {
-        user: {
-          name: this.staff.name,
-          surname: this.staff.surname,
-          email: this.staff.email,
-          roleId: this.staff.roleId,
-        },
-        isDeedOwner: false,
-      };
+      if (this.updateFormIsValid()) {
+        const payload = {
+          user: {
+            name: this.staff.name,
+            surname: this.staff.surname,
+            email: this.staff.email,
+            roleId: this.staff.roleId,
+          },
+          isDeedOwner: false,
+        };
 
-      gysClient
-        .put(`staffs/${this.staff.id}`, payload)
-        .then(() => {
-          this.toggleUpdateModal();
-          this.getStaffs();
+        gysClient
+          .put(`staffs/${this.staff.id}`, payload)
+          .then(() => {
+            this.toggleUpdateModal();
+            this.getStaffs();
 
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Alt kullanıcı güncellendi.";
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
-        });
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+            this.notification.messageContent = "Alt kullanıcı güncellendi.";
+          })
+          .catch((error) => {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+            this.notification.messageContent = error.response.data.message;
+          });
+        }
     },
     confirmDeleteStaff(event, id) {
       this.$confirm.require({

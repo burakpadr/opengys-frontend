@@ -88,10 +88,7 @@
                   size="small"
                   v-model="attribute.alias"
                   required="true"
-                  @input="
-                    () => (attribute.alias = attribute.alias.toUpperCase())
-                  "
-                  :class="{ 'p-invalid': formFieldsHasError.alias }"
+                  @input="() => attribute.alias = attribute.alias.toUpperCase()"
                 />
                 <label class="input">Kod*</label>
               </span>
@@ -204,13 +201,11 @@
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <InputText
-                  class="input p-invalid"
+                  class="input"
                   size="small"
                   v-model="attribute.alias"
                   required="true"
-                  @input="
-                    () => (attribute.alias = attribute.alias.toUpperCase())
-                  "
+                  @input="() => attribute.alias = attribute.alias.toUpperCase()"
                   :disabled="true"
                 />
                 <label class="input">Kod*</label>
@@ -245,7 +240,7 @@
                   v-model="attribute.inputType"
                   :options="inputTypes"
                   optionLabel="alias"
-                  class="w-full md:w-14rem input p-invalid"
+                  class="w-full md:w-14rem input"
                   inputId="inputType"
                   :disabled="true"
                 />
@@ -258,7 +253,7 @@
                   v-model="attribute.category"
                   :options="categories"
                   optionLabel="name"
-                  class="w-full md:w-14rem input p-invalid"
+                  class="w-full md:w-14rem input"
                   inputId="category"
                   :disabled="true"
                 />
@@ -450,66 +445,108 @@ export default {
     deleteAttributeValue(index) {
       this.attribute.attributeValues.splice(index, 1);
     },
+    createFormIsValid() {
+      if (!this.attribute.alias) {
+        return false;
+      }
+
+      if (!this.attribute.label) {
+        return false;
+      }
+
+      if (this.attribute.screenOrder == null) {
+        return false;
+      }
+
+      if (!this.attribute.inputType) {
+        return false;
+      }
+
+      if (this.attribute.category.length == 0) {
+        return false;
+      }
+
+      if (this.attribute.inputType == 'SELECT') {
+        for (var attributeValue of this.attribute.attributeValues) {
+          if (!attributeValue.value) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    },
+    updateFormIsValid() {
+      if (!this.attribute.label) {
+        return false;
+      }
+
+      if (this.attribute.screenOrder == null) {
+        return false;
+      }
+
+      if (this.attribute.inputType == 'SELECT') {
+        for (var attributeValue of this.attribute.attributeValues) {
+          if (!attributeValue.value) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    },
     create() {
-      if (!this.validateFormFields()) return;
+      if (this.createFormIsValid()) {
+        const payload = {
+          alias: this.attribute.alias,
+          label: this.attribute.label,
+          screenOrder: this.attribute.screenOrder,
+          inputType: this.attribute.inputType.alias,
+          categoryId: this.attribute.category.id,
+          attributeValues: this.attribute.attributeValues,
+        };
 
-      this.loading = true;
+        gysClient
+          .post("attributes", payload)
+          .then(() => {
+            this.toggleCreateModal();
+            this.getAttributes();
 
-      const payload = {
-        alias: this.attribute.alias,
-        label: this.attribute.label,
-        screenOrder: this.attribute.screenOrder,
-        inputType: this.attribute.inputType.alias,
-        categoryId: this.attribute.category.id,
-        attributeValues: this.attribute.attributeValues,
-      };
-
-      gysClient
-        .post("attributes", payload)
-        .then(() => {
-          this.toggleCreateModal();
-          this.getAttributes();
-
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Özellik oluşturuldu.";
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+            this.notification.messageContent = "Özellik oluşturuldu.";
+          })
+          .catch((error) => {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+            this.notification.messageContent = error.response.data.message;
         });
-
-      this.loading = false;
+      }
     },
     update() {
-      if (!this.validateFormFields()) return;
+      if (this.updateFormIsValid()) {
+        const payload = {
+          label: this.attribute.label,
+          screenOrder: this.attribute.screenOrder,
+          attributeValues: this.attribute.attributeValues,
+        };
 
-      this.loading = true;
+        gysClient
+          .put(`attributes/${this.attribute.id}`, payload)
+          .then(() => {
+            this.toggleUpdateModal();
+            this.getAttributes();
 
-      const payload = {
-        label: this.attribute.label,
-        screenOrder: this.attribute.screenOrder,
-        attributeValues: this.attribute.attributeValues,
-      };
-
-      gysClient
-        .put(`attributes/${this.attribute.id}`, payload)
-        .then(() => {
-          this.toggleUpdateModal();
-          this.getAttributes();
-
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Özellik güncellendi.";
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
-        });
-
-      this.loading = false;
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+            this.notification.messageContent = "Özellik güncellendi.";
+          })
+          .catch((error) => {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+            this.notification.messageContent = error.response.data.message;
+          });
+      }
     },
     confirmDeleteAttribute(event, attributeId) {
       this.$confirm.require({

@@ -270,10 +270,40 @@ export default {
           });
       }
     },
-    create() {
-      this.loading = true;
+    formIsValid() {
+      if (!this.realEstate.mainStatus) {
+        return false;
+      }
 
-      gysClient
+      if (!this.realEstate.no) {
+        return false;
+      }
+
+      if (!this.realEstate.address.cityName) {
+        return false;
+      }
+
+      if (!this.realEstate.address.districtName) {
+        return false;
+      }
+
+      if (!this.realEstate.address.neighborhoodName) {
+        return false;
+      }
+
+      if (!this.realEstate.categoryId) {
+        return false;
+      }
+
+      if ((this.subCategories != null && this.subCategories.length) && !this.realEstate.subCategoryId) {
+        return false;
+      } 
+
+      return true;
+    },
+    create() {
+      if (this.formIsValid()) {
+        gysClient
         .post("real-estates", this.realEstate)
         .then(() => {
           const result = {
@@ -291,13 +321,11 @@ export default {
 
           this.$emit("createResult", result);
         });
-
-      this.loading = false;
+      }
     },
     update() {
-      this.loading = true;
-
-      gysClient
+      if (this.formIsValid()) {
+        gysClient
         .put(`real-estates/${this.realEstate.id}`, this.realEstate)
         .then(() => {
           const result = {
@@ -315,8 +343,7 @@ export default {
 
           this.$emit("createResult", result);
         });
-
-      this.loading = false;
+      }
     },
   },
   mounted() {
