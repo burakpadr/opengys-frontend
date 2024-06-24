@@ -58,7 +58,7 @@
 <script>
 import { parseToken, removeToken } from "@/service/TokenService";
 import { transformToTitle } from "@/util/StringUtil";
-import { gysClient } from "@/assets/js/client";
+import { gysClient, refreshAcceptLanguage } from "@/assets/js/client";
 import i18n from "@/i18n";
 
 export default {
@@ -140,6 +140,8 @@ export default {
       localStorage.setItem("locale", this.selectedCountry.language);
 
       i18n.global.locale.value = this.selectedCountry.language;
+
+      refreshAcceptLanguage();
     }
   },
   mounted() {
