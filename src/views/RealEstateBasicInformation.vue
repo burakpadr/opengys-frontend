@@ -43,41 +43,30 @@
           <div class="modal-content-row"></div>
           <div class="modal-content-row">
             <span class="p-float-label" style="margin: 0 auto">
-              <Dropdown
+              <InputText
                 v-model="realEstate.address.cityName"
-                :options="cities"
-                optionLabel="name"
-                optionValue="name"
-                class="w-full md:w-14rem input p-invalid"
-                inputId="inputType"
-                @change="getDistricts"
+                class="input p-invalid"
+                size="small"
               />
-              <label for="inputType" class="input">{{ $t("realEstate.basicInformation.address.city") }}*</label>
+              <label class="input">{{ $t("realEstate.basicInformation.address.city") }}*</label>
             </span>
           </div>
-          <div class="modal-content-row" v-if="districts != null">
+          <div class="modal-content-row">
             <span class="p-float-label" style="margin: 0 auto">
-              <Dropdown
+              <InputText
                 v-model="realEstate.address.districtName"
-                :options="districts"
-                optionLabel="name"
-                optionValue="name"
-                class="w-full md:w-14rem input p-invalid"
-                inputId="inputType"
-                @change="getNeighborhoods"
+                class="input p-invalid"
+                size="small"
               />
-              <label for="inputType" class="input">{{ $t("realEstate.basicInformation.address.district") }}*</label>
+              <label class="input">{{ $t("realEstate.basicInformation.address.district") }}*</label>
             </span>
           </div>
-          <div class="modal-content-row" v-if="neighborhoods != null">
+          <div class="modal-content-row">
             <span class="p-float-label" style="margin: 0 auto">
-              <Dropdown
+              <InputText
                 v-model="realEstate.address.neighborhoodName"
-                :options="neighborhoods"
-                optionLabel="name"
-                optionValue="name"
-                class="w-full md:w-14rem input p-invalid"
-                inputId="inputType"
+                class="input p-invalid"
+                size="small"
               />
               <label for="inputType" class="input">{{ $t("realEstate.basicInformation.address.neighborhood") }}*</label>
             </span>
@@ -229,33 +218,33 @@ export default {
         this.mainStatusList = response.data;
       });
     },
-    getCities() {
-      gysClient.get("location/cities").then((response) => {
-        this.cities = response.data;
-      });
-    },
-    getDistricts() {
-      if (this.realEstate.address.cityName != null) {
-        gysClient
-          .get(`location/cities/${this.realEstate.address.cityName}/districts`)
-          .then((response) => {
-            this.neighborhoods = null;
+    // getCities() {
+    //   gysClient.get("location/cities").then((response) => {
+    //     this.cities = response.data;
+    //   });
+    // },
+    // getDistricts() {
+    //   if (this.realEstate.address.cityName != null) {
+    //     gysClient
+    //       .get(`location/cities/${this.realEstate.address.cityName}/districts`)
+    //       .then((response) => {
+    //         this.neighborhoods = null;
 
-            this.districts = response.data;
-          });
-      }
-    },
-    getNeighborhoods() {
-      if (this.realEstate.address.districtName != null) {
-        gysClient
-          .get(
-            `location/cities/${this.realEstate.address.cityName}/districts/${this.realEstate.address.districtName}/neighborhoods`
-          )
-          .then((response) => {
-            this.neighborhoods = response.data;
-          });
-      }
-    },
+    //         this.districts = response.data;
+    //       });
+    //   }
+    // },
+    // getNeighborhoods() {
+    //   if (this.realEstate.address.districtName != null) {
+    //     gysClient
+    //       .get(
+    //         `location/cities/${this.realEstate.address.cityName}/districts/${this.realEstate.address.districtName}/neighborhoods`
+    //       )
+    //       .then((response) => {
+    //         this.neighborhoods = response.data;
+    //       });
+    //   }
+    // },
     getCategories() {
       gysClient.get("categories?size=1000").then((response) => {
         this.categories = response.data.content;
@@ -352,9 +341,9 @@ export default {
     );
 
     this.getMainStatusList();
-    this.getCities();
-    this.getDistricts();
-    this.getNeighborhoods();
+    // this.getCities();
+    // this.getDistricts();
+    // this.getNeighborhoods();
     this.getCategories();
     this.getSubCategories();
   },

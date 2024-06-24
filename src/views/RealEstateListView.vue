@@ -80,7 +80,7 @@
                         <div class="flex align-items-center gap-3">
                           <span class="flex align-items-center gap-1">
                             <i class="bx bx-purchase-tag"></i>
-                            <span>{{ realEstate.data.mainStatus }}</span>
+                            <span v-if="realEstate.data.mainStatus === 'FOR_RENT'">{{ $t("enum.mainStatus.forRent") }}</span>
                           </span>
                         </div>
                         <div class="flex align-items-center gap-3">

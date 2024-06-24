@@ -13,6 +13,9 @@ const messages = {
         waiting: "Bekliyor",
         approved: "Onaylandı",
         rejected: "Reddedildi"
+      },
+      mainStatus: {
+        forRent: "Kiralık"
       }
     },
     common: {
@@ -331,6 +334,9 @@ const messages = {
         waiting: "Waiting",
         approved: "Approved",
         rejected: "Rejected"
+      },
+      mainStatus: {
+        forRent: "For Rent"
       }
     },
     common: {
