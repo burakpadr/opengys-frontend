@@ -304,7 +304,7 @@ export default {
           response.data.occupancyStatistic.realEstateCount;
         var occupantCount = response.data.occupancyStatistic.occupancyCount;
 
-        this.occupancyRate = (occupantCount / realEstateCountOccupancy) * 100;
+        this.occupancyRate = ((occupantCount / realEstateCountOccupancy) * 100).toFixed(2);
 
         // rental income
 
