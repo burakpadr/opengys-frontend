@@ -15,6 +15,9 @@ export function refreshAcceptLanguage() {
             gysClient.defaults.headers.common['Accept-Language'] = "en-TR";
         }
     }
+    else {
+        gysClient.defaults.headers.common['Accept-Language'] = "en-US";
+    }
 }
 
 gysClient.defaults.headers.common['Authorization'] = localStorage.getItem("token");

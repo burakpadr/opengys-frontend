@@ -23,12 +23,12 @@
       <template #content>
         <div style="margin-top: 30px">
           <span class="p-float-label">
-            <InputText class="input" size="small" v-model="email" />
+            <InputText class="input p-invalid" size="small" v-model="email" />
             <label class="input">{{ $t('login.email') }}*</label>
           </span>
           <span class="p-float-label" style="margin-top: 15px">
             <Password
-              class="input"
+              class="input p-invalid"
               v-model="password"
               :feedback="false"
               :toggle-mask="true"
@@ -86,49 +86,62 @@ export default {
     setVisibilityOfNotification(event) {
       this.notification.isActive = event;
     },
+    formIsValid() {
+      if (!this.email) {
+        return false;
+      }
+
+      if (!this.password) {
+        return false;
+      }
+
+      return true;
+    },
     signIn() {
-      removeToken();
+      if (this.formIsValid()) {
+        removeToken();
 
-      getTokenFromBackend(this.email, this.password)
-        .then((response) => {
-          setTokenToLocalStorage(response.headers.authorization);
+        getTokenFromBackend(this.email, this.password)
+          .then((response) => {
+            setTokenToLocalStorage(response.headers.authorization);
 
-          let decodedJwt = parseToken();
+            let decodedJwt = parseToken();
 
-          let url = "/";
+            let url = "/";
 
-          if (decodedJwt.isStaff) {
-            url = this.$router
-              .getRoutes()
-              .find(
-                (r) => r.components.default.name === DashboardStaffView.name
-              ).path;
-          } else if (decodedJwt.isTenant) {
-            
+            if (decodedJwt.isStaff) {
+              url = this.$router
+                .getRoutes()
+                .find(
+                  (r) => r.components.default.name === DashboardStaffView.name
+                ).path;
+            } else if (decodedJwt.isTenant) {
+              
 
-            url = this.$router
-              .getRoutes()
-              .find(
-                (r) => r.components.default.name === PaymentDeclarationTenantView.name
-              ).path;
-          }
+              url = this.$router
+                .getRoutes()
+                .find(
+                  (r) => r.components.default.name === PaymentDeclarationTenantView.name
+                ).path;
+            }
 
-          window.location.href = url;
-        })
-        .then(() => {
-          if (window.PasswordCredential) {
-            const passwordCredential = new PasswordCredential({
-              id: this.email,
-              password: this.password,
-            });
-            navigator.credentials.store(passwordCredential);
-          }
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
-        });
+            window.location.href = url;
+          })
+          .then(() => {
+            if (window.PasswordCredential) {
+              const passwordCredential = new PasswordCredential({
+                id: this.email,
+                password: this.password,
+              });
+              navigator.credentials.store(passwordCredential);
+            }
+          })
+          .catch((error) => {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+            this.notification.messageContent = error.response.data.message;
+          });
+      }
     },
     openResetPasswordModal() {
       this.loginModalIsVisible = false;

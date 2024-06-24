@@ -24,7 +24,7 @@
       <template #content>
         <div style="margin-top: 30px">
           <span class="p-float-label">
-            <InputText class="input" size="small" v-model="email" />
+            <InputText class="input p-invalid" size="small" v-model="email" />
             <label class="input">{{ $t('forgotPassword.step1.email') }}*</label>
           </span>
         </div>
@@ -56,7 +56,7 @@
       <template #content>
         <div style="margin-top: 30px">
           <span class="p-float-label">
-            <InputText class="input" size="small" v-model="otp" />
+            <InputText class="input p-invalid" size="small" v-model="otp" />
             <label class="input">{{ $t('forgotPassword.step2.code') }}*</label>
           </span>
         </div>
@@ -92,7 +92,7 @@
         <div style="margin-top: 30px">
           <span class="p-float-label">
             <Password
-              class="input"
+              class="input p-invalid"
               v-model="newPassword"
               :feedback="false"
               :toggle-mask="true"
@@ -138,70 +138,97 @@ export default {
     setVisibilityOfNotification(event) {
       this.notification.isActive = event;
     },
+    step1FormIsValid() {
+      if (!this.email) {
+        return false;
+      }
+
+      return true;
+    },    
     createResetPasswordOtp() {
-      const payload = {
-        email: this.email,
-      };
+      if (this.step1FormIsValid()) {
+        const payload = {
+          email: this.email,
+        };
 
-      gysClient
-        .post("users/create-reset-password-otp", payload)
-        .then(() => {
-          this.step = 2;
+        gysClient
+          .post("users/create-reset-password-otp", payload)
+          .then(() => {
+            this.step = 2;
 
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = this.$t('forgotPassword.info.codeSentToEmail');
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
-        });
-    },
-    validateResetPasswordOtp() {
-      const payload = {
-        email: this.email,
-        otp: this.otp,
-      };
-
-      gysClient
-        .post("users/validate-reset-password-otp", payload)
-        .then((response) => {
-          if (response.data.isMatched) this.step = 3;
-          else {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+            this.notification.messageContent = this.$t('forgotPassword.info.codeSentToEmail');
+          })
+          .catch((error) => {
             this.notification.isActive = true;
             this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-            this.notification.messageContent = this.$t('forgotPassword.info.codeIsIncorrect');
-          }
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
-        });
+            this.notification.messageContent = error.response.data.message;
+          });
+      }
+    },
+    step2FormIsValid() {
+      if (!this.otp) {
+        return false;
+      }
+
+      return true;
+    },
+    validateResetPasswordOtp() {
+      if (this.step2FormIsValid()) {
+        const payload = {
+          email: this.email,
+          otp: this.otp,
+        };
+
+        gysClient
+          .post("users/validate-reset-password-otp", payload)
+          .then((response) => {
+            if (response.data.isMatched) this.step = 3;
+            else {
+              this.notification.isActive = true;
+              this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+              this.notification.messageContent = this.$t('forgotPassword.info.codeIsIncorrect');
+            }
+          })
+          .catch((error) => {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+            this.notification.messageContent = error.response.data.message;
+          });
+      }
+    },
+    step3IsValid() {
+      if (!this.newPassword) {
+        return false;
+      }
+
+      return true;
     },
     resetPassword() {
-      const payload = {
-        email: this.email,
-        password: this.newPassword,
-      };
+      if (this.step3IsValid()) {
+        const payload = {
+          email: this.email,
+          password: this.newPassword,
+        };
 
-      gysClient
-        .patch("users/reset-password", payload)
-        .then(() => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = this.$t('forgotPassword.info.passwordChanged');
+        gysClient
+          .patch("users/reset-password", payload)
+          .then(() => {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
+            this.notification.messageContent = this.$t('forgotPassword.info.passwordChanged');
 
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 2000);
-        })
-        .catch((error) => {
-          this.notification.isActive = true;
-          this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-          this.notification.messageContent = error.response.data.message;
-        });
+            setTimeout(() => {
+              window.location.href = "/";
+            }, 2000);
+          })
+          .catch((error) => {
+            this.notification.isActive = true;
+            this.notification.severity = NotificationConstants.SEVERITY_ERROR;
+            this.notification.messageContent = error.response.data.message;
+          });
+      }
     },
     goToPreviousStep() {
       if (this.step == 1) window.location.href = "/";
