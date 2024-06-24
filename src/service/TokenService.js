@@ -12,6 +12,8 @@ export function getTokenFromBackend(email, password) {
 }
 
 export function setTokenToLocalStorage(token) {
+    localStorage.setItem("locale", process.env.VUE_APP_DEFAULT_LOCALE)
+
     localStorage.setItem(LOCAL_STORAGE_TOKEN_ALIAS, token);
 }
 
@@ -28,6 +30,8 @@ export function isTokenExpired() {
 }
 
 export function removeToken() {
+    localStorage.removeItem("locale");
+
     localStorage.removeItem(LOCAL_STORAGE_TOKEN_ALIAS);
 }
 

@@ -60,6 +60,10 @@ const COMPONENTS = [
     {
         componentName: "DashboardStaffView",
         label: "Dashboard"
+    },
+    {
+        componentName: "RentPaymentPlanInformation",
+        label: "Gayrimenkul > Sözleşmeler > Kira Ödeme Planı"
     }
 ]
 

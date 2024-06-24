@@ -23,7 +23,7 @@
               v-model="searchTerm"
               size="small"
               class="search-bar"
-              placeholder="Ara"
+              :placeholder="$t('common.search')"
               @input="search"
             />
           </span>
@@ -31,8 +31,8 @@
         <div class="table-container">
           <table>
             <tr>
-              <th>Rol Adı</th>
-              <th>Aksiyon</th>
+              <th>{{ $t('security.role.list.roleName') }}</th>
+              <th>{{ $t('common.action') }}</th>
             </tr>
             <tr v-for="(role, index) in roles" :key="index">
               <td>{{ role.label }}</td>
@@ -71,7 +71,7 @@
           <i class="bx bx-x exit" @click="toggleCreateModal"></i>
           <div class="modal-left-content">
             <div class="modal-content-header">
-              <span>Rol Bilgisi</span>
+              <span>{{ $t('security.role.form.roleInfo.header') }}</span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -81,12 +81,12 @@
                   v-model="role.label"
                   required="true"
                 />
-                <label class="input">Rol Adı*</label>
+                <label class="input">{{ $t('security.role.form.roleInfo.name') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
               <Button
-                label="Kaydet"
+                :label="$t('common.save')"
                 size="small"
                 class="button"
                 @click="create()"
@@ -95,12 +95,12 @@
           </div>
           <div class="modal-right-content">
             <div class="modal-content-header">
-              <span>Sayfalar</span>
+              <span>{{ $t('security.role.form.page.header') }}</span>
             </div>
             <div class="table-container">
               <table>
                 <tr>
-                  <th>Sayfa Adı</th>
+                  <th>{{ $t('security.role.form.page.pageName') }}</th>
                   <th></th>
                 </tr>
                 <tr v-for="(uiElement, index) in uiElements" :key="index">
@@ -118,12 +118,12 @@
           </div>
           <div class="modal-right-content">
             <div class="modal-content-header">
-              <span>Seçilen Sayfalar</span>
+              <span>{{ $t('security.role.form.selectedPage.header') }}</span>
             </div>
             <div class="table-container">
               <table>
                 <tr>
-                  <th>Sayfa Adı</th>
+                  <th>{{ $t('security.role.form.selectedPage.pageName') }}</th>
                   <th></th>
                 </tr>
                 <tr
@@ -148,7 +148,7 @@
           <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
           <div class="modal-left-content">
             <div class="modal-content-header">
-              <span>Rol Bilgisi</span>
+              <span>{{ $t('security.role.form.roleInfo.header') }}</span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -158,12 +158,12 @@
                   v-model="role.label"
                   required="true"
                 />
-                <label class="input">Rol Adı*</label>
+                <label class="input">{{ $t('security.role.form.roleInfo.name') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
               <Button
-                label="Kaydet"
+                :label="$t('common.save')"
                 size="small"
                 class="button"
                 @click="update()"
@@ -172,12 +172,12 @@
           </div>
           <div class="modal-right-content">
             <div class="modal-content-header">
-              <span>Sayfalar</span>
+              <span>{{ $t('security.role.form.page.header') }}</span>
             </div>
             <div class="table-container">
               <table>
                 <tr>
-                  <th>Sayfa Adı</th>
+                  <th>{{ $t('security.role.form.page.pageName') }}</th>
                   <th></th>
                 </tr>
                 <tr v-for="(uiElement, index) in uiElements" :key="index">
@@ -195,12 +195,12 @@
           </div>
           <div class="modal-right-content">
             <div class="modal-content-header">
-              <span>Seçilen Sayfalar</span>
+              <span>{{ $t('security.role.form.selectedPage.header') }}</span>
             </div>
             <div class="table-container">
               <table>
                 <tr>
-                  <th>Sayfa Adı</th>
+                  <th>{{ $t('security.role.form.selectedPage.pageName') }}</th>
                   <th></th>
                 </tr>
                 <tr
@@ -293,9 +293,9 @@ export default {
     confirmDeleteRole(event, id) {
       this.$confirm.require({
         target: event.currentTarget,
-        message: "Kaydı silmek istediğinden emin misin?",
-        rejectLabel: "Hayır",
-        acceptLabel: "Evet",
+        message: this.$t('common.sureToDeleteTheRecord'),
+        rejectLabel: this.$t('common.no'),
+        acceptLabel: this.$t('common.yes'),
         icon: "pi pi-exclamation-triangle",
         accept: () => {
           this.deleteRole(id);
@@ -303,7 +303,7 @@ export default {
           this.$toast.add({
             severity: NotificationConstants.SEVERITY_SUCCESS,
             summary: "Bildirim",
-            detail: "Kayıt başarılı bir şekilde silindi.",
+            detail: this.$t('common.recordDeleted'),
             life: 3000,
           });
         },
@@ -389,7 +389,7 @@ export default {
 
             this.notification.isActive = true;
             this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-            this.notification.messageContent = "Rol oluşturuldu.";
+            this.notification.messageContent = this.$t('common.recordCreated');
           })
           .catch((error) => {
             this.notification.isActive = true;
@@ -421,7 +421,7 @@ export default {
 
             this.notification.isActive = true;
             this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-            this.notification.messageContent = "Rol güncellendi.";
+            this.notification.messageContent = this.$t('common.recordUpdated');
           })
           .catch((error) => {
             this.notification.isActive = true;

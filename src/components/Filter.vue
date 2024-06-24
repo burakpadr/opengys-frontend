@@ -56,14 +56,14 @@
 
       <div>
         <Button
-          label="Filtrele"
+          :label="this.$t('common.filter')"
           size="small"
           class="input"
           style="margin: 20px"
           @click="submitFilterForm"
         />
         <Button
-          label="Temizle"
+          :label="this.$t('common.clear')"
           size="small"
           class="input"
           style="margin: 20px"

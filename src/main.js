@@ -39,12 +39,18 @@ import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
 import 'primeflex/primeflex.css';
 
+import i18n from "./i18n"
+
+import FlagIcon from 'vue-flag-icon';
+
 const app = createApp(App);
 
 app.use(router);
 app.use(PrimeVue);
 app.use(ToastService);
 app.use(ConfirmationService);
+app.use(i18n);
+app.use(FlagIcon);
 
 app.component("Paginator", Paginator);
 app.component("Button", Button);

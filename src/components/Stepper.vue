@@ -3,7 +3,7 @@
     <div class="bracket">
       <div class="step" v-for="(step, i) in this.options.steps" :key="i" :class="{'active': step.isActive}">
         <div class="circle" @click="changeStep(i)"></div>
-        <div class="label">{{ step.label }}</div>
+        <div class="label">{{ $t(step.i18nCode) }}</div>
       </div>
     </div>
     <div class="bracket"></div>

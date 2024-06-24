@@ -22,7 +22,7 @@
             <InputText
               size="small"
               class="search-bar"
-              placeholder="Ara"
+              :placeholder="$t('common.search')"
               v-model="searchTerm"
               @input="search"
             />
@@ -236,7 +236,7 @@ export default {
       basicInformationOfRealEstate: {
         id: null,
         no: null,
-        mainStatus: null,
+        mainStatus: "FOR_RENT",
         address: {
           latitude: null,
           longitude: null,

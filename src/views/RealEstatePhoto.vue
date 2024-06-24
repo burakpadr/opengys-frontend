@@ -13,15 +13,15 @@
               :multiple="true"
               accept="*"
               :maxFileSize="1000000"
-              chooseLabel="Ekle"
-              uploadLabel="Yükle"
-              cancelLabel="İptal"
+              :chooseLabel="$t('common.add')"
+              :uploadLabel="$t('common.upload')"
+              :cancelLabel="$t('common.cancel')"
               :pt="{
                 root: { class: 'file-upload' },
               }"
             >
               <template #empty>
-                <p>Dosyaları yüklemek için sürükle ve bırak.</p>
+                <p>{{ $t("realEstate.photo.dragAndDrop") }}</p>
               </template>
             </FileUpload>
           </div>
@@ -45,14 +45,14 @@
                   <Button
                     icon="pi pi-trash"
                     class="button"
-                    v-tooltip.top="'Sil'"
+                    v-tooltip.top="$t('common.delete')"
                     rounded
                     @click="deletePhoto()"
                   ></Button>
                   <Button
                     icon="pi pi-image"
                     class="button"
-                    v-tooltip.top="'Kapak Fotoğrafı Yap'"
+                    v-tooltip.top="$t('realEstate.photo.makeCoverPhoto')"
                     rounded
                     @click="changeCoverPhoto()"
                   ></Button>
@@ -126,7 +126,7 @@ export default {
 
       const result = {
         success: true,
-        message: "Fotoğraflar yüklendi.",
+        message: this.$t("realEstate.photo.imageUploadedSuccessfully"),
       };
 
       this.$emit("updateResult", result);
@@ -143,7 +143,7 @@ export default {
 
           const result = {
             success: true,
-            message: "Fotoğrafla silindi.",
+            message: this.$t("realEstate.photo.imagesRemoved"),
           };
 
           this.$emit("updateResult", result);
@@ -167,7 +167,7 @@ export default {
         .then(() => {
           const result = {
             success: true,
-            message: "Kapak fotoğrafı güncellendi.",
+            message: this.$t("realEstate.photo.coverPhotoUpdated"),
           };
 
           this.$emit("updateResult", result);

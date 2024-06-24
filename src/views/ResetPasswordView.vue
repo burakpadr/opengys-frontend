@@ -19,20 +19,20 @@
       </template>
       <template #title>
         <i class="bx bx-arrow-back" @click="goToPreviousStep()"></i>
-        <div style="margin-top: 15px">Parola Sıfırla</div>
+        <div style="margin-top: 15px">{{ $t('forgotPassword.header') }}</div>
       </template>
       <template #content>
         <div style="margin-top: 30px">
           <span class="p-float-label">
             <InputText class="input" size="small" v-model="email" />
-            <label class="input">E-Posta*</label>
+            <label class="input">{{ $t('forgotPassword.step1.email') }}*</label>
           </span>
         </div>
       </template>
       <template #footer>
         <div style="margin: 30px 0px 15px 0px">
           <div>
-            <Button type="submit" style="width: 150px" label="Kod Gönder" />
+            <Button type="submit" style="width: 150px" :label="$t('forgotPassword.step1.sendCode')" />
           </div>
         </div>
       </template>
@@ -51,23 +51,23 @@
       </template>
       <template #title>
         <i class="bx bx-arrow-back" @click="goToPreviousStep()"></i>
-        <div style="margin-top: 15px">Parola Sıfırla</div>
+        <div style="margin-top: 15px">{{ $t('forgotPassword.header') }}</div>
       </template>
       <template #content>
         <div style="margin-top: 30px">
           <span class="p-float-label">
             <InputText class="input" size="small" v-model="otp" />
-            <label class="input">Kod*</label>
+            <label class="input">{{ $t('forgotPassword.step2.code') }}*</label>
           </span>
         </div>
       </template>
       <template #footer>
         <div style="margin: 30px 0px 15px 0px">
           <div>
-            <Button type="submit" style="width: 150px" label="Doğrula" />
+            <Button type="submit" style="width: 150px" :label="$t('forgotPassword.step2.verify')" />
           </div>
           <div style="margin-top: 10px">
-            <a href="#">Kodu tekrar gönder</a>
+            <a href="#">{{ $t("forgotPassword.step2.sendCodeAgain") }}</a>
           </div>
         </div>
       </template>
@@ -86,7 +86,7 @@
       </template>
       <template #title>
         <i class="bx bx-arrow-back" @click="goToPreviousStep()"></i>
-        <div style="margin-top: 15px">Parola Sıfırla</div>
+        <div style="margin-top: 15px">{{ $t('forgotPassword.header') }}</div>
       </template>
       <template #content>
         <div style="margin-top: 30px">
@@ -97,17 +97,14 @@
               :feedback="false"
               :toggle-mask="true"
             />
-            <label class="input">Yeni Parola*</label>
+            <label class="input">{{ $t('forgotPassword.step3.newPassword') }}*</label>
           </span>
         </div>
       </template>
       <template #footer>
         <div style="margin: 30px 0px 15px 0px">
           <div>
-            <Button type="submit" style="width: 150px" label="Gönder" />
-          </div>
-          <div style="margin-top: 10px">
-            <a href="#">Kodu tekrar gönder</a>
+            <Button type="submit" style="width: 150px" :label="$t('common.save')" />
           </div>
         </div>
       </template>
@@ -153,7 +150,7 @@ export default {
 
           this.notification.isActive = true;
           this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Kod email adresinize gönderildi.";
+          this.notification.messageContent = this.$t('forgotPassword.info.codeSentToEmail');
         })
         .catch((error) => {
           this.notification.isActive = true;
@@ -174,7 +171,7 @@ export default {
           else {
             this.notification.isActive = true;
             this.notification.severity = NotificationConstants.SEVERITY_ERROR;
-            this.notification.messageContent = "Girdiğiniz kod hatalı.";
+            this.notification.messageContent = this.$t('forgotPassword.info.codeIsIncorrect');
           }
         })
         .catch((error) => {
@@ -194,8 +191,7 @@ export default {
         .then(() => {
           this.notification.isActive = true;
           this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent =
-            "Parolanız başarılı bir şekilde değiştirildi, yönlendiriliyorsunuz.";
+          this.notification.messageContent = this.$t('forgotPassword.info.passwordChanged');
 
           setTimeout(() => {
             window.location.href = "/";

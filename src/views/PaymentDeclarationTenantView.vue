@@ -29,10 +29,10 @@
         <div class="table-container">
           <table>
             <tr>
-              <th>Fatura Türü</th>
-              <th>Fatura Tarihi</th>
-              <th>Dekont</th>
-              <th>Onay Durumu</th>
+              <th>{{ $t('tenant.paymentDeclaration.list.invoiceType') }}</th>
+              <th>{{ $t('tenant.paymentDeclaration.list.invoiceDate') }}</th>
+              <th>{{ $t('tenant.paymentDeclaration.list.receipt') }}</th>
+              <th>{{ $t('tenant.paymentDeclaration.list.approvementStatus') }}</th>
             </tr>
             <tr
               v-for="(paymentDeclaration, index) in paymentDeclarations"
@@ -55,7 +55,7 @@
               >
                 <Tag
                   severity="success"
-                  :value="paymentDeclaration.approvementStatusValue"
+                  :value="$t('common.approved')"
                 ></Tag>
               </td>
               <td
@@ -65,13 +65,13 @@
               >
                 <Tag
                   severity="danger"
-                  :value="paymentDeclaration.approvementStatusValue"
+                  :value="$t('common.rejected')"
                 ></Tag>
               </td>
               <td v-else>
                 <Tag
                   severity="warning"
-                  :value="paymentDeclaration.approvementStatusValue"
+                  :value="$t('common.waiting')"
                 ></Tag>
               </td>
             </tr>
@@ -96,7 +96,7 @@
           <i class="bx bx-x exit" @click="toggleCreateModal"></i>
           <div class="modal-content">
             <div class="modal-content-header">
-              <span>Yeni Ekle</span>
+              <span>{{ $t('tenant.paymentDeclaration.form.header') }}</span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -109,7 +109,7 @@
                   inputId="inputType"
                   @change="getMatchableInvoices"
                 />
-                <label class="input">Fatura Türü*</label>
+                <label class="input">{{ $t('tenant.paymentDeclaration.form.invoiceType') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -122,14 +122,14 @@
                   class="w-full md:w-14rem input"
                   inputId="inputType"
                 />
-                <label class="input">Fatura Dönemi*</label>
+                <label class="input">{{ $t('tenant.paymentDeclaration.form.invoiceDate') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <FileUpload
                   class="input"
-                  chooseLabel="Dekont Ekle"
+                  :chooseLabel="$t('tenant.paymentDeclaration.form.addReceipt')"
                   mode="basic"
                   @select="onSelectReceiptFile($event)"
                 />
@@ -137,7 +137,7 @@
             </div>
             <div class="modal-content-row">
               <Button
-                label="Kaydet"
+                :label="$t('common.save')"
                 size="small"
                 class="button"
                 type="submit"
@@ -192,19 +192,19 @@ export default {
         receipt: null,
       },
       createModalIsVisible: false,
-      invoiceTypes: [{ alias: "RENT_PAYMENT", label: "Kira" }],
+      invoiceTypes: [{ alias: "RENT_PAYMENT", label: this.$t('enum.invoiceType.rentPayment') }],
       matchableInvoices: [],
       filterIsVisible: false,
       filterFields: [
         {
           type: InputType.DROPDOWN.name,
-          fieldLabel: "Fatura Türü",
+          fieldLabel: this.$t('tenant.paymentDeclaration.filter.invoiceType'),
           fieldName: "invoiceType",
           fieldValue: null,
           detail: {
             options: [
               {
-                label: "Kira Faturası",
+                label: this.$t('enum.invoiceType.rentPayment'),
                 value: "RENT_PAYMENT",
               },
             ],
@@ -214,21 +214,21 @@ export default {
         },
         {
           type: InputType.DROPDOWN.name,
-          fieldLabel: "Onay Durumu",
+          fieldLabel: this.$t('tenant.paymentDeclaration.filter.approvementStatus'),
           fieldName: "approvementStatus",
           fieldValue: null,
           detail: {
             options: [
               {
-                label: "Bekliyor",
+                label: this.$t('enum.approvementStatus.waiting'),
                 value: "WAITING",
               },
               {
-                label: "Onaylandı",
+                label: this.$t('enum.approvementStatus.approved'),
                 value: "APPROVED",
               },
               {
-                label: "Reddedildi",
+                label: this.$t('enum.approvementStatus.rejected'),
                 value: "REJECTED",
               },
             ],
@@ -312,7 +312,7 @@ export default {
 
           this.notification.isActive = true;
           this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Ödeme beyanı oluşturuldu.";
+          this.notification.messageContent = this.$t('common.recordCreated');
         })
         .catch((error) => {
           this.notification.isActive = true;

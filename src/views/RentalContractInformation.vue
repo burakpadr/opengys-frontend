@@ -4,7 +4,7 @@
       <div class="rental-contract-information-container" v-if="isVisible">
         <div class="modal-left-content">
           <div class="modal-content-header">
-            <span class="text">Sözleşme Listesi</span>
+            <span class="text">{{ $t("realEstate.contract.list.header") }}</span>
             <Button
               icon="pi pi-plus"
               style="background-color: #3b82f6; position: absolute; right: 20px"
@@ -17,12 +17,12 @@
           <div class="table-container">
             <table>
               <tr>
-                <th>Kiracının Adı Soyadı</th>
-                <th>Sözleşme Başlangıç T.</th>
-                <th>Sözleşme Bitiş T.</th>
-                <th>Sözleşme</th>
-                <th>Durumu</th>
-                <th>Aksiyon</th>
+                <th>{{ $t("realEstate.contract.list.tenantTitle") }}</th>
+                <th>{{ $t("realEstate.contract.list.contractStartDate") }}</th>
+                <th>{{ $t("realEstate.contract.list.contractEndDate") }}</th>
+                <th>{{ $t("realEstate.contract.list.contractFile") }}</th>
+                <th>{{ $t("realEstate.contract.list.status") }}</th>
+                <th>{{ $t("realEstate.contract.list.action") }}</th>
               </tr>
               <tr
                 v-for="(rentalContract, index) in rentalContracts"
@@ -44,10 +44,10 @@
                   </div>
                 </td>
                 <td v-if="rentalContract.isPublished">
-                  <Tag severity="success" value="Yayında"></Tag>
+                  <Tag severity="success" :value="$t('common.published')"></Tag>
                 </td>
                 <td v-else>
-                  <Tag severity="danger" value="Yayında Değil"></Tag>
+                  <Tag severity="danger" :value="$t('common.notPublished')"></Tag>
                 </td>
                 <td>
                   <ConfirmPopup
@@ -57,12 +57,12 @@
                   ></ConfirmPopup>
                   <i
                     @click="openUpdateEventModal(rentalContract.id)"
-                    v-tooltip.top="'Düzenle'"
+                    v-tooltip.top="$t('common.edit')"
                     class="bx bx-edit-alt"
                   ></i>
                   <i
                     @click="openRentPaymentInvoiceModal(rentalContract.id)"
-                    v-tooltip.top="'Kira Ödeme Planı'"
+                    v-tooltip.top="$t('realEstate.contract.list.rentPaymentPlan')"
                     class="bx bx-receipt"
                   ></i>
                 </td>
@@ -86,7 +86,7 @@
         >
           <div>
             <div class="modal-content-header">
-              <span>Sözleşme Oluştur</span>
+              <span>{{ $t('realEstate.contract.createUpdateForm.createHeader') }}</span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -98,7 +98,7 @@
                   class="w-full md:w-14rem input p-invalid"
                   inputId="inputType"
                 />
-                <label for="inputType" class="input">Kiracı*</label>
+                <label for="inputType" class="input">{{ $t('realEstate.contract.createUpdateForm.tenant') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -111,7 +111,7 @@
                   iconDisplay="input"
                 />
                 <label for="inputType" class="input"
-                  >Sözleşme Başlangıç Tarihi*</label
+                  >{{ $t('realEstate.contract.createUpdateForm.contractStartDate') }}*</label
                 >
               </span>
             </div>
@@ -125,7 +125,7 @@
                   iconDisplay="input"
                 />
                 <label for="inputType" class="input"
-                  >Sözleşme Bitiş Tarihi*</label
+                  >{{ $t('realEstate.contract.createUpdateForm.contractEndDate') }}*</label
                 >
               </span>
             </div>
@@ -138,7 +138,7 @@
                   :min="1"
                   class="input p-invalid"
                 />
-                <label for="inputType" class="input">Kira Günü*</label>
+                <label for="inputType" class="input">{{ $t('realEstate.contract.createUpdateForm.rentDay') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -151,7 +151,7 @@
                   currency="USD"
                   class="input p-invalid"
                 />
-                <label for="inputType" class="input">Aylık Kira Bedeli*</label>
+                <label for="inputType" class="input">{{ $t('realEstate.contract.createUpdateForm.monthlyRentFee') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -163,14 +163,14 @@
                   optionValue="value"
                   class="w-full md:w-14rem input p-invalid"
                 />
-                <label for="inputType" class="input">Durumu*</label>
+                <label for="inputType" class="input">{{ $t('realEstate.contract.createUpdateForm.status') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
                 <FileUpload
                   class="input p-invalid"
-                  chooseLabel="Kira Sözleşmesi Ekle"
+                  :chooseLabel="$t('realEstate.contract.createUpdateForm.addContractFile')"
                   mode="basic"
                   @select="onSelectRentalContractFile($event)"
                 />
@@ -178,7 +178,7 @@
             </div>
             <div class="modal-content-row">
               <Button
-                label="Kaydet"
+                :label="$t('common.save')"
                 type="submit"
                 size="small"
                 class="button"
@@ -196,7 +196,7 @@
         >
           <div>
             <div class="modal-content-header">
-              <span>Sözleşme Güncelle</span>
+              <span>{{ $t('realEstate.contract.createUpdateForm.updateHeader') }}</span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -205,7 +205,7 @@
                   class="input"
                   :disabled="true"
                 />
-                <label for="inputType" class="input">Kiracı*</label>
+                <label for="inputType" class="input">{{ $t('realEstate.contract.createUpdateForm.tenant') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -219,7 +219,7 @@
                   :disabled="true"
                 />
                 <label for="inputType" class="input"
-                  >Sözleşme Başlangıç Tarihi*</label
+                  >{{ $t('realEstate.contract.createUpdateForm.contractStartDate') }}*</label
                 >
               </span>
             </div>
@@ -234,7 +234,7 @@
                   :disabled="true"
                 />
                 <label for="inputType" class="input"
-                  >Sözleşme Bitiş Tarihi*</label
+                  >{{ $t('realEstate.contract.createUpdateForm.contractEndDate') }}*</label
                 >
               </span>
             </div>
@@ -248,7 +248,7 @@
                   class="input p-invalid"
                   :disabled="true"
                 />
-                <label for="inputType" class="input">Kira Günü*</label>
+                <label for="inputType" class="input">{{ $t('realEstate.contract.createUpdateForm.rentDay') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -262,7 +262,7 @@
                   class="input p-invalid"
                   :disabled="true"
                 />
-                <label for="inputType" class="input">Aylık Kira Bedeli*</label>
+                <label for="inputType" class="input">{{ $t('realEstate.contract.createUpdateForm.monthlyRentFee') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -275,13 +275,13 @@
                   class="w-full md:w-14rem input p-invalid"
                   :disabled="!rentalContract.isUpdatable"
                 />
-                <label for="inputType" class="input">Durumu*</label>
+                <label for="inputType" class="input">{{ $t('realEstate.contract.createUpdateForm.status') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto; display: flex">
                 <Button
-                  label="Kira Sözleşmesini Görüntüle"
+                  :label="$t('realEstate.contract.createUpdateForm.viewContractFile')"
                   icon="pi pi-eye"
                   class="button"
                   @click="openRentalContractInNewTab"
@@ -289,7 +289,7 @@
                 />
                 <FileUpload
                   class="input p-invalid"
-                  chooseLabel="Kira Sözleşmesini Güncelle"
+                  :chooseLabel="$t('realEstate.contract.createUpdateForm.updateContractFile')"
                   mode="basic"
                   @select="onSelectRentalContractFile($event)"
                   :disabled="!rentalContract.isUpdatable"
@@ -298,7 +298,7 @@
             </div>
             <div class="modal-content-row">
               <Button
-                label="Kaydet"
+                :label="$t('common.save')"
                 type="submit"
                 size="small"
                 class="button"
@@ -366,11 +366,11 @@ export default {
       rentalContractStatusOptions: [
         {
           value: true,
-          label: "Yayında",
+          label: this.$t("common.published"),
         },
         {
           value: false,
-          label: "Yayında Değil",
+          label: this.$t("common.notPublished"),
         },
       ],
     };
@@ -435,7 +435,7 @@ export default {
       if (this.rentalContract.startDate > this.rentalContract.endDate) {
         const result = {
               success: false,
-              message: "Sözleşme başlangıç tarihi sözleşme bitiş tarihinden büyük olamaz!",
+              message: this.$t('realEstate.contract.createUpdateForm.startDateCannotBeGreaterThanEndDate'),
             };
 
         this.$emit("updateResult", result);
@@ -503,7 +503,7 @@ export default {
           .then(() => {
             const result = {
               success: true,
-              message: "Sözleşme oluşturuldu.",
+              message: this.$t('common.recordCreated'),
             };
 
             this.getRentalContracts();
@@ -626,7 +626,7 @@ export default {
           .then(() => {
             const result = {
               success: true,
-              message: "Kira sözleşmesi kaydı güncellendi.",
+              message: this.$t('common.recordUpdated'),
             };
 
             this.getRentalContracts();

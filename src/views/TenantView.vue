@@ -23,7 +23,7 @@
               v-model="searchTerm"
               size="small"
               class="search-bar"
-              placeholder="Ara"
+              :placeholder="$t('common.search')"
               @input="search"
             />
           </span>
@@ -31,10 +31,10 @@
         <div class="table-container">
           <table>
             <tr>
-              <th>Adı Soyadı</th>
-              <th>E-Posta</th>
-              <th>Bağlı Gayrimenkul No</th>
-              <th>Aksiyon</th>
+              <th>{{ $t("userManagement.tenant.list.nameSurname") }}</th>
+              <th>{{ $t("userManagement.tenant.list.email") }}</th>
+              <th>{{ $t("userManagement.tenant.list.relatedRealEstateNo") }}</th>
+              <th>{{ $t("common.action") }}</th>
             </tr>
             <tr v-for="(tenant, index) in tenants" :key="index">
               <td>
@@ -79,7 +79,7 @@
           <i class="bx bx-x exit" @click="toggleCreateModal"></i>
           <div class="modal-content">
             <div class="modal-content-header">
-              <span>Yeni Ekle</span>
+              <span>{{ $t("userManagement.tenant.form.createHeader") }}</span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -89,7 +89,7 @@
                   size="small"
                   required="true"
                 />
-                <label class="input">Ad*</label>
+                <label class="input">{{ $t("userManagement.tenant.form.name") }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -100,7 +100,7 @@
                   size="small"
                   required="true"
                 />
-                <label class="input">Soyad*</label>
+                <label class="input">{{ $t("userManagement.tenant.form.surname") }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -111,7 +111,7 @@
                   size="small"
                   required="true"
                 />
-                <label class="input">E-posta*</label>
+                <label class="input">{{ $t("userManagement.tenant.form.email") }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -136,7 +136,7 @@
           <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
           <div class="modal-content">
             <div class="modal-content-header">
-              <span>Güncelle</span>
+              <span>{{ $t("userManagement.tenant.form.updateHeader") }}</span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -146,7 +146,7 @@
                   size="small"
                   required="true"
                 />
-                <label class="input">Ad*</label>
+                <label class="input">{{ $t("userManagement.tenant.form.name") }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -157,7 +157,7 @@
                   size="small"
                   required="true"
                 />
-                <label class="input">Soyad*</label>
+                <label class="input">{{ $t("userManagement.tenant.form.surname") }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -168,7 +168,7 @@
                   size="small"
                   required="true"
                 />
-                <label class="input">E-posta*</label>
+                <label class="input">{{ $t("userManagement.tenant.form.email") }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -277,9 +277,9 @@ export default {
     confirmDeleteTenant(event, id) {
       this.$confirm.require({
         target: event.currentTarget,
-        message: "Kaydı silmek istediğinden emin misin?",
-        rejectLabel: "Hayır",
-        acceptLabel: "Evet",
+        message: this.$t('common.sureToDeleteTheRecord'),
+        rejectLabel: this.$t('common.no'),
+        acceptLabel: this.$t('common.yes'),
         icon: "pi pi-exclamation-triangle",
         accept: () => {
           this.deleteTenant(id);
@@ -287,7 +287,7 @@ export default {
           this.$toast.add({
             severity: NotificationConstants.SEVERITY_SUCCESS,
             summary: "Bildirim",
-            detail: "Kayıt başarılı bir şekilde silindi.",
+            detail: this.$t('common.recordDeleted'),
             life: 3000,
           });
         },
@@ -351,7 +351,7 @@ export default {
 
             this.notification.isActive = true;
             this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-            this.notification.messageContent = "Kiraci oluşturuldu.";
+            this.notification.messageContent = this.$t('common.recordCreated');
           })
           .catch((error) => {
             this.notification.isActive = true;
@@ -378,7 +378,7 @@ export default {
 
             this.notification.isActive = true;
             this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-            this.notification.messageContent = "Alt kullanıcı güncellendi.";
+            this.notification.messageContent = this.$t('common.recordUpdated');
           })
           .catch((error) => {
             this.notification.isActive = true;

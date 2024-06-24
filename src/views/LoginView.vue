@@ -18,13 +18,13 @@
         </div>
       </template>
       <template #title>
-        <div style="margin-top: 15px">Giriş</div>
+        <div style="margin-top: 15px">{{ $t('login.header') }}</div>
       </template>
       <template #content>
         <div style="margin-top: 30px">
           <span class="p-float-label">
             <InputText class="input" size="small" v-model="email" />
-            <label class="input">E-Posta*</label>
+            <label class="input">{{ $t('login.email') }}*</label>
           </span>
           <span class="p-float-label" style="margin-top: 15px">
             <Password
@@ -33,17 +33,17 @@
               :feedback="false"
               :toggle-mask="true"
             />
-            <label class="input">Parola*</label>
+            <label class="input">{{ $t('login.password') }}*</label>
           </span>
         </div>
       </template>
       <template #footer>
         <div style="margin: 30px 0px 15px 0px">
           <div>
-            <Button type="submit" style="width: 100px" label="Giriş" />
+            <Button type="submit" style="width: 100px" :label="$t('login.signIn')" />
           </div>
           <div style="margin-top: 10px">
-            <a href="#" @click="openResetPasswordModal()">Şifremi unuttum</a>
+            <a href="#" @click="openResetPasswordModal()">{{ $t('login.forgotPassword') }}</a>
           </div>
         </div>
       </template>
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import RealEstateListView from "./RealEstateListView.vue";
+import DashboardStaffView from "./DashboardStaffView.vue";
 import PaymentDeclarationTenantView from "./PaymentDeclarationTenantView.vue";
 import Notification from "@/components/Notification.vue";
 import * as NotificationConstants from "../assets/js/notificationConstants";
@@ -101,7 +101,7 @@ export default {
             url = this.$router
               .getRoutes()
               .find(
-                (r) => r.components.default.name === RealEstateListView.name
+                (r) => r.components.default.name === DashboardStaffView.name
               ).path;
           } else if (decodedJwt.isTenant) {
             

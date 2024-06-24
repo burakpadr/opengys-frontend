@@ -21,13 +21,13 @@
         <div class="table-container">
           <table>
             <tr>
-              <th>Gayrimenkul No</th>
-              <th>Fatura Türü</th>
-              <th>Fatura Tarihi</th>
-              <th>Kiracı Ünvanı</th>
-              <th>Dekont</th>
-              <th>Onay Durumu</th>
-              <th>Aksiyon</th>
+              <th>{{ $t('paymentManagement.paymentDeclaration.list.realEstateNo') }}</th>
+              <th>{{ $t('paymentManagement.paymentDeclaration.list.invoiceType') }}</th>
+              <th>{{ $t('paymentManagement.paymentDeclaration.list.invoiceDate') }}</th>
+              <th>{{ $t('paymentManagement.paymentDeclaration.list.tenant') }}</th>
+              <th>{{ $t('paymentManagement.paymentDeclaration.list.receipt') }}</th>
+              <th>{{ $t('paymentManagement.paymentDeclaration.list.approvementStatus') }}</th>
+              <th>{{ $t('paymentManagement.paymentDeclaration.list.action') }}</th>
             </tr>
             <tr
               v-for="(paymentDeclaration, index) in paymentDeclarations"
@@ -52,7 +52,7 @@
               >
                 <Tag
                   severity="success"
-                  :value="paymentDeclaration.approvementStatusValue"
+                  :value="$t('common.approved')"
                 ></Tag>
               </td>
               <td
@@ -62,13 +62,13 @@
               >
                 <Tag
                   severity="danger"
-                  :value="paymentDeclaration.approvementStatusValue"
+                  :value="$t('common.rejected')"
                 ></Tag>
               </td>
               <td v-else>
                 <Tag
                   severity="warning"
-                  :value="paymentDeclaration.approvementStatusValue"
+                  :value="$t('common.waiting')"
                 ></Tag>
               </td>
               <td data-cell="Aksiyon">
@@ -82,7 +82,7 @@
                   ></ConfirmPopup>
                   <i
                     class="pi pi-check"
-                    v-tooltip.top="'Onayla'"
+                    v-tooltip.top="$t('common.approve')"
                     @click="
                       confirmToApprovePaymentDeclaration(
                         $event,
@@ -97,7 +97,7 @@
                         paymentDeclaration.id
                       )
                     "
-                    v-tooltip.top="'Reddet'"
+                    v-tooltip.top="$t('common.reject')"
                     class="pi pi-times"
                   ></i>
                 </div>
@@ -153,13 +153,13 @@ export default {
       filterFields: [
         {
           type: InputType.DROPDOWN.name,
-          fieldLabel: "Fatura Türü",
+          fieldLabel: this.$t('paymentManagement.paymentDeclaration.filter.invoiceType'),
           fieldName: "invoiceType",
           fieldValue: null,
           detail: {
             options: [
               {
-                label: "Kira Faturası",
+                label: this.$t('enum.invoiceType.rentPayment'),
                 value: "RENT_PAYMENT",
               },
             ],
@@ -169,21 +169,21 @@ export default {
         },
         {
           type: InputType.DROPDOWN.name,
-          fieldLabel: "Onay Durumu",
+          fieldLabel: this.$t('paymentManagement.paymentDeclaration.filter.approvementStatus'),
           fieldName: "approvementStatus",
           fieldValue: null,
           detail: {
             options: [
               {
-                label: "Bekliyor",
+                label: this.$t('enum.approvementStatus.waiting'),
                 value: "WAITING",
               },
               {
-                label: "Onaylandı",
+                label: this.$t('enum.approvementStatus.approved'),
                 value: "APPROVED",
               },
               {
-                label: "Reddedildi",
+                label: this.$t('enum.approvementStatus.rejected'),
                 value: "REJECTED",
               },
             ],
@@ -225,9 +225,9 @@ export default {
     confirmToRejectPaymentDeclaration(event, paymentDeclarationId) {
       this.$confirm.require({
         target: event.currentTarget,
-        message: "Kaydı reddetmek istediğinden emin misin?",
-        rejectLabel: "Hayır",
-        acceptLabel: "Evet",
+        message: this.$t('paymentManagement.paymentDeclaration.list.sureToReject'),
+        rejectLabel: this.$t('common.no'),
+        acceptLabel:this.$t('common.yes'),
         icon: "pi pi-exclamation-triangle",
         accept: () => {
           this.rejectPaymentDeclaration(paymentDeclarationId);
@@ -235,7 +235,7 @@ export default {
           this.$toast.add({
             severity: NotificationConstants.SEVERITY_SUCCESS,
             summary: "Bildirim",
-            detail: "Kayıt başarılı bir şekilde reddedildi.",
+            detail: this.$t('common.rejected'),
             life: 3000,
           });
         },
@@ -244,9 +244,9 @@ export default {
     confirmToApprovePaymentDeclaration(event, paymentDeclarationId) {
       this.$confirm.require({
         target: event.currentTarget,
-        message: "Kaydı onaylamak istediğinden emin misin?",
-        rejectLabel: "Hayır",
-        acceptLabel: "Evet",
+        message: this.$t('paymentManagement.paymentDeclaration.list.sureToApprove'),
+        rejectLabel: this.$t('common.no'),
+        acceptLabel:this.$t('common.yes'),
         icon: "pi pi-exclamation-triangle",
         accept: () => {
           this.approvePaymentDeclaration(paymentDeclarationId);
@@ -254,7 +254,7 @@ export default {
           this.$toast.add({
             severity: NotificationConstants.SEVERITY_SUCCESS,
             summary: "Bildirim",
-            detail: "Kayıt başarılı bir şekilde oanylandı.",
+            detail: this.$t('common.approved'),
             life: 3000,
           });
         },

@@ -4,7 +4,7 @@
       <div class="advert-information-container" v-if="isVisible">
         <div class="modal-left-content">
           <div class="modal-content-header">
-            <span class="text">İlan Listesi</span>
+            <span class="text">{{ $t("realEstate.advert.list.header") }}</span>
             <Button
               icon="pi pi-plus"
               style="background-color: #3b82f6; position: absolute; right: 20px"
@@ -17,12 +17,12 @@
           <div class="table-container">
             <table>
               <tr>
-                <th>İlan Yeri</th>
-                <th>İlan Başlangıç T.</th>
-                <th>İlan Bitiş T.</th>
-                <th>İlan Fiyatı</th>
-                <th>Durumu</th>
-                <th>Aksiyon</th>
+                <th>{{ $t("realEstate.advert.list.advertPlace") }}</th>
+                <th>{{ $t("realEstate.advert.list.advertStartDate") }}</th>
+                <th>{{ $t("realEstate.advert.list.advertEndDate") }}</th>
+                <th>{{ $t("realEstate.advert.list.advertAmount") }}</th>
+                <th>{{ $t("realEstate.advert.list.status") }}</th>
+                <th>{{ $t("realEstate.advert.list.action") }}</th>
               </tr>
               <tr v-for="(advert, index) in adverts" :key="index">
                 <td>{{ advert.advertPlaceName }}</td>
@@ -37,10 +37,10 @@
                   }}
                 </td>
                 <td v-if="advert.isPublished">
-                  <Tag severity="success" value="Yayında"></Tag>
+                  <Tag severity="success" :value="$t('common.published')"></Tag>
                 </td>
                 <td v-else>
-                  <Tag severity="danger" value="Yayında Değil"></Tag>
+                  <Tag severity="danger" :value="$t('common.notPublished')"></Tag>
                 </td>
                 <td>
                   <ConfirmPopup
@@ -50,12 +50,12 @@
                   ></ConfirmPopup>
                   <i
                     class="bx bx-trash"
-                    v-tooltip.top="'Sil'"
+                    v-tooltip.top="$t('common.delete')"
                     @click="confirmDeleteAdvert($event, advert.id)"
                   ></i>
                   <i
                     @click="openUpdateEventModal(advert.id)"
-                    v-tooltip.top="'Düzenle'"
+                    v-tooltip.top="$t('common.edit')"
                     class="bx bx-edit-alt"
                   ></i>
                 </td>
@@ -75,7 +75,7 @@
         <div class="modal-right-content" v-if="createModalIsVisible">
           <div>
             <div class="modal-content-header">
-              <span>İlan Bilgisi Oluştur</span>
+              <span>{{ $t('realEstate.advert.form.createFormHeader') }}</span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -87,7 +87,7 @@
                   class="w-full md:w-14rem input p-invalid"
                   inputId="inputType"
                 />
-                <label for="inputType" class="input">İlan Yeri*</label>
+                <label for="inputType" class="input">{{ $t('realEstate.advert.form.advertPlace') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -100,7 +100,7 @@
                   iconDisplay="input"
                 />
                 <label for="inputType" class="input"
-                  >İlan Başlangıç Tarihi*</label
+                  >{{ $t('realEstate.advert.form.advertStartDate') }}*</label
                 >
               </span>
             </div>
@@ -113,7 +113,7 @@
                   showIcon
                   iconDisplay="input"
                 />
-                <label for="inputType" class="input">İlan Bitiş Tarihi</label>
+                <label for="inputType" class="input">{{ $t('realEstate.advert.form.advertEndDate') }}</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -126,7 +126,7 @@
                   currency="USD"
                   class="input p-invalid"
                 />
-                <label for="inputType" class="input">İlan Fiyatı*</label>
+                <label for="inputType" class="input">{{ $t('realEstate.advert.form.advertAmount') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -138,12 +138,12 @@
                   optionValue="value"
                   class="w-full md:w-14rem input p-invalid"
                 />
-                <label for="inputType" class="input">Durumu*</label>
+                <label for="inputType" class="input">{{ $t('realEstate.advert.form.status') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
               <Button
-                label="Kaydet"
+                :label="$t('common.save')"
                 size="small"
                 class="button"
                 @click="create()"
@@ -156,7 +156,7 @@
 
         <div class="modal-right-content" v-if="updateModalIsVisible">
           <div class="modal-content-header">
-            <span>İlan Bilgisi Güncelle</span>
+            <span>{{ $t('realEstate.advert.form.updateFormHeader') }}</span>
           </div>
           <div class="modal-content-row">
             <span class="p-float-label" style="margin: 0 auto">
@@ -168,7 +168,7 @@
                 class="w-full md:w-14rem input p-invalid"
                 inputId="inputType"
               />
-              <label for="inputType" class="input">İlan Yeri*</label>
+              <label for="inputType" class="input">{{ $t('realEstate.advert.form.advertPlace') }}*</label>
             </span>
           </div>
           <div class="modal-content-row">
@@ -181,7 +181,7 @@
                 iconDisplay="input"
               />
               <label for="inputType" class="input"
-                >İlan Başlangıç Tarihi*</label
+                >{{ $t('realEstate.advert.form.advertStartDate') }}*</label
               >
             </span>
           </div>
@@ -194,7 +194,7 @@
                 showIcon
                 iconDisplay="input"
               />
-              <label for="inputType" class="input">İlan Bitiş Tarihi</label>
+              <label for="inputType" class="input">{{ $t('realEstate.advert.form.advertEndDate') }}</label>
             </span>
           </div>
           <div class="modal-content-row">
@@ -207,7 +207,7 @@
                 currency="USD"
                 class="input p-invalid"
               />
-              <label for="inputType" class="input">İlan Fiyatı*</label>
+              <label for="inputType" class="input">{{ $t('realEstate.advert.form.advertAmount') }}*</label>
             </span>
           </div>
           <div class="modal-content-row">
@@ -219,12 +219,12 @@
                 optionValue="value"
                 class="w-full md:w-14rem input p-invalid"
               />
-              <label for="inputType" class="input">Durumu*</label>
+              <label for="inputType" class="input">{{ $t('realEstate.advert.form.status') }}*</label>
             </span>
           </div>
           <div class="modal-content-row">
             <Button
-              label="Kaydet"
+              :label="$t('common.save')"
               size="small"
               class="button"
               @click="update(advert.id)"
@@ -260,11 +260,11 @@ export default {
       advertStatusOptions: [
         {
           value: true,
-          label: "Yayında",
+          label: this.$t("common.published"),
         },
         {
           value: false,
-          label: "Yayında Değil",
+          label: this.$t("common.notPublished"),
         },
       ],
       advert: {
@@ -346,7 +346,7 @@ export default {
       if (this.advert.endDate && (this.advert.startDate > this.advert.endDate)) {
         const result = {
               success: false,
-              message: "İlan başlangıç tarihi ilan bitiş tarihinden büyük olamaz!",
+              message: this.$t("realEstate.advert.form.startDateCannotBeGreaterThanEndDate"),
             };
 
         this.$emit("updateResult", result);
@@ -385,7 +385,7 @@ export default {
           .then(() => {
             const result = {
               success: true,
-              message: "İlan oluşturuldu.",
+              message: this.$t("common.recordCreated"),
             };
 
             this.getAdverts();
@@ -459,7 +459,7 @@ export default {
           .then(() => {
             const result = {
               success: true,
-              message: "İlan güncellendi.",
+              message: this.$t("common.recordUpdated"),
             };
 
             this.getAdverts();
@@ -479,7 +479,7 @@ export default {
     confirmDeleteAdvert(event, id) {
       this.$confirm.require({
         target: event.currentTarget,
-        message: "Kaydı silmek istediğinden emin misin?",
+        message: this.$t('common.sureToDeleteTheRecord'),
         rejectLabel: "Hayır",
         acceptLabel: "Evet",
         icon: "pi pi-exclamation-triangle",
@@ -489,7 +489,7 @@ export default {
           this.$toast.add({
             severity: NotificationConstants.SEVERITY_SUCCESS,
             summary: "Bildirim",
-            detail: "Kayıt başarılı bir şekilde silindi.",
+            detail: this.$t("common.recordDeleted"),
             life: 3000,
           });
         },

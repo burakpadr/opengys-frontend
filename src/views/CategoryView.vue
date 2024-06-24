@@ -23,7 +23,7 @@
               v-model="searchTerm"
               size="small"
               class="search-bar"
-              placeholder="Ara"
+              :placeholder="$t('common.search')"
               @input="search"
             />
           </span>
@@ -31,12 +31,12 @@
         <div class="table-container">
           <table>
             <tr>
-              <th>Kategori Adı</th>
-              <th>Aksiyon</th>
+              <th>{{ $t('systemDefinition.category.list.categoryName') }}</th>
+              <th>{{ $t('systemDefinition.category.list.action') }}</th>
             </tr>
             <tr v-for="(category, index) in categories" :key="index">
-              <td data-cell="Kategori Adı">{{ category.name }}</td>
-              <td data-cell="Aksiyon">
+              <td>{{ category.name }}</td>
+              <td>
                 <ConfirmPopup
                   :pt="{
                     root: { class: 'confirmPopup' },
@@ -71,7 +71,7 @@
           <i class="bx bx-x exit" @click="toggleCreateModal"></i>
           <div class="modal-left-content">
             <div class="modal-content-header">
-              <span>Kategori Bilgisi</span>
+              <span>{{ $t('systemDefinition.category.form.categoryInfo.header') }}</span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -81,17 +81,17 @@
                   v-model="category.name"
                   required="true"
                 />
-                <label class="input" for="Kategori Adı*">Kategori Adı*</label>
+                <label class="input">{{ $t('systemDefinition.category.form.categoryInfo.categoryName') }}*</label>
               </span>
             </div>
           </div>
           <div class="modal-right-content">
             <div class="modal-content-header">
-              <span>Alt Kategori Bilgisi</span>
+              <span>{{ $t('systemDefinition.category.form.subcategoryInfo.header') }}</span>
             </div>
             <div class="modal-content-row">
               <Button
-                label="Alt Kategori Ekle"
+                :label="$t('systemDefinition.category.form.subcategoryInfo.addSubcategory')"
                 size="small"
                 class="button"
                 icon="pi pi-plus"
@@ -111,7 +111,7 @@
                   required="true"
                 />
                 <label class="input" for="Alt Kategori Adı*"
-                  >Alt Kategori Adı*</label
+                  >{{ $t('systemDefinition.category.form.subcategoryInfo.subcategoryName') }}*</label
                 >
                 <i
                   class="bx bx-trash"
@@ -123,7 +123,7 @@
             <div class="modal-content-row">
               <Button
                 :loading="loading"
-                label="Kaydet"
+                :label="$t('common.save')"
                 size="small"
                 class="button"
                 @click="create"
@@ -142,7 +142,7 @@
           <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
           <div class="modal-left-content">
             <div class="modal-content-header">
-              <span>Kategori Bilgisi</span>
+              <span>{{ $t('systemDefinition.category.form.categoryInfo.header') }}</span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -152,17 +152,17 @@
                   v-model="category.name"
                   required="true"
                 />
-                <label class="input" for="Kategori Adı*">Kategori Adı*</label>
+                <label class="input" for="Kategori Adı*">{{ $t('systemDefinition.category.form.categoryInfo.categoryName') }}*</label>
               </span>
             </div>
           </div>
           <div class="modal-right-content">
             <div class="modal-content-header">
-              <span>Alt Kategori Bilgisi</span>
+              <span>{{ $t('systemDefinition.category.form.subcategoryInfo.header') }}</span>
             </div>
             <div class="modal-content-row">
               <Button
-                label="Alt Kategori Ekle"
+                :label="$t('systemDefinition.category.form.subcategoryInfo.addSubcategory')"
                 size="small"
                 class="button"
                 icon="pi pi-plus"
@@ -181,8 +181,8 @@
                   v-model="category.subCategories[index].name"
                   required="true"
                 />
-                <label class="input" for="Alt Kategori Adı*"
-                  >Alt Kategori Adı*</label
+                <label class="input"
+                  >{{$t('systemDefinition.category.form.subcategoryInfo.subcategoryName')}}*</label
                 >
                 <i
                   class="bx bx-trash"
@@ -194,7 +194,7 @@
             <div class="modal-content-row">
               <Button
                 :loading="loading"
-                label="Güncelle"
+                :label="$t('common.save')"
                 size="small"
                 class="button"
                 @click="update"
@@ -316,7 +316,7 @@ export default {
 
           this.notification.isActive = true;
           this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Kategori oluşturuldu.";
+          this.notification.messageContent = this.$t("common.recordCreated");
         })
         .catch((error) => {
           this.notification.isActive = true;
@@ -335,7 +335,7 @@ export default {
 
           this.notification.isActive = true;
           this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "Kategori güncellendi.";
+          this.notification.messageContent = this.$t("common.recordUpdated");
         })
         .catch((error) => {
           this.notification.isActive = true;
@@ -365,7 +365,7 @@ export default {
     confirmDeleteCategory(event, categoryId) {
       this.$confirm.require({
         target: event.currentTarget,
-        message: "Kaydı silmek istediğinden emin misin?",
+        message: this.$t("common.sureToDeleteTheRecord"),
         rejectLabel: "Hayır",
         acceptLabel: "Evet",
         icon: "pi pi-exclamation-triangle",
@@ -375,7 +375,7 @@ export default {
           this.$toast.add({
             severity: NotificationConstants.SEVERITY_SUCCESS,
             summary: "Bildirim",
-            detail: "Kayıt başarılı bir şekilde silindi.",
+            detail: this.$t("common.recordDeleted"),
             life: 3000,
           });
         },

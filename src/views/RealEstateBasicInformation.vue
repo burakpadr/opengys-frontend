@@ -6,9 +6,9 @@
 
         <div class="modal-left-content">
           <div class="modal-content-header">
-            <span>Temel Bilgiler</span>
+            <span>{{ $t("realEstate.basicInformation.basic.header") }}</span>
           </div>
-          <div class="modal-content-row">
+          <!-- <div class="modal-content-row">
             <span class="p-float-label" style="margin: 0 auto">
               <Dropdown
                 v-model="realEstate.mainStatus"
@@ -18,9 +18,9 @@
                 class="w-full md:w-14rem input p-invalid"
                 :disabled="isUpdateAction ? true : false"
               />
-              <label class="input">Ana Statü*</label>
+              <label class="input">{{ $t("realEstate.basicInformation.basic.mainStatus") }}*</label>
             </span>
-          </div>
+          </div> -->
           <div class="modal-content-row">
             <span class="p-float-label" style="margin: 0 auto">
               <InputText
@@ -29,7 +29,7 @@
                 required="true"
                 v-model="realEstate.no"
               />
-              <label class="input">Gayrimenkul No*</label>
+              <label class="input">{{ $t("realEstate.basicInformation.basic.realEstateNo") }}*</label>
             </span>
           </div>
         </div>
@@ -38,7 +38,7 @@
 
         <div class="modal-right-content">
           <div class="modal-content-header">
-            <span>Adres Bilgisi</span>
+            <span>{{ $t("realEstate.basicInformation.address.header") }}</span>
           </div>
           <div class="modal-content-row"></div>
           <div class="modal-content-row">
@@ -52,7 +52,7 @@
                 inputId="inputType"
                 @change="getDistricts"
               />
-              <label for="inputType" class="input">İl*</label>
+              <label for="inputType" class="input">{{ $t("realEstate.basicInformation.address.city") }}*</label>
             </span>
           </div>
           <div class="modal-content-row" v-if="districts != null">
@@ -66,7 +66,7 @@
                 inputId="inputType"
                 @change="getNeighborhoods"
               />
-              <label for="inputType" class="input">İlçe*</label>
+              <label for="inputType" class="input">{{ $t("realEstate.basicInformation.address.district") }}*</label>
             </span>
           </div>
           <div class="modal-content-row" v-if="neighborhoods != null">
@@ -79,7 +79,7 @@
                 class="w-full md:w-14rem input p-invalid"
                 inputId="inputType"
               />
-              <label for="inputType" class="input">Mahalle*</label>
+              <label for="inputType" class="input">{{ $t("realEstate.basicInformation.address.neighborhood") }}*</label>
             </span>
           </div>
           <div class="modal-content-row">
@@ -90,7 +90,7 @@
                 required="true"
                 v-model="realEstate.address.postCode"
               />
-              <label class="input">Posta Kodu</label>
+              <label class="input">{{ $t("realEstate.basicInformation.address.postCode") }}</label>
             </span>
           </div>
           <div class="modal-content-row">
@@ -101,7 +101,7 @@
                 required="true"
                 v-model="realEstate.address.latitude"
               />
-              <label class="input">Enlem</label>
+              <label class="input">{{ $t("realEstate.basicInformation.address.latitude") }}</label>
             </span>
           </div>
           <div class="modal-content-row">
@@ -112,7 +112,7 @@
                 required="true"
                 v-model="realEstate.address.longitude"
               />
-              <label class="input">Boylam</label>
+              <label class="input">{{ $t("realEstate.basicInformation.address.longitude") }}</label>
             </span>
           </div>
           <div class="modal-content-row">
@@ -125,7 +125,7 @@
                 required="true"
                 autoResize
               />
-              <label class="input">Açık Adres</label>
+              <label class="input">{{ $t("realEstate.basicInformation.address.address") }}</label>
             </span>
           </div>
         </div>
@@ -134,7 +134,7 @@
 
         <div class="modal-right-content">
           <div class="modal-content-header">
-            <span>Ek Özellikler</span>
+            <span>{{ $t("realEstate.basicInformation.additional.header") }}</span>
           </div>
           <div class="modal-content-row">
             <span class="p-float-label" style="margin: 0 auto">
@@ -147,7 +147,7 @@
                 inputId="inputType"
                 @change="getSubCategories"
               />
-              <label for="inputType" class="input">Kategori*</label>
+              <label for="inputType" class="input">{{ $t("realEstate.basicInformation.additional.category") }}*</label>
             </span>
           </div>
           <div
@@ -163,7 +163,7 @@
                 class="w-full md:w-14rem input p-invalid"
                 inputId="inputType"
               />
-              <label for="inputType" class="input">Alt Kategori*</label>
+              <label for="inputType" class="input">{{ $t("realEstate.basicInformation.additional.subcategory") }}*</label>
             </span>
           </div>
           <div class="modal-content-row" v-if="isInsertAction">
@@ -200,7 +200,7 @@ export default {
   components: { ViewUsedByStaff },
   props: {
     realEstate: {
-      type: Object,
+      type: Object
     },
     isInsertAction: {
       type: Boolean,
@@ -271,9 +271,9 @@ export default {
       }
     },
     formIsValid() {
-      if (!this.realEstate.mainStatus) {
-        return false;
-      }
+      // if (!this.realEstate.mainStatus) {
+      //   return false;
+      // }
 
       if (!this.realEstate.no) {
         return false;
@@ -308,7 +308,7 @@ export default {
         .then(() => {
           const result = {
             success: true,
-            message: "Gayrimenkul oluşturuldu.",
+            message: this.$t("common.recordCreated"),
           };
 
           this.$emit("createResult", result);
@@ -330,7 +330,7 @@ export default {
         .then(() => {
           const result = {
             success: true,
-            message: "Gayrimenkul güncellendi.",
+            message: this.$t("common.recordUpdated"),
           };
 
           this.$emit("updateResult", result);
@@ -369,7 +369,7 @@ export default {
 
 .real-estate-basic-information-container .modal-left-content {
   width: 350px;
-  height: 270px;
+  height: 180px;
   background: #fafafa;
   position: relative;
   float: left;

@@ -23,7 +23,7 @@
               v-model="searchTerm"
               size="small"
               class="search-bar"
-              placeholder="Ara"
+              :placeholder="$t('common.search')"
               @input="search"
             />
           </span>
@@ -31,11 +31,11 @@
         <div class="table-container">
           <table>
             <tr>
-              <th>Adı Soyadı</th>
-              <th>E-Posta</th>
-              <th>Rol</th>
+              <th>{{ $t('userManagement.staff.list.nameSurname') }}</th>
+              <th>{{ $t('userManagement.staff.list.email') }}</th>
+              <th>{{ $t('userManagement.staff.list.role') }}</th>
               <!-- <th>Aktif</th> -->
-              <th>Aksiyon</th>
+              <th>{{ $t('common.action') }}</th>
             </tr>
             <tr
               v-for="(staff, index) in staffs"
@@ -94,7 +94,7 @@
           <i class="bx bx-x exit" @click="toggleCreateModal"></i>
           <div class="modal-content">
             <div class="modal-content-header">
-              <span>Yeni Ekle</span>
+              <span>{{ $t('userManagement.staff.form.createHeader') }}</span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -103,7 +103,7 @@
                   v-model="staff.name"
                   size="small"
                 />
-                <label class="input">Ad*</label>
+                <label class="input">{{ $t('userManagement.staff.form.name') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -113,7 +113,7 @@
                   v-model="staff.surname"
                   size="small"
                 />
-                <label class="input">Soyad*</label>
+                <label class="input">{{ $t('userManagement.staff.form.surname') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -123,7 +123,7 @@
                   v-model="staff.email"
                   size="small"
                 />
-                <label class="input">E-posta*</label>
+                <label class="input">{{ $t('userManagement.staff.form.email') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -136,12 +136,12 @@
                   class="w-full md:w-14rem input p-invalid"
                   inputId="inputType"
                 />
-                <label class="input">Rol*</label>
+                <label class="input">{{ $t('userManagement.staff.form.role') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
               <Button
-                label="Kaydet"
+                :label="$t('common.save')"
                 size="small"
                 class="button"
                 type="submit"
@@ -161,7 +161,7 @@
           <i class="bx bx-x exit" @click="toggleUpdateModal"></i>
           <div class="modal-content">
             <div class="modal-content-header">
-              <span>Güncelle</span>
+              <span>{{ $t('userManagement.staff.form.updateHeader') }}</span>
             </div>
             <div class="modal-content-row">
               <span class="p-float-label" style="margin: 0 auto">
@@ -171,7 +171,7 @@
                   size="small"
                   :disabled="true"
                 />
-                <label class="input">Ad*</label>
+                <label class="input">{{ $t('userManagement.staff.form.name') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -182,7 +182,7 @@
                   size="small"
                   :disabled="true"
                 />
-                <label class="input">Soyad*</label>
+                <label class="input">{{ $t('userManagement.staff.form.surname') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -193,7 +193,7 @@
                   size="small"
                   :disabled="true"
                 />
-                <label class="input">E-posta*</label>
+                <label class="input">{{ $t('userManagement.staff.form.email') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -206,7 +206,7 @@
                   class="w-full md:w-14rem input p-invalid"
                   inputId="inputType"
                 />
-                <label class="input">Rol*</label>
+                <label class="input">{{ $t('userManagement.staff.form.role') }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
@@ -394,7 +394,7 @@ export default {
 
             this.notification.isActive = true;
             this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-            this.notification.messageContent = "Alt kullanıcı oluşturuldu.";
+            this.notification.messageContent = this.$t('common.recordCreated');
           })
           .catch((error) => {
             this.notification.isActive = true;
@@ -423,7 +423,7 @@ export default {
 
             this.notification.isActive = true;
             this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-            this.notification.messageContent = "Alt kullanıcı güncellendi.";
+            this.notification.messageContent = this.$t('common.recordUpdated');
           })
           .catch((error) => {
             this.notification.isActive = true;
@@ -435,9 +435,9 @@ export default {
     confirmDeleteStaff(event, id) {
       this.$confirm.require({
         target: event.currentTarget,
-        message: "Kaydı silmek istediğinden emin misin?",
-        rejectLabel: "Hayır",
-        acceptLabel: "Evet",
+        message: this.$t('common.sureToDeleteTheRecord'),
+        rejectLabel: this.$t('common.no'),
+        acceptLabel: this.$t('common.yes'),
         icon: "pi pi-exclamation-triangle",
         accept: () => {
           this.deleteStaff(id);
@@ -445,7 +445,7 @@ export default {
           this.$toast.add({
             severity: NotificationConstants.SEVERITY_SUCCESS,
             summary: "Bildirim",
-            detail: "Kayıt başarılı bir şekilde silindi.",
+            detail: this.$t('common.recordDeleted'),
             life: 3000,
           });
         },

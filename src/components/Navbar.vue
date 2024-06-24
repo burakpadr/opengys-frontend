@@ -36,7 +36,7 @@
                   class="navbar-item"
                   :class="{ active: navbarElement.parentMenuisActive }"
                 >
-                  {{ navbarElement.title }}
+                  {{ $t(navbarElement.i18nCode) }}
                 </span>
                 <i
                   v-if="navbarElement.hasSubMenu"
@@ -49,13 +49,13 @@
 
               <div class="navbar-tooltip">
                 <div v-if="navbarElement.hasSubMenu" class="sub-menu-header">
-                  {{ navbarElement.title }}
+                  {{ $t(navbarElement.i18nCode) }}
                 </div>
                 <div v-else>
                   <router-link
                     :to="navbarElement.href"
                     @click="changeActivityStatus(i, null)"
-                    >{{ navbarElement.title }}</router-link
+                    >{{ $t(navbarElement.i18nCode) }}</router-link
                   >
                 </div>
                 <div v-for="(submenu, j) in navbarElement.submenus" :key="j">
@@ -63,7 +63,7 @@
                     :to="submenu.href"
                     @click="changeActivityStatus(i, j)"
                     :class="{ active: submenu.isActive }"
-                    >{{ submenu.title }}</router-link
+                    >{{ $t(submenu.i18nCode) }}</router-link
                   >
                 </div>
               </div>
@@ -86,7 +86,7 @@
                     <span
                       class="navbar-item"
                       :class="{ active: submenu.isActive }"
-                      >{{ submenu.title }}</span
+                      >{{ $t(submenu.i18nCode) }}</span
                     >
                   </router-link>
                 </li>
@@ -111,7 +111,7 @@
                   class="navbar-item"
                   :class="{ active: navbarElement.parentMenuisActive }"
                 >
-                  {{ navbarElement.title }}
+                  {{ $t(navbarElement.i18nCode) }}
                 </span>
                 <i
                   v-if="navbarElement.hasSubMenu"
@@ -124,13 +124,13 @@
 
               <div class="navbar-tooltip">
                 <div v-if="navbarElement.hasSubMenu" class="sub-menu-header">
-                  {{ navbarElement.title }}
+                  {{ $t(navbarElement.i18nCode) }}
                 </div>
                 <div v-else>
                   <router-link
                     :to="navbarElement.href"
                     @click="changeActivityStatus(i, null)"
-                    >{{ navbarElement.title }}</router-link
+                    >{{ $t(navbarElement.i18nCode) }}</router-link
                   >
                 </div>
                 <div v-for="(submenu, j) in navbarElement.submenus" :key="j">
@@ -138,7 +138,7 @@
                     :to="submenu.href"
                     @click="changeActivityStatus(i, j)"
                     :class="{ active: submenu.isActive }"
-                    >{{ submenu.title }}</router-link
+                    >{{ $t(submenu.i18nCode) }}</router-link
                   >
                 </div>
               </div>
@@ -157,7 +157,7 @@
                     <span
                       class="navbar-item"
                       :class="{ active: submenu.isActive }"
-                      >{{ submenu.title }}</span
+                      >{{ $t(submenu.i18nCode) }}</span
                     >
                   </router-link>
                 </li>

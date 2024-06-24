@@ -1,21 +1,21 @@
 export const FOR_RENT_TABS = [
     {
-        label: "Temel Özellikler",
+        i18nCode: "realEstate.stepper.properties",
         isActive: true,
         component: "RealEstateBasicInformation"
     },
     {
-        label: "Fotoğraflar",
+        i18nCode: "realEstate.stepper.photos",
         isActive: false,
         component: "RealEstatePhoto"
     },
     {
-        label: "İlanlar",
+        i18nCode: "realEstate.stepper.adverts",
         isActive: false,
         component: "AdvertInformation"
     },
     {
-        label: "Sözleşmeler",
+        i18nCode: "realEstate.stepper.contracts",
         isActive: false,
         component: "RentalContractInformation"
     }

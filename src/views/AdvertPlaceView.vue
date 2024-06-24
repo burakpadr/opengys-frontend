@@ -23,7 +23,7 @@
               v-model="searchTerm"
               size="small"
               class="search-bar"
-              placeholder="Ara"
+              :placeholder="$t('common.search')"
               @input="search"
             />
           </span>
@@ -31,8 +31,8 @@
         <div class="table-container">
           <table>
             <tr>
-              <th>İlan Yeri</th>
-              <th>Aksiyon</th>
+              <th>{{ $t("systemDefinition.advertPlace.list.name") }}</th>
+              <th>{{ $t("systemDefinition.advertPlace.list.action") }}</th>
             </tr>
             <tr v-for="(advertPlace, index) in advertPlaces" :key="index">
               <td data-cell="İlan Yeri">{{ advertPlace.name }}</td>
@@ -77,13 +77,13 @@
                   size="small"
                   required="true"
                 />
-                <label class="input" for="İlan Yeri*">İlan Yeri*</label>
+                <label class="input" for="İlan Yeri*">{{ $t("systemDefinition.advertPlace.form.name") }}*</label>
               </span>
             </div>
             <div class="modal-content-row">
               <Button
                 :loading="loading"
-                label="Kaydet"
+                :label="$t('common.save')"
                 size="small"
                 class="button"
                 @click="submitForm"
@@ -143,7 +143,7 @@ export default {
       this.modalIsVisible = this.modalIsVisible ? false : true;
     },
     openAddEventModal() {
-      this.modalHeader = "Yeni Ekle";
+      this.modalHeader = this.$t("systemDefinition.advertPlace.form.createHeader");
       this.modalName = "CREATE";
 
       this.advertPlace = {};
@@ -151,7 +151,7 @@ export default {
       this.toggleModal();
     },
     openUpdateEventModal(advertPlaceId) {
-      this.modalHeader = "Güncelle";
+      this.modalHeader = this.$t("systemDefinition.advertPlace.form.updateHeader");
       this.modalName = "UPDATE";
 
       gysClient
@@ -208,7 +208,7 @@ export default {
 
           this.notification.isActive = true;
           this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "İlan yeri oluşturuldu.";
+          this.notification.messageContent = this.$t("common.recordCreated");
         })
         .catch((error) => {
           this.notification.isActive = true;
@@ -227,7 +227,7 @@ export default {
 
           this.notification.isActive = true;
           this.notification.severity = NotificationConstants.SEVERITY_SUCCESS;
-          this.notification.messageContent = "İlan yeri güncellendi.";
+          this.notification.messageContent = this.$t("common.recordUpdated");
         })
         .catch((error) => {
           this.notification.isActive = true;
@@ -239,7 +239,7 @@ export default {
     confirmDeleteAdvertPlace(event, advertPlaceId) {
       this.$confirm.require({
         target: event.currentTarget,
-        message: "Kaydı silmek istediğinden emin misin?",
+        message: this.$t("common.sureToDeleteTheRecord"),
         rejectLabel: "Hayır",
         acceptLabel: "Evet",
         icon: "pi pi-exclamation-triangle",
@@ -249,7 +249,7 @@ export default {
           this.$toast.add({
             severity: NotificationConstants.SEVERITY_SUCCESS,
             summary: "Bildirim",
-            detail: "Kayıt başarılı bir şekilde silindi.",
+            detail: this.$t("common.recordDeleted"),
             life: 3000,
           });
         },

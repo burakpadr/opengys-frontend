@@ -4,16 +4,16 @@
       <div class="rent-payment-plan-information-container" v-if="isVisible">
         <div class="modal-content">
           <div class="modal-content-header">
-            <span class="text">Kira Ödeme Planı</span>
+            <span class="text">{{ $t('realEstate.contract.rentalPaymentPlan.header') }}</span>
           </div>
           <div class="table-container">
             <table>
               <tr>
-                <th>Kira Sayısı</th>
-                <th>Kira Tarihi</th>
-                <th>Kira Tutarı</th>
-                <th>Dekont</th>
-                <th>Durumu</th>
+                <th>{{ $t('realEstate.contract.rentPaymentPlan.rentalPeriod') }}</th>
+                <th>{{ $t('realEstate.contract.rentPaymentPlan.rentDate') }}</th>
+                <th>{{ $t('realEstate.contract.rentPaymentPlan.rentFee') }}</th>
+                <th>{{ $t('realEstate.contract.rentPaymentPlan.receipt') }}</th>
+                <th>{{ $t('realEstate.contract.rentPaymentPlan.status') }}</th>
               </tr>
               <tr v-for="(rentInvoice, index) in rentInvoices" :key="index">
                 <td>{{ index + 1 }}</td>
@@ -34,10 +34,10 @@
                   </div>
                 </td>
                 <td v-if="rentInvoice.isPaid">
-                  <Tag severity="success" value="Ödendi"></Tag>
+                  <Tag severity="success" :value="$t('realEstate.contract.rentPaymentPlan.paid')"></Tag>
                 </td>
                 <td v-else>
-                  <Tag severity="danger" value="Ödenmedi"></Tag>
+                  <Tag severity="danger" :value="$t('realEstate.contract.rentPaymentPlan.unpaid')"></Tag>
                 </td>
               </tr>
             </table>
@@ -93,9 +93,10 @@ export default {
     },
   },
   mounted() {
-    // canSeeComponent(this.$options.name).then(
-    //   (response) => (this.isVisible = response.data)
-    // );
+    canSeeComponent(this.$options.name).then(
+      (response) => (this.isVisible = response.data)
+    );
+
     this.getRentInvoices();
   },
 };

@@ -1,7 +1,32 @@
 <template>
   <div class="header">
     <div class="right">
-      <i class="bx bx-bell"></i>
+      <Dropdown
+        v-model="selectedCountry"
+        :options="countries"
+        optionLabel="name"
+        :placeholder="$t('header.selectLanguage')"
+        class="w-full md:w-56"
+        style="margin-right: 40px"
+        @change="changeLocale"
+      >
+        <template #value="slotProps">
+          <div v-if="slotProps.value" class="flex items-center">
+            <flag :iso="slotProps.value.flag" />
+            <div style="margin-left: 8px">{{ slotProps.value.name }}</div>
+          </div>
+          <span v-else>
+            {{ slotProps.placeholder }}
+          </span>
+        </template>
+        <template #option="slotProps">
+          <div class="flex items-center">
+            <flag :iso="slotProps.option.flag" />
+            <div style="margin-left: 8px">{{ slotProps.option.name }}</div>
+          </div>
+        </template>
+      </Dropdown>
+      <!-- <i class="bx bx-bell"></i> -->
       <i class="bx bx-user" @click="toggleUserOverlayPanel($event)"></i>
       <OverlayPanel
         ref="userOverlayPanel"
@@ -17,7 +42,10 @@
             >
               <span class="inline-flex flex-column">
                 <span class="font-bold"> {{ formatNameSurname() }}</span>
-                <span class="text-sm">{{ userTitle }}</span>
+                <span v-if="userHasDynamicRole" class="text-sm">{{
+                  userTitle
+                }}</span>
+                <span class="text-sm" v-else>{{ $t(userTitle) }}</span>
               </span>
             </button>
           </template>
@@ -31,14 +59,20 @@
 import { parseToken, removeToken } from "@/service/TokenService";
 import { transformToTitle } from "@/util/StringUtil";
 import { gysClient } from "@/assets/js/client";
+import i18n from "@/i18n";
 
 export default {
   name: "Header",
   data() {
     return {
+      selectedCountry: localStorage.getItem("locale"),
+      countries: [
+        { name: "English", flag: "us", language: "en" },
+        { name: "Türkçe", flag: "tr", language: "tr" },
+      ],
       items: [
         {
-          label: "Çıkış",
+          label: this.$t("header.exit"),
           icon: "pi pi-sign-out",
           command: () => {
             this.logout();
@@ -52,7 +86,8 @@ export default {
       home: {
         icon: "pi pi-home",
       },
-      userTitle: null
+      userHasDynamicRole: null,
+      userTitle: null,
     };
   },
   methods: {
@@ -67,17 +102,22 @@ export default {
           this.staff = response.data;
 
           if (response.data.user.roleLabel) {
+            this.userHasDynamicRole = true;
+
             this.userTitle = response.data.user.roleLabel;
-          }
-          else {
-            this.userTitle = "Tapu Sahibi";
+          } else {
+            this.userHasDynamicRole = false;
+
+            this.userTitle = "header.userTitle.landlord";
           }
         });
       } else if (decodedToken.isTenant) {
         gysClient.get(`tenants?userId=${decodedToken.sub}`).then((response) => {
           this.staff = response.data;
 
-          this.userTitle = "Kiracı";
+          this.userHasDynamicRole = false;
+
+          this.userTitle = "header.userTitle.tenant";
         });
       }
     },
@@ -96,8 +136,15 @@ export default {
 
       window.location.href = "/";
     },
+    changeLocale() {
+      localStorage.setItem("locale", this.selectedCountry.language);
+
+      i18n.global.locale.value = this.selectedCountry.language;
+    }
   },
   mounted() {
+    this.selectedCountry = this.countries.find(c => c.language === localStorage.getItem('locale'))
+
     this.getUserInformation();
   },
 };

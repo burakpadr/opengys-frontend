@@ -8,7 +8,7 @@
               <template #content>
                 <div class="flex justify-content-between gap-5">
                   <div class="flex flex-column gap-1">
-                    <span class="text-secondary">Ödenmemiş Kira</span>
+                    <span class="text-secondary">{{ $t('dashboard.unpaidRent') }}</span>
                     <br />
                     <span class="font-bold text-lg">${{
                       new Intl.NumberFormat("en-US").format(
@@ -22,7 +22,7 @@
                         statistics.rentPaymentStatusStatistic
                           .unpaidStatisticElement.numberOfInvoice
                       }}
-                      ödenmedi</span
+                      {{ $t('dashboard.unpaid') }}</span
                     >
                   </div>
                   <span
@@ -43,7 +43,7 @@
               <template #content>
                 <div class="flex justify-content-between gap-5">
                   <div class="flex flex-column gap-1">
-                    <span class="text-secondary">Ödemesi Yaklaşan Kira</span>
+                    <span class="text-secondary">{{ $t('dashboard.upcomingRent') }}</span>
                     <br />
                     <span class="font-bold text-lg">${{
                       new Intl.NumberFormat("en-US").format(
@@ -57,7 +57,7 @@
                         statistics.rentPaymentStatusStatistic
                           .upcomingStatisticElement.numberOfInvoice
                       }}
-                      ödemesi yaklaşan</span
+                      {{ $t('dashboard.upcoming') }}</span
                     >
                   </div>
                   <span
@@ -79,7 +79,7 @@
                 <div class="flex justify-content-between gap-5">
                   <div class="flex flex-column gap-1">
                     <span class="text-secondary"
-                      >Onay Bekleyen Kira Beyanı</span
+                      >{{ $t('dashboard.leaseStatementPendingApproval') }}</span
                     >
                     <br />
                     <span class="font-bold text-lg">${{
@@ -94,7 +94,7 @@
                         statistics.rentPaymentStatusStatistic
                           .pendingStatisticsElement.numberOfInvoice
                       }}
-                      onay bekleyen beyan</span
+                      {{ $t('dashboard.pendingLeaseStatement') }}</span
                     >
                   </div>
                   <span
@@ -118,7 +118,7 @@
                 <div class="flex justify-content-between gap-5">
                   <div class="flex flex-column gap-1">
                     <span class="font-bold text-lg"
-                      >Aylara Göre Kira Geliri</span
+                      >{{ $t('dashboard.rentalIncomeByMonth') }}</span
                     >
                     <br />
                     <br />
@@ -141,7 +141,7 @@
                 <template #content>
                   <div class="flex flex-column gap-1">
                     <span class="font-bold text-lg"
-                      >Gayrimenkullerin Kategorilere Göre Dağılımı</span
+                      >{{ $t('dashboard.realEstateDistributionByCategory') }}</span
                     >
                   </div>
                   <br />
@@ -162,7 +162,7 @@
                 <template #content>
                   <div class="flex flex-column gap-1">
                     <span class="font-bold text-lg"
-                      >Kiralanan Gayrimenkul Oranı</span
+                      >{{ $t('dashboard.occupancyRate') }}</span
                     >
                   </div>
                   <br />
@@ -179,13 +179,13 @@
                   />
                   <br />
                   <span class="opacity-50"
-                    >Toplam Gayrimenkul Sayısı:
+                    >{{ $t('dashboard.totalNumberOfRealEstate') }}:
                     {{ statistics.occupancyStatistic.realEstateCount }}
                   </span>
                   <br />
                   <br />
                   <span class="opacity-50"
-                    >Toplam Kiralanan Gayrimenkul Sayısı:
+                    >{{ $t('dashboard.totalNumerOfRentedRealEstate') }}:
                     {{ statistics.occupancyStatistic.occupancyCount }}
                   </span>
                 </template>
@@ -255,7 +255,7 @@ export default {
         labels: [],
         datasets: [
             {
-                label: "Kira Verisi",
+                label: this.$t('dashboard.rentData'),
                 data: []
             }
         ]
@@ -317,7 +317,7 @@ export default {
             var rentalIncomeDataElement = response.data.rentalIncomeStatistic.monthlyStatisticElements
                     .find((element) => element.month === i.toString());
 
-            rentalIncomeLabels.push(monthNamesShort[i]);
+            rentalIncomeLabels.push(monthNamesShort[i - 1]);
 
             if (!rentalIncomeDataElement) {
                 rentalIncomeData.push(0);
