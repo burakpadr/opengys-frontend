@@ -189,6 +189,7 @@ const messages = {
           startDateCannotBeGreaterThanEndDate: "Sözleşme başlangıç tarihi sözleşme bitiş tarihinden büyük olamaz!"
         },
         rentPaymentPlan: {
+          header: "Kira Ödeme Planı",
           rentalPeriod: "Kira Sayısı",
           rentDate: "Kira Tarihi",
           rentFee: "Kira Tutarı",
@@ -510,6 +511,7 @@ const messages = {
           startDateCannotBeGreaterThanEndDate: "Start date cannot be greater than end date"
         },
         rentPaymentPlan: {
+          header: "Rent Payment Plan",
           rentalPeriod: "Rental Period",
           rentDate: "Rent Date",
           rentFee: "Rent Fee",

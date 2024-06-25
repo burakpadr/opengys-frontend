@@ -1,6 +1,6 @@
 {
-  "name": "gys-frontend",
-  "version": "0.1.0",
+  "name": "OpenGYS",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "local": "NODE_ENV=local node script/script.js && vue-cli-service serve --mode local",

@@ -4,7 +4,7 @@
       <div class="rent-payment-plan-information-container" v-if="isVisible">
         <div class="modal-content">
           <div class="modal-content-header">
-            <span class="text">{{ $t('realEstate.contract.rentalPaymentPlan.header') }}</span>
+            <span class="text">{{ $t('realEstate.contract.rentPaymentPlan.header') }}</span>
           </div>
           <div class="table-container">
             <table>
