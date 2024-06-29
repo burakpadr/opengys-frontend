@@ -11,59 +11,59 @@ const gysClient = axios.create({
 const COMPONENTS = [
     {
         componentName: "AdvertInformation",
-        label: "Gayrimenkul > İlanlar"
+        label: "page.advertInformation"
     },
     {
         componentName: "RealEstateBasicInformation",
-        label: "Gayrimenkul > Temel Bilgiler"
+        label: "page.realEstateBasicInformation"
     },
     {
         componentName: "RealEstatePhoto",
-        label: "Gayrimenkul > Fotoğraflar"
+        label: "page.realEstatePhoto"
     },
     {
         componentName: "RealEstateListView",
-        label: "Gayrimenkuller"
+        label: "page.realEstateListView"
     },
     {
         componentName: "CategoryView",
-        label: "Sistem Tanımları > Kategoriler"
+        label: "page.categoryView"
     },
     {
         componentName: "AttributeView",
-        label: "Sistem Tanımları > Özellikler"
+        label: "page.attributeView"
     },
     {
         componentName: "AdvertPlaceView",
-        label: "Sistem Tanımları > İlan Yerleri"
+        label: "page.advertPlaceView"
     },
     {
         componentName: "RoleView",
-        label: "Güvenlik > Rol Mekanizması"
+        label: "page.roleView"
     },
     {
         componentName: "StaffView",
-        label: "Kullanıcı Yönetimi > Alt Kullanıcı"
+        label: "page.staffView"
     },
     {
         componentName: "TenantView",
-        label: "Kullanıcı Yönetimi > Kiracılar"
+        label: "page.tenantView"
     },
     {
         componentName: "RentalContractInformation",
-        label: "Gayrimenkul > Sözleşmeler"
+        label: "page.rentalContractInformation"
     },
     {
         componentName: "PaymentDeclarationStaffView",
-        label: "Ödeme İşlemleri > Ödeme Beyanları"
+        label: "page.paymentDeclarationStaffView"
     },
     {
         componentName: "DashboardStaffView",
-        label: "Dashboard"
+        label: "page.dashboardStaffView"
     },
     {
         componentName: "RentPaymentPlanInformation",
-        label: "Gayrimenkul > Sözleşmeler > Kira Ödeme Planı"
+        label: "page.rentPaymentPlanInformation"
     }
 ]
 

@@ -5,6 +5,23 @@ const messages = {
   // TR
 
   tr: {
+    page: {
+      advertInformation: "Gayrimenkul > İlanlar",
+      realEstateBasicInformation: "Gayrimenkul > Temel Bilgiler",
+      realEstatePhoto: "Gayrimenkul > Fotoğraflar",
+      realEstateListView: "Gayrimenkuller",
+      categoryView: "Sistem Tanımları > Kategoriler",
+      attributeView: "Sistem Tanımları > Özellikler",
+      advertPlaceView: "Sistem Tanımları > İlan Yerleri",
+      roleView: "Güvenlik > Rol",
+      staffView: "Kullanıcı Yönetimi > Alt Kullanıcılar",
+      tenantView: "Kullanıcı Yönetimi > Kiracılar",
+      rentalContractInformation: "Gayrimenkul > Sözleşmeler",
+      paymentDeclarationStaffView: "Ödeme İşlemleri > Ödeme Beyanları",
+      dashboardStaffView: "Dashboard",
+      rentPaymentPlanInformation: "Gayrimenkul > Sözleşmeler > Kira Ödeme Planı"
+      
+    },
     enum: {
       invoiceType: {
         rentPayment: "Kira Faturası"
@@ -327,6 +344,22 @@ const messages = {
   // EN
 
   en: {
+    page: {
+      advertInformation: "Real Estate > Adverts",
+      realEstateBasicInformation: "Real Estate > Basic Information",
+      realEstatePhoto: "Real Estate > Photos",
+      realEstateListView: "Real Estates",
+      categoryView: "System Definitions > Categories",
+      attributeView: "System Definitions > Attributes",
+      advertPlaceView: "System Definitions > Advert Places",
+      roleView: "Security > Role",
+      staffView: "User Management > Sub Users",
+      tenantView: "User Management > Tenants",
+      rentalContractInformation: "Real Estates > Contracts",
+      paymentDeclarationStaffView: "Payment Management > Payment Declarations",
+      dashboardStaffView: "Dashboard",
+      rentPaymentPlanInformation: "Real Estate > Contract > Rent Payment Plan"
+    },
     enum: {
       invoiceType: {
         rentPayment: "Rent Payment"

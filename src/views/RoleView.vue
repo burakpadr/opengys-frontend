@@ -104,7 +104,7 @@
                   <th></th>
                 </tr>
                 <tr v-for="(uiElement, index) in uiElements" :key="index">
-                  <td>{{ uiElement.label }}</td>
+                  <td>{{ $t(uiElement.label) }}</td>
                   <td>
                     <Checkbox
                       v-model="role.selectedUIElements"
@@ -130,7 +130,7 @@
                   v-for="(uiElement, index) in role.selectedUIElements"
                   :key="index"
                 >
-                  <td>{{ uiElement.label }}</td>
+                  <td>{{$t(uiElement.label) }}</td>
                   <td></td>
                 </tr>
               </table>
@@ -181,7 +181,7 @@
                   <th></th>
                 </tr>
                 <tr v-for="(uiElement, index) in uiElements" :key="index">
-                  <td>{{ uiElement.label }}</td>
+                  <td>{{ $t(uiElement.label) }}</td>
                   <td>
                     <Checkbox
                       v-model="role.selectedUIElements"
@@ -207,7 +207,7 @@
                   v-for="(uiElement, index) in role.selectedUIElements"
                   :key="index"
                 >
-                  <td>{{ uiElement.label }}</td>
+                  <td>{{ $t(uiElement.label) }}</td>
                   <td></td>
                 </tr>
               </table>
