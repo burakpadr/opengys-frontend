@@ -391,9 +391,10 @@ export default {
           this.rentalContracts = response.data.content;
 
           this.rentalContracts.forEach((rentalContract) => {
-            rentalContract.rentalContractFileRelativeUrl =
-              process.env.VUE_APP_GYS_API_BASE_URL +
-              rentalContract.rentalContractFileRelativeUrl;
+            if (rentalContract.rentalContractFileRelativeUrl) {
+              rentalContract.rentalContractFileRelativeUrl = process.env.VUE_APP_GYS_API_BASE_URL
+                  + rentalContract.rentalContractFileRelativeUrl;
+            }
           });
 
           this.pagination.totalRecords = response.data.totalElements;
